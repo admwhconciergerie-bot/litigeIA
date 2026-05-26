@@ -15,16 +15,15 @@ app.post('/api/analyze', async (req, res) => {
       const userMsg = messages[0];
       const openaiMessages = [];
       if (system) openaiMessages.push({ role: 'system', content: system });
-      const content = [];
-      for (const part of (userMsg.content || [])) {
-        if (part.type === 'text') {
-          content.push({ type: 'text', text: part.text });
-        } else if (part.type === 'image' && part.source && part.source.type === 'base64') {
-          content.push({ type: 'image_url', image_url: { url: 'data:' + (part.source.media_type || 'image/jpeg') + ';base64,' + part.source.data } });
-        }
-      }
-      openaiMessages.push({ role: 'user', content });
-      const body = { model: 'google/gemma-4-31b-it:free', messages: openaiMessages, max_tokens: 3000 };
+
+      // Texte uniquement (extraire le texte et mentionner les photos)
+      const textParts = (userMsg.content || []).filter(p => p.type === 'text').map(p => p.text);
+      const imgCount = (userMsg.content || []).filter(p => p.type === 'image').length;
+      let userText = textParts.join('\n');
+      if (imgCount > 0) userText += '\n[' + imgCount + ' photo(s) de degats jointe(s)]';
+      openaiMessages.push({ role: 'user', content: userText });
+
+      const body = { model: 'deepseek/deepseek-v4-flash:free', messages: openaiMessages, max_tokens: 3000 };
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: { 'Authorization': 'Bearer ' + openrouterKey, 'Content-Type': 'application/json', 'HTTP-Referer': 'https://litigeia.onrender.com', 'X-Title': 'LitigeIA' },
