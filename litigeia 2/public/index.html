@@ -236,6 +236,24 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 .info-cell-val{font-size:14px;font-weight:600}
 
 .hidden{display:none!important}
+/* === TIMELINE PROGRESSION LITIGE === */
+.litige-timeline-wrap{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px 14px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.tl-header{font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.litige-timeline{display:flex;align-items:flex-start;overflow-x:auto;padding-bottom:4px}
+.tl-step{display:flex;flex-direction:column;align-items:center;flex:1;min-width:72px;cursor:pointer;transition:transform .15s}
+.tl-step:hover{transform:translateY(-2px)}
+.tl-circle{width:34px;height:34px;border-radius:50%;border:2.5px solid #cbd5e1;background:#f8fafc;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#94a3b8;transition:all .25s;position:relative;z-index:1}
+.tl-step.done .tl-circle{background:#6366f1;border-color:#6366f1;color:#fff;font-size:15px}
+.tl-step.active .tl-circle{background:#fff;border-color:#6366f1;color:#6366f1;box-shadow:0 0 0 4px rgba(99,102,241,.18);font-weight:800}
+.tl-step.opt .tl-circle{border-color:#f59e0b;border-style:dashed;color:#f59e0b}
+.tl-step.done.opt .tl-circle{background:#f59e0b;border-color:#f59e0b;color:#fff;border-style:solid}
+.tl-step.active.opt .tl-circle{box-shadow:0 0 0 4px rgba(245,158,11,.18);border-color:#f59e0b;color:#f59e0b}
+.tl-label{font-size:10px;font-weight:600;color:#94a3b8;text-align:center;margin-top:7px;line-height:1.3;max-width:76px}
+.tl-step.done .tl-label{color:#6366f1}.tl-step.active .tl-label{color:#4f46e5;font-weight:700}
+.tl-step.opt .tl-label{color:#f59e0b}.tl-step.done.opt .tl-label,.tl-step.active.opt .tl-label{color:#d97706}
+.tl-connector{flex:1;height:3px;background:#e2e8f0;margin:0 3px;margin-top:16px;min-width:16px;border-radius:2px;transition:background .3s}
+.tl-connector.done{background:#6366f1}
+.tl-progress-text{font-size:11px;color:#94a3b8;margin-top:10px;text-align:right}
 </style>
 </head>
 <body>
@@ -2199,6 +2217,92 @@ window.addEventListener('load', () => {
   if (DB.config.email) document.getElementById('ownerEmailInput').value = DB.config.email;
   if (DB.config.iban) document.getElementById('ownerIbanInput').value = DB.config.iban;
 });
+</script>
+<script>
+/* === TIMELINE PROGRESSION LITIGE === */
+(function(){
+  var ETAPES=[
+    {l:'Constaté',i:'1'},
+    {l:'Déclaré',i:'2'},
+    {l:'Appel plateforme',i:'3'},
+    {l:'Eléments envoyés',i:'4'},
+    {l:'Résultat',i:'5'},
+    {l:'Constation',sub:'si besoin',i:'6',opt:true}
+  ];
+
+  function getData(){return JSON.parse(localStorage.getItem('litigeIA')||'{}');}
+  function saveData(d){localStorage.setItem('litigeIA',JSON.stringify(d));}
+
+  function getEtape(id){
+    var d=getData(); var lt=(d.litiges||[]).find(function(l){return l.id===id;});
+    return lt?+(lt.etape||0):0;
+  }
+
+  window.setLitigeEtape=function(id,idx){
+    var d=getData(); var litiges=d.litiges||[];
+    var i=litiges.findIndex(function(l){return l.id===id;});
+    if(i>=0){
+      var cur=+(litiges[i].etape||0);
+      // Clic sur etape active: revenir en arriere; sinon avancer jusqu'a cette etape
+      litiges[i].etape=(idx===cur&&idx>0)?idx-1:idx;
+      d.litiges=litiges; saveData(d);
+    }
+    renderTL();
+  };
+
+  function renderTL(){
+    var wrap=document.getElementById('litTLWrap'); if(!wrap)return;
+    var id=window._tlLitigeId; if(!id)return;
+    var etape=getEtape(id);
+    var html='';
+    for(var i=0;i<ETAPES.length;i++){
+      var e=ETAPES[i];
+      var cls=i<etape?'done':i===etape?'active':'';
+      if(e.opt)cls+=(cls?' ':')+'opt';
+      var circleContent=i<etape?'&#10003;':String(i+1);
+      var connHtml=i<ETAPES.length-1?'<div class="tl-connector'+(i<etape?' done':'')+'"></div>':'';
+      html+='<div class="tl-step '+cls+'" onclick="setLitigeEtape(\'' +id+ '\','+i+')" title="'+e.l+'">';
+      html+='<div class="tl-circle">'+circleContent+'</div>';
+      html+='<div class="tl-label">'+e.l+(e.sub?'<br><small style=\'opacity:.7\'>'+e.sub+'</small>':'')+'</div>';
+      html+='</div>'+connHtml;
+    }
+    var pct=Math.round(etape/(ETAPES.length-1)*100);
+    wrap.innerHTML='<div class="tl-header">&#128205; Progression du litige</div><div class="litige-timeline">'+html+'</div><div class="tl-progress-text">'+pct+'% accompli &mdash; '+etape+' / '+(ETAPES.length-1)+' étapes</div>';
+  }
+
+  function injectTL(){
+    var mv=document.getElementById('modalView');
+    if(!mv||mv.style.display==='none')return;
+    var existing=document.getElementById('litTLWrap');
+    if(!existing){
+      var dg=mv.querySelector('.detail-grid');
+      if(!dg)return;
+      var div=document.createElement('div');
+      div.id='litTLWrap';
+      div.className='litige-timeline-wrap';
+      dg.insertAdjacentElement('afterend',div);
+    }
+    renderTL();
+  }
+
+  // Patcher viewLitige pour capturer l'ID
+  var _orig=window.viewLitige;
+  window.viewLitige=function(id){
+    window._tlLitigeId=id;
+    var r=_orig&&_orig.apply(this,arguments);
+    setTimeout(injectTL,80);
+    return r;
+  };
+
+  // Observer les changements du modal (navigation interne)
+  document.addEventListener('DOMContentLoaded',function(){
+    var mv=document.getElementById('modalView');
+    if(!mv)return;
+    new MutationObserver(function(){
+      if(mv.style.display!=='none'&&window._tlLitigeId){setTimeout(injectTL,80);}
+    }).observe(mv,{attributes:true,attributeFilter:['style','class']});
+  });
+})();
 </script>
 </body>
 </html>
