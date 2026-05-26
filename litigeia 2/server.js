@@ -15,21 +15,23 @@ app.post('/api/analyze', async (req, res) => {
     const openaiMessages = [];
     if (system) openaiMessages.push({ role: 'system', content: system });
 
-    // Texte uniquement (extraire le texte et mentionner les photos)
     const textParts = (userMsg.content || []).filter(p => p.type === 'text').map(p => p.text);
     const imgCount = (userMsg.content || []).filter(p => p.type === 'image').length;
     let userText = textParts.join('\n');
     if (imgCount > 0) userText += '\n[' + imgCount + ' photo(s) de degats jointe(s)]';
     openaiMessages.push({ role: 'user', content: userText });
 
-    // Liste de modèles gratuits à essayer dans l'ordre
+    // Modeles gratuits confirmes sur OpenRouter - essayer dans l'ordre
     const models = [
       'meta-llama/llama-3.3-70b-instruct:free',
-      'mistralai/mistral-7b-instruct:free',
-      'qwen/qwen3-8b:free',
-      'google/gemma-3-12b-it:free'
+      'openai/gpt-oss-120b:free',
+      'nousresearch/hermes-3-llama-3.1-405b:free',
+      'nvidia/nemotron-nano-9b-v2:free',
+      'minimax/minimax-m2.5:free',
+      'meta-llama/llama-3.2-3b-instruct:free'
     ];
 
+    let lastError = 'Aucun modele disponible';
     for (const model of models) {
       try {
         const body = { model, messages: openaiMessages, max_tokens: 3000 };
@@ -48,15 +50,13 @@ app.post('/api/analyze', async (req, res) => {
           const text = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
           return res.json({ content: [{ type: 'text', text }], usage: { input_tokens: 0, output_tokens: 0 } });
         }
-        // Si erreur 429 ou provider error, essayer le modele suivant
-        if (response.status !== 429 && response.status !== 503) {
-          return res.status(response.status).json({ error: (data.error && data.error.message) || 'Erreur OpenRouter' });
-        }
+        lastError = (data.error && data.error.message) || 'Erreur ' + response.status;
+        // Continuer avec le modele suivant quel que soit l'erreur
       } catch (err) {
-        // Continuer avec le modele suivant
+        lastError = err.message;
       }
     }
-    return res.status(503).json({ error: 'Tous les modeles sont temporairement indisponibles. Reessayez dans quelques minutes.' });
+    return res.status(503).json({ error: lastError });
   }
 
   if (!anthropicKey) return res.status(500).json({ error: 'Aucune cle API configuree.' });
