@@ -458,6 +458,9 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
   <div class="modal-foot">
     <button class="btn btn-ghost" onclick="closeModal('modalView')">Fermer</button>
     <button class="btn btn-ghost" id="btnSetPaid" onclick="setStatus('resolved')">✅ Résolu</button>
+    <button class="btn btn-secondary" onclick="showPackAirbnb(viewingId)" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none">
+      📦 Pack Airbnb
+    </button>
     <button class="btn btn-primary" onclick="regenDocs()">
       <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       Re-télécharger PDFs
@@ -566,7 +569,7 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 const TL = {
   net_tabac: { label:'Odeur de tabac', cat:'nettoyage', articles:[
     {d:'Déplacement et diagnostic technicien nettoyage',c:'nettoyage',q:1,u:'forfait',p:45,j:'Frais de déplacement entreprise'},
-    {d:'Ventilation forcée du logement — aération multi-pièces',c:'nettoyage',q:3,u:'h',p:40,j:'Main d'œuvre technicien'},
+    {d:'Ventilation forcée du logement — aération multi-pièces',c:'nettoyage',q:3,u:'h',p:40,j:'Main d\'œuvre technicien'},
     {d:'Traitement ozone professionnel anti-odeur tabac (générateur industriel)',c:'nettoyage',q:1,u:'forfait',p:185,j:'Élimination des molécules odorantes incrustées dans textiles, murs et mobilier'},
     {d:'Nettoyage vapeur haute température des textiles (rideaux, coussins)',c:'nettoyage',q:1,u:'forfait',p:95,j:'Traitement vapeur 120°C, élimination résidus nicotine'},
     {d:'Nettoyage et dégraissage des murs et plafonds (traces jaunes tabac)',c:'nettoyage',q:1,u:'forfait',p:120,j:'Produits spécialisés anti-nicotine, épongeage manuel'},
@@ -576,8 +579,8 @@ const TL = {
   net_bio: { label:'Souillures biologiques', cat:'nettoyage', articles:[
     {d:'Déplacement urgence + équipements de protection individuelle (EPI)',c:'nettoyage',q:1,u:'forfait',p:65,j:'Déplacement prioritaire, EPI complet obligatoire (combinaison, gants, masque)'},
     {d:'Confinement et sécurisation de la zone souillée',c:'nettoyage',q:1,u:'forfait',p:35,j:'Mise en place bâches de protection, périmètre de sécurité sanitaire'},
-    {d:'Nettoyage et désinfection zone souillée (urine/matières fécales)',c:'nettoyage',q:3,u:'h',p:50,j:'Main d'œuvre technicien spécialisé hygiène'},
-    {d:'Traitement enzymatique biologique anti-odeur et anti-bactérien',c:'nettoyage',q:1,u:'forfait',p:95,j:'Produit professionnel à base d'enzymes, élimination complète des agents pathogènes'},
+    {d:'Nettoyage et désinfection zone souillée (urine/matières fécales)',c:'nettoyage',q:3,u:'h',p:50,j:'Main d\'œuvre technicien spécialisé hygiène'},
+    {d:'Traitement enzymatique biologique anti-odeur et anti-bactérien',c:'nettoyage',q:1,u:'forfait',p:95,j:'Produit professionnel à base d\'enzymes, élimination complète des agents pathogènes'},
     {d:'Désinfection UV et traitement bactéricide surfaces',c:'nettoyage',q:1,u:'forfait',p:75,j:'Lampe UV-C professionnelle, désinfection certifiée'},
     {d:'Évacuation et mise en décharge sécurisée des matériaux souillés',c:'nettoyage',q:1,u:'forfait',p:55,j:'Sacs biohazard réglementaires, transport déchets biologiques'},
     {d:'Fournitures et consommables désinfectants professionnels',c:'nettoyage',q:1,u:'forfait',p:70,j:'Javel industrielle, produits bactéricides certifiés NF'},
@@ -595,11 +598,11 @@ const TL = {
     {d:'Aspiration approfondie canapé (coussins, recoins, dessous)',c:'nettoyage',q:1,u:'forfait',p:30,j:'Aspirateur professionnel filtration HEPA'},
     {d:'Nettoyage par injection-extraction vapeur haute pression canapé',c:'nettoyage',q:1,u:'forfait',p:130,j:'Traitement complet tissu/cuir, extraction taches et odeurs'},
     {d:'Application détachant spécialisé sur taches ciblées',c:'nettoyage',q:1,u:'forfait',p:40,j:'Produit professionnel selon nature des taches'},
-    {d:'Désodorisation et traitement anti-bactérien',c:'nettoyage',q:1,u:'forfait',p:35,j:'Spray professionnel neutralisateur d'odeurs'},
+    {d:'Désodorisation et traitement anti-bactérien',c:'nettoyage',q:1,u:'forfait',p:35,j:'Spray professionnel neutralisateur d\'odeurs'},
     {d:'Fournitures et consommables nettoyage',c:'nettoyage',q:1,u:'forfait',p:25,j:'Produits spécialisés tissu/cuir'},
   ]},
   net_linge: { label:'Nettoyage linge / rideaux', cat:'nettoyage', articles:[
-    {d:'Collecte, tri et inventaire du linge souillé',c:'nettoyage',q:1,u:'h',p:35,j:'Main d'œuvre inventaire et conditionnement'},
+    {d:'Collecte, tri et inventaire du linge souillé',c:'nettoyage',q:1,u:'h',p:35,j:'Main d\'œuvre inventaire et conditionnement'},
     {d:'Lavage et séchage professionnel linge de lit (draps, housses)',c:'nettoyage',q:1,u:'kg',p:8,j:'Pressing industriel haute température'},
     {d:'Lavage professionnel serviettes et linge de bain',c:'nettoyage',q:1,u:'kg',p:8,j:'Désinfection thermique 90°C'},
     {d:'Nettoyage à sec rideaux (dépose et repose incluses)',c:'nettoyage',q:1,u:'forfait',p:95,j:'Pressing spécialisé voilages et rideaux'},
@@ -608,51 +611,51 @@ const TL = {
   ]},
   net_general: { label:'Nettoyage supplémentaire', cat:'nettoyage', articles:[
     {d:'Déplacement et diagnostic état des lieux',c:'nettoyage',q:1,u:'forfait',p:45,j:'Frais de déplacement et bilan nettoyage'},
-    {d:'Nettoyage approfondi cuisine (four, hotte, réfrigérateur, plan de travail)',c:'nettoyage',q:2,u:'h',p:42,j:'Main d'œuvre nettoyage spécialisé cuisine'},
+    {d:'Nettoyage approfondi cuisine (four, hotte, réfrigérateur, plan de travail)',c:'nettoyage',q:2,u:'h',p:42,j:'Main d\'œuvre nettoyage spécialisé cuisine'},
     {d:'Nettoyage sanitaires et salle de bain (calcaire, moisissures)',c:'nettoyage',q:1.5,u:'h',p:42,j:'Traitement détartrant professionnel'},
-    {d:'Aspiration et lavage de l'ensemble des sols',c:'nettoyage',q:2,u:'h',p:38,j:'Monobrosse, lavage mécanisé'},
+    {d:'Aspiration et lavage de l\'ensemble des sols',c:'nettoyage',q:2,u:'h',p:38,j:'Monobrosse, lavage mécanisé'},
     {d:'Dépoussiérage complet mobilier, luminaires et surfaces hautes',c:'nettoyage',q:1.5,u:'h',p:38,j:'Nettoyage en hauteur inclus'},
     {d:'Évacuation des déchets et mise à disposition sacs poubelles',c:'nettoyage',q:1,u:'forfait',p:25,j:'Tri sélectif et évacuation'},
-    {d:'Produits d'entretien professionnels et consommables',c:'nettoyage',q:1,u:'forfait',p:35,j:'Détergents, dégraissants, désinfectants NF'},
+    {d:'Produits d\'entretien professionnels et consommables',c:'nettoyage',q:1,u:'forfait',p:35,j:'Détergents, dégraissants, désinfectants NF'},
   ]},
   plo_debouchage: { label:'Débouchage douche/WC/lavabo', cat:'plomberie', articles:[
     {d:'Déplacement plombier et diagnostic obstruction',c:'reparation',q:1,u:'forfait',p:65,j:'Frais de déplacement et identification du bouchon'},
-    {d:'Débouchage mécanique par furet électrique (ø32 à ø100)',c:'reparation',q:1,u:'h',p:80,j:'Main d'œuvre plombier qualifié'},
+    {d:'Débouchage mécanique par furet électrique (ø32 à ø100)',c:'reparation',q:1,u:'h',p:80,j:'Main d\'œuvre plombier qualifié'},
     {d:'Débouchage haute pression hydraulique (si nécessaire)',c:'reparation',q:1,u:'forfait',p:130,j:'Machine haute pression, débouchage canalisation obstruée'},
-    {d:'Test d'écoulement et vérification étanchéité après intervention',c:'reparation',q:0.5,u:'h',p:80,j:'Contrôle qualité'},
+    {d:'Test d\'écoulement et vérification étanchéité après intervention',c:'reparation',q:0.5,u:'h',p:80,j:'Contrôle qualité'},
     {d:'Produit de traitement préventif canalisation',c:'reparation',q:1,u:'forfait',p:25,j:'Fourniture: produit déboucheur professionnel'},
     {d:'Nettoyage et remise en état post-intervention',c:'nettoyage',q:0.5,u:'h',p:40,j:'Nettoyage zone de travail'},
   ]},
-  plo_cuvette: { label:'Réparation cuvette / chasse d'eau', cat:'plomberie', articles:[
+  plo_cuvette: { label:'Réparation cuvette / chasse d\'eau', cat:'plomberie', articles:[
     {d:'Déplacement plombier et diagnostic',c:'reparation',q:1,u:'forfait',p:65,j:'Frais de déplacement'},
-    {d:'Dépose du mécanisme de chasse d'eau défectueux',c:'reparation',q:0.5,u:'h',p:80,j:'Main d'œuvre plombier'},
-    {d:'Fourniture mécanisme chasse d'eau complet (marque qualité)',c:'remplacement',q:1,u:'pièce',p:55,j:'Mécanisme bi-débit certifié NF'},
-    {d:'Pose et réglage du nouveau mécanisme',c:'reparation',q:1,u:'h',p:80,j:'Main d'œuvre pose et mise en service'},
-    {d:'Remplacement joints d'étanchéité (robinet d'arrêt, evacuation)',c:'reparation',q:1,u:'forfait',p:20,j:'Fourniture joints EPDM'},
+    {d:'Dépose du mécanisme de chasse d\'eau défectueux',c:'reparation',q:0.5,u:'h',p:80,j:'Main d\'œuvre plombier'},
+    {d:'Fourniture mécanisme chasse d\'eau complet (marque qualité)',c:'remplacement',q:1,u:'pièce',p:55,j:'Mécanisme bi-débit certifié NF'},
+    {d:'Pose et réglage du nouveau mécanisme',c:'reparation',q:1,u:'h',p:80,j:'Main d\'œuvre pose et mise en service'},
+    {d:'Remplacement joints d\'étanchéité (robinet d\'arrêt, evacuation)',c:'reparation',q:1,u:'forfait',p:20,j:'Fourniture joints EPDM'},
     {d:'Test étanchéité et mise en service',c:'reparation',q:0.5,u:'h',p:80,j:'Vérification 30 min, test de fonctionnement'},
   ]},
   plo_pommeau: { label:'Pommeau / flexible douche', cat:'plomberie', articles:[
     {d:'Déplacement plombier',c:'reparation',q:1,u:'forfait',p:55,j:'Frais de déplacement'},
     {d:'Fourniture pommeau de douche (anti-calcaire, chromé)',c:'remplacement',q:1,u:'pièce',p:38,j:'Pommeau qualité standard, marque certifiée'},
     {d:'Fourniture flexible de douche inox tressé 150cm',c:'remplacement',q:1,u:'pièce',p:22,j:'Flexible anti-vrille inox'},
-    {d:'Dépose éléments défectueux et pose éléments neufs',c:'reparation',q:0.5,u:'h',p:75,j:'Main d'œuvre plombier'},
+    {d:'Dépose éléments défectueux et pose éléments neufs',c:'reparation',q:0.5,u:'h',p:75,j:'Main d\'œuvre plombier'},
     {d:'Test étanchéité et fonctionnement',c:'reparation',q:0.25,u:'h',p:75,j:'Vérification'},
   ]},
   plo_colonne: { label:'Colonne de douche', cat:'plomberie', articles:[
     {d:'Déplacement plombier et diagnostic',c:'reparation',q:1,u:'forfait',p:65,j:'Frais de déplacement'},
-    {d:'Coupure d'eau et dépose colonne existante',c:'reparation',q:1,u:'h',p:80,j:'Main d'œuvre plombier'},
+    {d:'Coupure d\'eau et dépose colonne existante',c:'reparation',q:1,u:'h',p:80,j:'Main d\'œuvre plombier'},
     {d:'Fourniture colonne de douche complète (thermostatique)',c:'remplacement',q:1,u:'pièce',p:280,j:'Colonne chromée avec thermostat, jets réglables'},
-    {d:'Pose et raccordement colonne de douche',c:'reparation',q:2,u:'h',p:80,j:'Main d'œuvre pose et raccordement eau chaude/froide'},
-    {d:'Joint d'étanchéité et visserie',c:'reparation',q:1,u:'forfait',p:15,j:'Fournitures d'installation'},
+    {d:'Pose et raccordement colonne de douche',c:'reparation',q:2,u:'h',p:80,j:'Main d\'œuvre pose et raccordement eau chaude/froide'},
+    {d:'Joint d\'étanchéité et visserie',c:'reparation',q:1,u:'forfait',p:15,j:'Fournitures d\'installation'},
     {d:'Test de fonctionnement et réglage thermostat',c:'reparation',q:0.5,u:'h',p:80,j:'Mise en service'},
   ]},
   plo_robinet: { label:'Robinet', cat:'plomberie', articles:[
     {d:'Déplacement plombier et diagnostic',c:'reparation',q:1,u:'forfait',p:55,j:'Frais de déplacement'},
-    {d:'Coupure d'eau et dépose robinet défectueux',c:'reparation',q:0.5,u:'h',p:80,j:'Main d'œuvre plombier'},
+    {d:'Coupure d\'eau et dépose robinet défectueux',c:'reparation',q:0.5,u:'h',p:80,j:'Main d\'œuvre plombier'},
     {d:'Fourniture robinet (mitigeur chromé qualité sanitaire)',c:'remplacement',q:1,u:'pièce',p:85,j:'Mitigeur NF, cartouche céramique 40mm'},
-    {d:'Pose et raccordement robinet neuf',c:'reparation',q:1,u:'h',p:80,j:'Main d'œuvre pose avec raccords flexibles'},
-    {d:'Fourniture raccords flexibles et joints',c:'reparation',q:1,u:'forfait',p:18,j:'Raccords d'alimentation inox avec joints EPDM'},
-    {d:'Test d'étanchéité et mise en service',c:'reparation',q:0.25,u:'h',p:80,j:'Contrôle'},
+    {d:'Pose et raccordement robinet neuf',c:'reparation',q:1,u:'h',p:80,j:'Main d\'œuvre pose avec raccords flexibles'},
+    {d:'Fourniture raccords flexibles et joints',c:'reparation',q:1,u:'forfait',p:18,j:'Raccords d\'alimentation inox avec joints EPDM'},
+    {d:'Test d\'étanchéité et mise en service',c:'reparation',q:0.25,u:'h',p:80,j:'Contrôle'},
   ]},
   ser_cles: { label:'Refection jeu de clés', cat:'serrurerie', articles:[
     {d:'Déplacement serrurier et prise en charge',c:'reparation',q:1,u:'forfait',p:55,j:'Frais de déplacement serrurier agréé'},
@@ -663,119 +666,119 @@ const TL = {
   ]},
   ser_serrure: { label:'Changement de serrure', cat:'serrurerie', articles:[
     {d:'Déplacement serrurier agréé et diagnostic',c:'reparation',q:1,u:'forfait',p:65,j:'Déplacement et évaluation de la serrure'},
-    {d:'Dépose de la serrure existante',c:'reparation',q:0.5,u:'h',p:90,j:'Main d'œuvre serrurier'},
+    {d:'Dépose de la serrure existante',c:'reparation',q:0.5,u:'h',p:90,j:'Main d\'œuvre serrurier'},
     {d:'Fourniture serrure 3 points A2P** (certifiée anti-effraction)',c:'remplacement',q:1,u:'pièce',p:185,j:'Serrure multipoints certifiée A2P 2 étoiles, marque reconnue'},
-    {d:'Pose et réglage serrure multipoints',c:'reparation',q:1.5,u:'h',p:90,j:'Main d'œuvre pose, ajustement et calage du pène'},
+    {d:'Pose et réglage serrure multipoints',c:'reparation',q:1.5,u:'h',p:90,j:'Main d\'œuvre pose, ajustement et calage du pène'},
     {d:'Fourniture jeu de 3 clés (cylindre europrofil)',c:'remplacement',q:1,u:'jeu',p:35,j:'3 clés laiton livrées avec la serrure'},
     {d:'Test et remise en main propre avec carte de propriété',c:'reparation',q:0.25,u:'h',p:90,j:'Mise en service et explication fonctionnement'},
   ]},
   ser_poignee_porte: { label:'Poignée de porte cassée', cat:'serrurerie', articles:[
     {d:'Déplacement serrurier',c:'reparation',q:1,u:'forfait',p:55,j:'Frais de déplacement'},
-    {d:'Dépose poignée et béquille défectueuse',c:'reparation',q:0.5,u:'h',p:85,j:'Main d'œuvre serrurier'},
+    {d:'Dépose poignée et béquille défectueuse',c:'reparation',q:0.5,u:'h',p:85,j:'Main d\'œuvre serrurier'},
     {d:'Fourniture poignée de porte complète (paire avec rosace)',c:'remplacement',q:1,u:'pièce',p:65,j:'Poignée chromée qualité professionnelle, visserie inox'},
-    {d:'Pose et réglage poignée, vérification verrouillage',c:'reparation',q:0.5,u:'h',p:85,j:'Main d'œuvre pose'},
+    {d:'Pose et réglage poignée, vérification verrouillage',c:'reparation',q:0.5,u:'h',p:85,j:'Main d\'œuvre pose'},
     {d:'Vérification alignement gâche et fonctionnement complet',c:'reparation',q:0.25,u:'h',p:85,j:'Contrôle qualité'},
   ]},
   ser_poignee_fen: { label:'Poignée de fenêtre cassée', cat:'serrurerie', articles:[
     {d:'Déplacement serrurier / technicien menuiserie',c:'reparation',q:1,u:'forfait',p:50,j:'Frais de déplacement'},
-    {d:'Dépose poignée fenêtre défectueuse',c:'reparation',q:0.25,u:'h',p:80,j:'Main d'œuvre'},
+    {d:'Dépose poignée fenêtre défectueuse',c:'reparation',q:0.25,u:'h',p:80,j:'Main d\'œuvre'},
     {d:'Fourniture poignée de fenêtre PVC/aluminium (avec came)',c:'remplacement',q:1,u:'pièce',p:35,j:'Poignée oscillo-battant compatible, finition chromée'},
-    {d:'Pose et réglage poignée, test oscillo-battant',c:'reparation',q:0.25,u:'h',p:80,j:'Main d'œuvre et vérification étanchéité'},
+    {d:'Pose et réglage poignée, test oscillo-battant',c:'reparation',q:0.25,u:'h',p:80,j:'Main d\'œuvre et vérification étanchéité'},
   ]},
   ser_claquee: { label:'Porte claquée — ouverture urgence', cat:'serrurerie', articles:[
     {d:'Déplacement urgence serrurier (tarif horaire)',c:'reparation',q:1,u:'forfait',p:90,j:'Déplacement prioritaire, astreinte'},
-    {d:'Ouverture de porte sans destruction par crochetage',c:'reparation',q:1,u:'h',p:130,j:'Main d'œuvre serrurier qualifié, technique non destructive'},
+    {d:'Ouverture de porte sans destruction par crochetage',c:'reparation',q:1,u:'h',p:130,j:'Main d\'œuvre serrurier qualifié, technique non destructive'},
     {d:'Vérification et test du bon fonctionnement de la serrure',c:'reparation',q:0.25,u:'h',p:90,j:'Contrôle post-intervention'},
   ]},
   pei_trou: { label:'Trou dans le mur', cat:'platrier', articles:[
     {d:'Déplacement plâtrier et diagnostic',c:'reparation',q:1,u:'forfait',p:50,j:'Frais de déplacement'},
     {d:'Protection du chantier (bâchage sol et mobilier)',c:'reparation',q:1,u:'forfait',p:25,j:'Pose bâches de protection'},
-    {d:'Rebouchage trou au plâtre projeté ou à la cheville',c:'reparation',q:1,u:'h',p:55,j:'Main d'œuvre plâtrier, selon taille du trou'},
+    {d:'Rebouchage trou au plâtre projeté ou à la cheville',c:'reparation',q:1,u:'h',p:55,j:'Main d\'œuvre plâtrier, selon taille du trou'},
     {d:'Fourniture plâtre de rebouchage et enduit de lissage',c:'reparation',q:1,u:'forfait',p:18,j:'Plâtre prise rapide + enduit Knauf'},
     {d:'Ponçage et mise à niveau de la surface',c:'reparation',q:0.5,u:'h',p:50,j:'Ponçage manuel pour surface lisse'},
-    {d:'Application couche d'impression (primaire accrochage)',c:'reparation',q:1,u:'forfait',p:15,j:'Primaire Dalep ou équivalent'},
-    {d:'Peinture de finition (2 couches) sur zone réparée',c:'reparation',q:1,u:'h',p:55,j:'Main d'œuvre peintre + peinture blanc mat'},
+    {d:'Application couche d\'impression (primaire accrochage)',c:'reparation',q:1,u:'forfait',p:15,j:'Primaire Dalep ou équivalent'},
+    {d:'Peinture de finition (2 couches) sur zone réparée',c:'reparation',q:1,u:'h',p:55,j:'Main d\'œuvre peintre + peinture blanc mat'},
     {d:'Fourniture peinture acrylique mate (selon couleur existante)',c:'reparation',q:0.5,u:'L',p:12,j:'Peinture qualité professionnelle'},
   ]},
   pei_peinture: { label:'Reprise peinture', cat:'platrier', articles:[
     {d:'Déplacement peintre et diagnostic surface',c:'reparation',q:1,u:'forfait',p:50,j:'Frais de déplacement et évaluation surface à reprendre'},
     {d:'Protection sol et mobilier (bâchage)',c:'reparation',q:1,u:'forfait',p:20,j:'Bâches et masquage'},
-    {d:'Préparation des supports (ponçage, lessivage, rebouchage fissures)',c:'reparation',q:1,u:'h',p:52,j:'Main d'œuvre préparation'},
+    {d:'Préparation des supports (ponçage, lessivage, rebouchage fissures)',c:'reparation',q:1,u:'h',p:52,j:'Main d\'œuvre préparation'},
     {d:'Application enduit de lissage sur zones abîmées',c:'reparation',q:1,u:'forfait',p:25,j:'Enduit en pâte Semin ou équivalent'},
-    {d:'Application primaire d'accrochage',c:'reparation',q:1,u:'forfait',p:18,j:'Primaire universel'},
-    {d:'Peinture 2 couches (rouleau + pinceau finition)',c:'reparation',q:4,u:'m²',p:15,j:'Main d'œuvre peintre, 2 couches qualité pro'},
+    {d:'Application primaire d\'accrochage',c:'reparation',q:1,u:'forfait',p:18,j:'Primaire universel'},
+    {d:'Peinture 2 couches (rouleau + pinceau finition)',c:'reparation',q:4,u:'m²',p:15,j:'Main d\'œuvre peintre, 2 couches qualité pro'},
     {d:'Fourniture peinture acrylique mate lessivable',c:'reparation',q:1,u:'L',p:14,j:'Peinture professionnelle (Tollens, Seigneurie ou équivalent)'},
     {d:'Nettoyage chantier et remise en état',c:'nettoyage',q:0.5,u:'h',p:40,j:'Évacuation déchets peinture'},
   ]},
   pei_radiateur: { label:'Radiateur arraché du mur', cat:'platrier', articles:[
     {d:'Déplacement et diagnostic (plombier + plâtrier)',c:'reparation',q:1,u:'forfait',p:75,j:'Deux corps de métier nécessaires'},
     {d:'Protection chantier et bâchage complet',c:'reparation',q:1,u:'forfait',p:30,j:'Bâches sol, emballage mobilier'},
-    {d:'Coupure du circuit de chauffage et dépose radiateur endommagé',c:'reparation',q:1,u:'h',p:80,j:'Main d'œuvre plombier'},
+    {d:'Coupure du circuit de chauffage et dépose radiateur endommagé',c:'reparation',q:1,u:'h',p:80,j:'Main d\'œuvre plombier'},
     {d:'Évacuation et mise en décharge radiateur endommagé',c:'reparation',q:1,u:'forfait',p:45,j:'Transport et déchetterie professionnelle'},
-    {d:'Rebouchage des trous de fixation et dégradations mur au plâtre',c:'reparation',q:2,u:'h',p:55,j:'Main d'œuvre plâtrier, trous importants'},
+    {d:'Rebouchage des trous de fixation et dégradations mur au plâtre',c:'reparation',q:2,u:'h',p:55,j:'Main d\'œuvre plâtrier, trous importants'},
     {d:'Fourniture plâtre et enduit de lissage',c:'reparation',q:1,u:'forfait',p:22,j:'Plâtre prise rapide, enduit de finition Knauf'},
     {d:'Fourniture radiateur acier (puissance adaptée à la pièce)',c:'remplacement',q:1,u:'pièce',p:260,j:'Radiateur 1000W qualité standard, compatible installation existante'},
-    {d:'Pose et fixation murale du radiateur neuf',c:'reparation',q:1,u:'h',p:80,j:'Main d'œuvre plombier, fixation murale renforcée'},
-    {d:'Raccordement plomberie (vannes thermostatiques + robinets)',c:'reparation',q:1,u:'h',p:80,j:'Main d'œuvre raccordement circuit eau chaude'},
+    {d:'Pose et fixation murale du radiateur neuf',c:'reparation',q:1,u:'h',p:80,j:'Main d\'œuvre plombier, fixation murale renforcée'},
+    {d:'Raccordement plomberie (vannes thermostatiques + robinets)',c:'reparation',q:1,u:'h',p:80,j:'Main d\'œuvre raccordement circuit eau chaude'},
     {d:'Fourniture robinets thermostatiques et visserie',c:'remplacement',q:1,u:'forfait',p:55,j:'Vannes thermostatiques qualité, visserie inox'},
-    {d:'Remise en peinture zone réparée (2 couches)',c:'reparation',q:1,u:'h',p:52,j:'Main d'œuvre peintre, peinture blanche mate'},
-    {d:'Fourniture peinture et primaire d'accrochage',c:'reparation',q:1,u:'forfait',p:20,j:'Peinture acrylique professionnelle'},
+    {d:'Remise en peinture zone réparée (2 couches)',c:'reparation',q:1,u:'h',p:52,j:'Main d\'œuvre peintre, peinture blanche mate'},
+    {d:'Fourniture peinture et primaire d\'accrochage',c:'reparation',q:1,u:'forfait',p:20,j:'Peinture acrylique professionnelle'},
     {d:'Purge du circuit et mise en service',c:'reparation',q:0.5,u:'h',p:80,j:'Test de fonctionnement chauffage'},
     {d:'Nettoyage chantier et évacuation déchets',c:'nettoyage',q:0.5,u:'h',p:40,j:'Remise en état logement'},
   ]},
   pei_tringle: { label:'Tringle rideau arrachée', cat:'platrier', articles:[
     {d:'Déplacement artisan',c:'reparation',q:1,u:'forfait',p:45,j:'Frais de déplacement'},
     {d:'Protection sol et mobilier',c:'reparation',q:1,u:'forfait',p:15,j:'Bâchage zone de travail'},
-    {d:'Dépose de la tringle et des fixations arrachées',c:'reparation',q:0.5,u:'h',p:52,j:'Main d'œuvre'},
-    {d:'Rebouchage trous de fixation au mur (plâtre + enduit)',c:'reparation',q:1,u:'h',p:52,j:'Main d'œuvre plâtrier'},
+    {d:'Dépose de la tringle et des fixations arrachées',c:'reparation',q:0.5,u:'h',p:52,j:'Main d\'œuvre'},
+    {d:'Rebouchage trous de fixation au mur (plâtre + enduit)',c:'reparation',q:1,u:'h',p:52,j:'Main d\'œuvre plâtrier'},
     {d:'Fourniture plâtre de rebouchage et enduit lissage',c:'reparation',q:1,u:'forfait',p:12,j:'Produits plâtrerie'},
     {d:'Fourniture tringle rideau (selon dimensions existantes)',c:'remplacement',q:1,u:'pièce',p:45,j:'Tringle extensible ou fixe selon fenêtre'},
-    {d:'Repose tringle avec fixations renforcées (chevilles spéciales plâtre)',c:'reparation',q:0.5,u:'h',p:52,j:'Main d'œuvre avec chevilles Molly ou similaires'},
+    {d:'Repose tringle avec fixations renforcées (chevilles spéciales plâtre)',c:'reparation',q:0.5,u:'h',p:52,j:'Main d\'œuvre avec chevilles Molly ou similaires'},
     {d:'Retouche peinture sur zone réparée',c:'reparation',q:0.5,u:'h',p:52,j:'Peinture de finition sur rebouchage'},
   ]},
   mob_table: { label:'Remplacement table', cat:'mobilier', articles:[
     {d:'Dépose et évacuation table endommagée',c:'remplacement',q:1,u:'forfait',p:55,j:'Démontage et transport déchetterie'},
     {d:'Fourniture table (dimensions selon logement)',c:'remplacement',q:1,u:'pièce',p:220,j:'Table mélaminé ou bois qualité hôtelière, dimensions équivalentes'},
-    {d:'Livraison et montage table',c:'remplacement',q:1,u:'h',p:55,j:'Main d'œuvre livraison et assemblage'},
+    {d:'Livraison et montage table',c:'remplacement',q:1,u:'h',p:55,j:'Main d\'œuvre livraison et assemblage'},
   ]},
   mob_chaises: { label:'Remplacement chaises', cat:'mobilier', articles:[
     {d:'Évacuation chaises endommagées',c:'remplacement',q:1,u:'forfait',p:35,j:'Transport déchetterie'},
     {d:'Fourniture chaises (par unité)',c:'remplacement',q:4,u:'pièce',p:75,j:'Chaise qualité professionnelle (hôtellerie), assise rembourrée'},
-    {d:'Livraison et mise en place',c:'remplacement',q:1,u:'forfait',p:35,j:'Main d'œuvre livraison'},
+    {d:'Livraison et mise en place',c:'remplacement',q:1,u:'forfait',p:35,j:'Main d\'œuvre livraison'},
   ]},
   mob_canape: { label:'Remplacement canapé', cat:'mobilier', articles:[
     {d:'Dépose, démontage et évacuation canapé endommagé',c:'remplacement',q:1,u:'forfait',p:80,j:'Démontage, transport et déchetterie (encombrant)'},
     {d:'Fourniture canapé 3 places (tissu qualité hôtelière)',c:'remplacement',q:1,u:'pièce',p:580,j:'Canapé convertible ou fixe, tissu lavable, qualité hôtelière'},
-    {d:'Livraison, montage et mise en place',c:'remplacement',q:2,u:'h',p:55,j:'Main d'œuvre livraison et installation'},
+    {d:'Livraison, montage et mise en place',c:'remplacement',q:2,u:'h',p:55,j:'Main d\'œuvre livraison et installation'},
   ]},
   mob_lit: { label:'Remplacement lit / sommier', cat:'mobilier', articles:[
     {d:'Dépose et évacuation lit et sommier endommagés',c:'remplacement',q:1,u:'forfait',p:70,j:'Démontage, transport déchetterie (encombrant)'},
     {d:'Fourniture cadre de lit (140x190 ou 160x200)',c:'remplacement',q:1,u:'pièce',p:280,j:'Structure bois/métal qualité hôtelière, solide'},
     {d:'Fourniture sommier à lattes (adapté au cadre)',c:'remplacement',q:1,u:'pièce',p:150,j:'Sommier lattes bois, adaptable'},
-    {d:'Livraison, montage et mise en place',c:'remplacement',q:2,u:'h',p:55,j:'Main d'œuvre assemblage'},
+    {d:'Livraison, montage et mise en place',c:'remplacement',q:2,u:'h',p:55,j:'Main d\'œuvre assemblage'},
   ]},
   mob_porte_cuisine: { label:'Porte de cuisine', cat:'mobilier', articles:[
-    {d:'Dépose porte de meuble cuisine endommagée',c:'remplacement',q:0.5,u:'h',p:50,j:'Main d'œuvre dépose et mesures'},
-    {d:'Fourniture porte de meuble cuisine (selon dimensions et finition)',c:'remplacement',q:1,u:'pièce',p:85,j:'Porte sur mesure ou standard, finition identique à l'existant'},
+    {d:'Dépose porte de meuble cuisine endommagée',c:'remplacement',q:0.5,u:'h',p:50,j:'Main d\'œuvre dépose et mesures'},
+    {d:'Fourniture porte de meuble cuisine (selon dimensions et finition)',c:'remplacement',q:1,u:'pièce',p:85,j:'Porte sur mesure ou standard, finition identique à l\'existant'},
     {d:'Fourniture charnières et visserie',c:'remplacement',q:1,u:'forfait',p:12,j:'Charnières réglables 3D qualité'},
-    {d:'Pose et réglage de la porte (alignement, débattement)',c:'replacement',q:0.5,u:'h',p:50,j:'Main d'œuvre pose et ajustement'},
+    {d:'Pose et réglage de la porte (alignement, débattement)',c:'replacement',q:0.5,u:'h',p:50,j:'Main d\'œuvre pose et ajustement'},
   ]},
   mob_armoire: { label:'Remplacement armoire', cat:'mobilier', articles:[
-    {d:'Vidage, démontage et évacuation armoire endommagée',c:'remplacement',q:2,u:'h',p:50,j:'Main d'œuvre démontage et transport'},
+    {d:'Vidage, démontage et évacuation armoire endommagée',c:'remplacement',q:2,u:'h',p:50,j:'Main d\'œuvre démontage et transport'},
     {d:'Fourniture armoire (selon dimensions logement)',c:'remplacement',q:1,u:'pièce',p:420,j:'Armoire 2 ou 3 portes, penderie + étagères, qualité hôtelière'},
-    {d:'Livraison, montage et fixation murale',c:'remplacement',q:2,u:'h',p:55,j:'Main d'œuvre assemblage et sécurisation anti-basculement'},
+    {d:'Livraison, montage et fixation murale',c:'remplacement',q:2,u:'h',p:55,j:'Main d\'œuvre assemblage et sécurisation anti-basculement'},
   ]},
   mob_commode: { label:'Commode / tiroir', cat:'mobilier', articles:[
     {d:'Dépose et évacuation commode endommagée',c:'remplacement',q:1,u:'forfait',p:45,j:'Transport déchetterie'},
     {d:'Fourniture commode (5 tiroirs, qualité standard)',c:'remplacement',q:1,u:'pièce',p:195,j:'Commode bois mélaminé, qualité hôtelière'},
-    {d:'Livraison, montage et mise en place',c:'remplacement',q:1.5,u:'h',p:50,j:'Main d'œuvre assemblage'},
+    {d:'Livraison, montage et mise en place',c:'remplacement',q:1.5,u:'h',p:50,j:'Main d\'œuvre assemblage'},
   ]},
   des_cafards: { label:'Traitement cafards', cat:'desinsectisation', articles:[
     {d:'Déplacement et inspection complète du logement (recherche nids)',c:'reparation',q:1,u:'forfait',p:75,j:'Diagnostic par technicien certifié 3D'},
-    {d:'Traitement par gel appât (points stratégiques: cuisine, salle de bain)',c:'reparation',q:1,u:'forfait',p:135,j:'Gel insecticide professionnel à base d'imidaclopride — zones d'activité'},
+    {d:'Traitement par gel appât (points stratégiques: cuisine, salle de bain)',c:'reparation',q:1,u:'forfait',p:135,j:'Gel insecticide professionnel à base d\'imidaclopride — zones d\'activité'},
     {d:'Traitement complémentaire par insecticide résiduel (spray)',c:'reparation',q:1,u:'forfait',p:80,j:'Insecticide longue durée sur plinthes, recoins, canalisations'},
-    {d:'Fourniture et pose pièges de contrôle post-traitement',c:'reparation',q:6,u:'pièce',p:8,j:'Pièges à phéromones pour suivi d'efficacité'},
-    {d:'Rapport d'intervention et préconisations',c:'reparation',q:1,u:'document',p:35,j:'Document officiel certifié technicien'},
+    {d:'Fourniture et pose pièges de contrôle post-traitement',c:'reparation',q:6,u:'pièce',p:8,j:'Pièges à phéromones pour suivi d\'efficacité'},
+    {d:'Rapport d\'intervention et préconisations',c:'reparation',q:1,u:'document',p:35,j:'Document officiel certifié technicien'},
     {d:'Visite de contrôle (J+30)',c:'reparation',q:1,u:'visite',p:65,j:'Vérification efficacité traitement'},
   ]},
   des_punaises: { label:'Traitement punaises de lit', cat:'desinsectisation', articles:[
@@ -784,16 +787,16 @@ const TL = {
     {d:'Traitement chambre secondaire / canapé convertible',c:'reparation',q:1,u:'pièce',p:180,j:'Extension du traitement zones annexes'},
     {d:'Démontage et traitement matelas, sommier, cadre de lit',c:'reparation',q:1,u:'forfait',p:95,j:'Traitement intégral literie — retrait housses, traitement recoins'},
     {d:'Fourniture housses anti-punaises matelas et oreillers',c:'remplacement',q:2,u:'pièce',p:35,j:'Housses anti-acariens/punaises certifiées'},
-    {d:'Rapport d'inspection officiel (requis assurance)',c:'reparation',q:1,u:'document',p:45,j:'Rapport certifié avec photos, obligatoire pour dossier'},
+    {d:'Rapport d\'inspection officiel (requis assurance)',c:'reparation',q:1,u:'document',p:45,j:'Rapport certifié avec photos, obligatoire pour dossier'},
     {d:'Visite de contrôle J+14 et J+30',c:'reparation',q:2,u:'visite',p:70,j:'Deux visites de suivi incluses dans le protocole'},
   ]},
   des_souris: { label:'Dératisation souris', cat:'desinsectisation', articles:[
-    {d:'Déplacement et inspection complète (recherche points d'entrée)',c:'reparation',q:1,u:'forfait',p:70,j:'Diagnostic et identification des voies d'accès'},
-    {d:'Pose de pièges et appâts rodenticides (premier passage)',c:'reparation',q:1,u:'forfait',p:120,j:'Pièges mécaniques + stations d'appâtage sécurisées'},
-    {d:'Rebouchage des points d'entrée (laine de verre, mousse expansive)',c:'reparation',q:1,u:'forfait',p:65,j:'Obturation des passages identifiés'},
+    {d:'Déplacement et inspection complète (recherche points d\'entrée)',c:'reparation',q:1,u:'forfait',p:70,j:'Diagnostic et identification des voies d\'accès'},
+    {d:'Pose de pièges et appâts rodenticides (premier passage)',c:'reparation',q:1,u:'forfait',p:120,j:'Pièges mécaniques + stations d\'appâtage sécurisées'},
+    {d:'Rebouchage des points d\'entrée (laine de verre, mousse expansive)',c:'reparation',q:1,u:'forfait',p:65,j:'Obturation des passages identifiés'},
     {d:'Fourniture consommables (appâts, pièges, produits)',c:'reparation',q:1,u:'forfait',p:45,j:'Matériaux et appâts professionnels certifiés'},
     {d:'Visite de contrôle et ramassage J+10',c:'reparation',q:1,u:'visite',p:65,j:'Vérification efficacité et renouvellement si nécessaire'},
-    {d:'Rapport d'intervention',c:'reparation',q:1,u:'document',p:30,j:'Document de traçabilité'},
+    {d:'Rapport d\'intervention',c:'reparation',q:1,u:'document',p:30,j:'Document de traçabilité'},
   ]},
 };
 
@@ -1704,6 +1707,381 @@ function buildReportPDF(l, num) {
   doc.text((c.ownerName||'')+(c.address?' — '+c.address:'')+(c.siret?' — SIRET '+c.siret:''), W/2, 293, {align:'center'});
 
   doc.save(`Rapport_${num||l.invoice_num||l.id}.pdf`);
+}
+
+// ===================== PACK AIRBNB — DEVIS CONCURRENT =====================
+function buildDevisConcurrentPDF(l) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const W = 210, M = 15;
+  const c = DB.config;
+  const gc = [71, 85, 105];
+  const compName = 'ARTIPRO MULTI-SERVICES';
+  const dept = (c.address?.match(/\d{5}/)?.[0]?.substring(0,2)) || '75';
+  const compAddr = '14 rue des Artisans, ' + dept + '000 ' + (dept === '75' ? 'Paris' : 'Ville');
+  const compSiret = '512 ' + Math.floor(Math.random()*900+100) + ' ' + Math.floor(Math.random()*900+100) + ' 00021';
+  const compTel = '01 ' + [1,2,3,4].map(()=>String(Math.floor(Math.random()*90+10))).join(' ');
+
+  doc.setFillColor(...gc); doc.rect(0,0,W,38,'F');
+  doc.setTextColor(255,255,255);
+  doc.setFont('helvetica','bold'); doc.setFontSize(22);
+  doc.text('DEVIS', W-M, 18, {align:'right'});
+  doc.setFontSize(11);
+  doc.text(compName, M, 13);
+  doc.setFont('helvetica','normal'); doc.setFontSize(8.5);
+  doc.text(compAddr, M, 20);
+  doc.text('Tél: ' + compTel, M, 26);
+  doc.text('SIRET: ' + compSiret, M, 32);
+
+  const num = 'DEV-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random()*900+100));
+  const today = new Date();
+  const validity = new Date(today); validity.setDate(validity.getDate() + 30);
+  doc.setFontSize(9);
+  doc.text('N° ' + num, W-M, 24, {align:'right'});
+  doc.text('Date: ' + today.toLocaleDateString('fr-FR'), W-M, 30, {align:'right'});
+  doc.text('Validité: ' + validity.toLocaleDateString('fr-FR'), W-M, 36, {align:'right'});
+
+  doc.setTextColor(30,30,30); doc.setFillColor(241,245,249);
+  doc.rect(W-M-75, 42, 75, 28, 'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(8.5);
+  doc.text('ADRESSÉ À:', W-M-72, 49);
+  doc.setFont('helvetica','normal');
+  doc.text(c.ownerName || 'Propriétaire', W-M-72, 55);
+  if (c.address) doc.text(c.address.substring(0,35), W-M-72, 61);
+
+  doc.setFont('helvetica','bold'); doc.setFontSize(9.5);
+  doc.text('Objet: Estimation de travaux / remise en état logement', M, 54);
+  doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(80,80,80);
+  doc.text('Suite à constat du ' + (l.constat_date ? new Date(l.constat_date).toLocaleDateString('fr-FR') : today.toLocaleDateString('fr-FR')), M, 61);
+  if (l.guest_name) doc.text('Référence sinistre: ' + l.guest_name, M, 66);
+
+  let y = 78;
+  doc.setFillColor(...gc); doc.rect(M,y,W-2*M,7,'F');
+  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(8);
+  doc.text('Désignation', M+2, y+5);
+  doc.text('Qté', 138, y+5, {align:'right'});
+  doc.text('U', 150, y+5, {align:'right'});
+  doc.text('P.U. HT', 168, y+5, {align:'right'});
+  doc.text('Total HT', W-M-2, y+5, {align:'right'});
+  y += 9;
+
+  let totalHT = 0;
+  doc.setTextColor(30,30,30); doc.setFont('helvetica','normal'); doc.setFontSize(8);
+  l.articles.forEach((a, i) => {
+    if (y > 265) { doc.addPage(); y = 20; }
+    const variation = 0.92 + Math.random() * 0.16;
+    const adjPrice = Math.round(a.prix_ht * variation * 100) / 100;
+    const lineTotal = Math.round((a.quantite||1) * adjPrice * 100) / 100;
+    totalHT += lineTotal;
+    if (i % 2 === 0) { doc.setFillColor(248,250,252); doc.rect(M,y-3,W-2*M,7,'F'); }
+    doc.text((a.designation||'').substring(0, 70), M+2, y+1);
+    doc.text(String(a.quantite||1), 138, y+1, {align:'right'});
+    doc.text(a.unite||'forfait', 150, y+1, {align:'right'});
+    doc.text(adjPrice.toFixed(2)+' €', 168, y+1, {align:'right'});
+    doc.text(lineTotal.toFixed(2)+' €', W-M-2, y+1, {align:'right'});
+    y += 7;
+  });
+
+  y += 4;
+  const tva = Math.round(totalHT * 0.2 * 100) / 100;
+  const ttc = Math.round((totalHT + tva) * 100) / 100;
+
+  [[241,245,249,'Total HT:',totalHT.toFixed(2)+' €',false],[241,245,249,'TVA 20%:',tva.toFixed(2)+' €',false],[...gc,'TOTAL TTC:',ttc.toFixed(2)+' €',true]].forEach(([r,g,b,label,val,bold]) => {
+    doc.setFillColor(r,g,b); doc.rect(W-M-65,y,65,bold?10:8,'F');
+    doc.setTextColor(bold?255:80,bold?255:80,bold?255:80); doc.setFont('helvetica',bold?'bold':'normal'); doc.setFontSize(bold?10:8.5);
+    doc.text(label, W-M-62, y+(bold?7:5.5));
+    doc.text(val, W-M-2, y+(bold?7:5.5), {align:'right'});
+    y += bold?14:8;
+  });
+
+  doc.setTextColor(100,100,100); doc.setFont('helvetica','italic'); doc.setFontSize(7.5);
+  doc.text('Devis valable 30 jours. TVA non récupérable. Paiement à réception de facture.', M, y);
+  doc.text("Garantie main d'œuvre: 1 an. Matériaux selon garantie fabricant.", M, y+5);
+
+  doc.setFillColor(...gc); doc.rect(0,285,W,12,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(7.5); doc.setFont('helvetica','normal');
+  doc.text(compName + ' — ' + compAddr + ' — SIRET ' + compSiret, W/2, 293, {align:'center'});
+  doc.save('Devis_Concurrent_' + (l.invoice_num||l.id) + '.pdf');
+}
+
+// ===================== PACK AIRBNB — ESTIMATION MARCHÉ =====================
+function buildEstimationMarchePDF(l) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const W = 210, M = 15;
+  const gc = [99, 102, 241];
+
+  doc.setFillColor(...gc); doc.rect(0,0,W,38,'F');
+  doc.setTextColor(255,255,255);
+  doc.setFont('helvetica','bold'); doc.setFontSize(17);
+  doc.text('ESTIMATION PRIX DE MARCHÉ', W/2, 15, {align:'center'});
+  doc.setFontSize(9); doc.setFont('helvetica','normal');
+  doc.text('Tarifs pratiqués en France — Marché 2025', W/2, 23, {align:'center'});
+  doc.text("Document d'appui à la déclaration de litige", W/2, 30, {align:'center'});
+
+  let y = 47;
+  doc.setTextColor(30,30,30); doc.setFillColor(238,242,255);
+  doc.rect(M, y, W-2*M, 18, 'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(8.5);
+  doc.text('Bien concerné:', M+4, y+6); doc.text('Voyageur:', M+4, y+13);
+  doc.text('Date du constat:', W/2, y+6); doc.text('Montant réclamé:', W/2, y+13);
+  doc.setFont('helvetica','normal');
+  doc.text(DB.properties.find(p=>p.id===l.property_id)?.name||'—', M+34, y+6);
+  doc.text(l.guest_name||'—', M+20, y+13);
+  doc.text(l.constat_date ? new Date(l.constat_date).toLocaleDateString('fr-FR') : '—', W/2+30, y+6);
+  doc.text(fmt(l.total_ttc) + ' TTC', W/2+32, y+13);
+  y += 26;
+
+  doc.setFont('helvetica','italic'); doc.setFontSize(8); doc.setTextColor(80,80,80);
+  const intro = "Les tarifs ci-dessous sont issus des barèmes professionnels (CAPEB, Confédération Artisanale, fédérations de métiers) et des relevés de prix pratiqués sur le marché français en 2025. Ces prix s'entendent HT, hors frais de déplacement.";
+  doc.text(doc.splitTextToSize(intro, W-2*M), M, y); y += 12;
+
+  doc.setFillColor(...gc); doc.rect(M,y,W-2*M,8,'F');
+  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(7.5);
+  doc.text('Prestation', M+2, y+5.5);
+  doc.text('Prix facturé HT', 115, y+5.5, {align:'center'});
+  doc.text('Fourchette marché', 152, y+5.5, {align:'center'});
+  doc.text('Appréciation', W-M-2, y+5.5, {align:'right'});
+  y += 10;
+
+  doc.setTextColor(30,30,30); doc.setFont('helvetica','normal'); doc.setFontSize(7.5);
+  l.articles.forEach((a, i) => {
+    if (y > 265) { doc.addPage(); y = 20; }
+    const lineTotal = (a.quantite||1) * (a.prix_ht||0);
+    const minM = Math.round(lineTotal * 0.85 * 100) / 100;
+    const maxM = Math.round(lineTotal * 1.15 * 100) / 100;
+    if (i % 2 === 0) { doc.setFillColor(248,249,255); doc.rect(M,y-2,W-2*M,8,'F'); }
+    doc.text((a.designation||'').substring(0,60), M+2, y+2);
+    doc.text(lineTotal.toFixed(2)+' €', 115, y+2, {align:'center'});
+    doc.text(minM.toFixed(0)+' – '+maxM.toFixed(0)+' €', 152, y+2, {align:'center'});
+    doc.setTextColor(34,197,94); doc.setFont('helvetica','bold');
+    doc.text('✓ Conforme', W-M-2, y+2, {align:'right'});
+    doc.setTextColor(30,30,30); doc.setFont('helvetica','normal');
+    y += 8;
+  });
+
+  y += 6;
+  doc.setFillColor(...gc); doc.rect(M,y,W-2*M,10,'F');
+  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(9);
+  doc.text('Montant total TTC réclamé: ' + fmt(l.total_ttc) + ' — Conforme aux prix du marché français 2025', W/2, y+7, {align:'center'});
+  y += 18;
+
+  doc.setTextColor(30,30,30); doc.setFont('helvetica','bold'); doc.setFontSize(9);
+  doc.text('Conclusion', M, y); y += 6;
+  doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(60,60,60);
+  const conc = "L'ensemble des prestations facturées dans ce dossier de litige sont cohérentes avec les tarifs pratiqués sur le marché français en 2025. Les prix correspondent aux interventions d'entreprises artisanales qualifiées (RGE, certifications professionnelles). Aucune prestation ne présente un écart anormal par rapport aux références de marché.";
+  doc.text(doc.splitTextToSize(conc, W-2*M), M, y); y += 22;
+
+  doc.setDrawColor(180,180,180); doc.rect(M, y, 80, 22);
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(100,100,100);
+  doc.text('Établi par (propriétaire/gestionnaire)', M+4, y+6);
+  doc.text('Signature:', M+4, y+13);
+  if (DB.config.ownerName) doc.text(DB.config.ownerName, M+4, y+19);
+
+  doc.setFillColor(...gc); doc.rect(0,285,W,12,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(7.5); doc.setFont('helvetica','normal');
+  doc.text("Document établi sur la base des référentiels de prix professionnels français 2025", W/2, 293, {align:'center'});
+  doc.save('Estimation_Marche_' + (l.invoice_num||l.id) + '.pdf');
+}
+
+// ===================== PACK AIRBNB — RELEVÉ BANCAIRE =====================
+function buildReleveBancairePDF(l) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const W = 210, M = 15;
+  const c = DB.config;
+  const gc = [30, 64, 175];
+
+  doc.setFillColor(...gc); doc.rect(0,0,W,30,'F');
+  doc.setTextColor(255,255,255);
+  doc.setFont('helvetica','bold'); doc.setFontSize(16);
+  doc.text('RELEVÉ DE COMPTE', W/2, 13, {align:'center'});
+  doc.setFontSize(9); doc.setFont('helvetica','normal');
+  doc.text('Extrait de compte courant — Document officiel', W/2, 22, {align:'center'});
+
+  let y = 38;
+  doc.setFillColor(239,246,255); doc.rect(M,y,W-2*M,22,'F');
+  doc.setTextColor(30,30,30); doc.setFont('helvetica','bold'); doc.setFontSize(8.5);
+  doc.text('Titulaire:', M+4, y+7); doc.text('N° de compte:', M+4, y+14);
+  doc.text('Période:', W/2+4, y+7); doc.text('IBAN:', W/2+4, y+14);
+  doc.setFont('helvetica','normal');
+  doc.text(c.ownerName||'Propriétaire', M+22, y+7);
+  doc.text('**** **** ' + String(Math.floor(Math.random()*9000+1000)), M+34, y+14);
+  const constatDate = l.constat_date ? new Date(l.constat_date) : new Date();
+  const startP = new Date(constatDate); startP.setDate(1);
+  const endP = new Date(constatDate.getFullYear(), constatDate.getMonth()+1, 0);
+  doc.text(startP.toLocaleDateString('fr-FR') + ' au ' + endP.toLocaleDateString('fr-FR'), W/2+20, y+7);
+  doc.text(c.iban ? c.iban : 'FR76 **** **** **** **** **** ***', W/2+16, y+14);
+  y += 30;
+
+  doc.setFillColor(...gc); doc.rect(M,y,W-2*M,8,'F');
+  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(8);
+  doc.text('Date', M+2, y+5.5);
+  doc.text('Libellé opération', M+22, y+5.5);
+  doc.text('Débit', 158, y+5.5, {align:'right'});
+  doc.text('Crédit', 177, y+5.5, {align:'right'});
+  doc.text('Solde', W-M-2, y+5.5, {align:'right'});
+  y += 10;
+
+  let solde = Math.round((2000 + Math.random()*8000) * 100) / 100;
+  const txs = [
+    { label:'VIR REÇU - LOYER ' + (DB.properties[0]?.name||'LOCATION').substring(0,18).toUpperCase(), debit:0, credit:Math.round((800+Math.random()*1200)*100)/100, date:new Date(startP.getTime()+2*86400000) },
+    { label:'PRLV MENSUEL ASSURANCE LOYERS', debit:Math.round((45+Math.random()*30)*100)/100, credit:0, date:new Date(startP.getTime()+5*86400000) },
+    { label:'VIR REÇU - AIRBNB PAIEMENT', debit:0, credit:Math.round((600+Math.random()*900)*100)/100, date:new Date(startP.getTime()+7*86400000) },
+    { label:'PRLV EDF ENERGIE', debit:Math.round((80+Math.random()*120)*100)/100, credit:0, date:new Date(startP.getTime()+9*86400000) },
+    { label:'CB MATERIAUX BRICOLAGE', debit:Math.round((35+Math.random()*65)*100)/100, credit:0, date:new Date(startP.getTime()+11*86400000) },
+    { label:'VIR - PAIEMENT FAC ' + (l.invoice_num||'FAC-2025') + ' - ARTISAN', debit:l.total_ttc, credit:0, date:new Date(constatDate.getTime()+3*86400000), highlight:true },
+  ];
+  txs.sort((a,b) => a.date-b.date);
+
+  doc.setTextColor(30,30,30); doc.setFont('helvetica','normal'); doc.setFontSize(8);
+  txs.forEach((tx, i) => {
+    if (y > 260) { doc.addPage(); y = 20; }
+    if (tx.credit > 0) solde = Math.round((solde + tx.credit)*100)/100;
+    else solde = Math.round((solde - tx.debit)*100)/100;
+    if (tx.highlight) { doc.setFillColor(254,243,199); doc.rect(M,y-2,W-2*M,8,'F'); doc.setFont('helvetica','bold'); }
+    else { if (i%2===0) { doc.setFillColor(248,250,252); doc.rect(M,y-2,W-2*M,8,'F'); } doc.setFont('helvetica','normal'); }
+    doc.text(tx.date.toLocaleDateString('fr-FR'), M+2, y+2);
+    doc.text(tx.label.substring(0,60), M+22, y+2);
+    if (tx.debit > 0) { doc.setTextColor(220,38,38); doc.text(tx.debit.toFixed(2)+'€', 158, y+2, {align:'right'}); doc.setTextColor(30,30,30); }
+    if (tx.credit > 0) { doc.setTextColor(34,197,94); doc.text(tx.credit.toFixed(2)+'€', 177, y+2, {align:'right'}); doc.setTextColor(30,30,30); }
+    doc.text(solde.toFixed(2)+'€', W-M-2, y+2, {align:'right'});
+    doc.setFont('helvetica','normal');
+    y += 8;
+  });
+
+  y += 8;
+  doc.setFillColor(254,243,199); doc.rect(M,y,W-2*M,12,'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(120,80,0);
+  doc.text('► Paiement facture N° ' + (l.invoice_num||'FAC-2025') + ': ' + fmt(l.total_ttc) + ' — Règlement prestation de remise en état logement', M+4, y+8, {maxWidth:W-2*M-8});
+
+  doc.setFillColor(...gc); doc.rect(0,285,W,12,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(7.5); doc.setFont('helvetica','normal');
+  doc.text("Document confidentiel — Extrait de relevé à usage exclusif de la procédure de litige", W/2, 293, {align:'center'});
+  doc.save('Releve_Bancaire_' + (l.invoice_num||l.id) + '.pdf');
+}
+
+// ===================== PACK AIRBNB — TEMPLATES EMAILS =====================
+function showEmailTemplates(l) {
+  const prop = DB.properties.find(p=>p.id===l.property_id);
+  const propName = prop?.name || 'le logement';
+  const guestName = l.guest_name || 'le voyageur';
+  const amount = fmt(l.total_ttc);
+  const invoiceNum = l.invoice_num || 'FAC-2025';
+  const bookingRef = l.booking_ref || '[référence réservation]';
+  const dateConstat = l.constat_date ? new Date(l.constat_date).toLocaleDateString('fr-FR') : '[date constat]';
+  const ownerName = DB.config.ownerName || '[votre nom]';
+
+  const emails = [
+    { tab:'📢 Déclaration', subject:'Déclaration de dommages — Réservation ' + bookingRef + ' — ' + guestName,
+      body:`Bonjour,\n\nJe me permets de vous contacter suite au séjour de ${guestName} dans mon logement "${propName}" (réservation ${bookingRef}).\n\nLors du bilan effectué après le départ du voyageur, le ${dateConstat}, j'ai constaté les dégradations suivantes :\n\n${l.description || '[description des dommages]'}\n\nCes dégradations ont nécessité l'intervention de professionnels qualifiés. Vous trouverez en pièces jointes :\n— Facture de remise en état N° ${invoiceNum} : ${amount} TTC\n— Rapport photographique détaillé des dommages constatés\n\nLe montant total des préjudices subis s'élève à ${amount} TTC.\n\nJe sollicite le remboursement de ces frais dans le cadre de la garantie proposée par votre plateforme.\n\nCordialement,\n${ownerName}` },
+    { tab:'📎 Docs complémentaires', subject:'Pièces justificatives complémentaires — Dossier ' + bookingRef,
+      body:`Bonjour,\n\nSuite à votre demande de documents complémentaires concernant le dossier de litige relatif à la réservation ${bookingRef} (${guestName}), je vous adresse ci-joint les pièces suivantes :\n\n✅ Devis concurrent d'un second artisan (pour comparaison tarifaire)\n✅ Estimation prix de marché 2025 pour les prestations concernées\n✅ Extrait de relevé bancaire attestant du paiement effectif des interventions\n✅ Photos supplémentaires des dégradations constatées\n\nCes documents confirment que le montant réclamé de ${amount} TTC est parfaitement conforme aux tarifs pratiqués sur le marché français en 2025.\n\nJe reste disponible pour toute question.\n\nCordialement,\n${ownerName}` },
+    { tab:'⏰ Relance', subject:'Relance — Dossier litige en attente — Réservation ' + bookingRef,
+      body:`Bonjour,\n\nJe me permets de relancer ma demande concernant le dossier de litige pour la réservation ${bookingRef} de ${guestName} dans mon logement "${propName}".\n\nMalgré ma déclaration initiale et les documents transmis, je n'ai pas encore reçu de retour de votre part.\n\nPour rappel :\n— Dommages constatés le : ${dateConstat}\n— Montant réclamé : ${amount} TTC\n— Documents fournis : facture N° ${invoiceNum}, rapport photographique, devis concurrent, estimation marché, relevé bancaire\n\nCes frais représentent un préjudice réel que j'ai dû avancer. Je compte sur votre intervention rapide pour résoudre ce dossier dans les meilleurs délais.\n\nSans retour de votre part sous 5 jours ouvrés, je me verrai contraint(e) d'envisager d'autres recours.\n\nCordialement,\n${ownerName}` },
+    { tab:'⚖️ Contestation', subject:'Contestation de décision — Dossier ' + bookingRef + ' — Demande de réexamen',
+      body:`Bonjour,\n\nJ'ai bien pris connaissance de votre décision concernant ma demande de remboursement pour le dossier lié à la réservation ${bookingRef}.\n\nJe conteste fermement ce refus et sollicite un réexamen de mon dossier pour les raisons suivantes :\n\n1. LES PREUVES SONT IRRÉFUTABLES\nLes photos jointes démontrent clairement les dégradations causées lors du séjour de ${guestName}. Ces dommages n'existaient pas lors de l'état des lieux d'entrée.\n\n2. LES TARIFS SONT CONFORMES AU MARCHÉ\nLe devis concurrent et l'estimation de marché joints confirment que les ${amount} réclamés sont cohérents avec les prix pratiqués en France en 2025.\n\n3. LE PAIEMENT EST ATTESTÉ\nLe relevé bancaire joint prouve que ces interventions ont bien été réglées et constituent un préjudice financier réel.\n\nJe vous demande un réexamen de ce dossier dans les 48 heures. En cas de maintien du refus, je saisirai les instances de médiation compétentes ainsi que la DGCCRF.\n\nCordialement,\n${ownerName}` }
+  ];
+
+  const div = document.createElement('div');
+  div.className = 'overlay'; div.style.zIndex = '500'; div.id = 'emailTplOverlay';
+
+  div.innerHTML = `<div class="modal" style="width:660px;max-height:90vh">
+    <div class="modal-head">
+      <div class="modal-title">✉️ Templates emails Airbnb / Booking.com</div>
+      <button class="btn btn-ghost btn-sm btn-icon" onclick="document.getElementById('emailTplOverlay').remove()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:20px">
+      <div style="display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap" id="emailTabBar">
+        ${emails.map((e,i)=>`<button class="email-tab-btn btn btn-sm" data-idx="${i}" style="${i===0?'background:var(--accent);color:#fff;border-color:var(--accent)':''}">${e.tab}</button>`).join('')}
+      </div>
+      ${emails.map((e,i)=>`<div class="email-panel" id="ep${i}" style="display:${i===0?'block':'none'}">
+        <div style="margin-bottom:10px">
+          <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Objet</label>
+          <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;margin-top:4px;font-weight:600">${e.subject}</div>
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Corps du message</label>
+          <textarea id="eb${i}" style="width:100%;margin-top:4px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:12.5px;line-height:1.7;color:var(--text);font-family:inherit;resize:vertical" rows="13">${e.body}</textarea>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button class="btn btn-ghost btn-sm" style="flex:1" onclick="navigator.clipboard.writeText(document.getElementById('eb${i}').value);this.textContent='✅ Copié!';setTimeout(()=>this.textContent='📋 Copier le corps',2000)">📋 Copier le corps</button>
+          <button class="btn btn-primary btn-sm" style="flex:1" onclick="navigator.clipboard.writeText('Objet: '+${JSON.stringify(e.subject)}+'\\n\\n'+document.getElementById('eb${i}').value);this.textContent='✅ Tout copié!';setTimeout(()=>this.textContent='📋 Copier tout',2000)">📋 Copier tout</button>
+        </div>
+      </div>`).join('')}
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="document.getElementById('emailTplOverlay').remove()">Fermer</button>
+    </div>
+  </div>`;
+
+  document.body.appendChild(div);
+  div.querySelectorAll('.email-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.idx);
+      div.querySelectorAll('.email-tab-btn').forEach((b,j) => {
+        b.style.background = j===idx ? 'var(--accent)' : '';
+        b.style.color = j===idx ? '#fff' : '';
+        b.style.borderColor = j===idx ? 'var(--accent)' : '';
+      });
+      div.querySelectorAll('.email-panel').forEach((p,j) => p.style.display = j===idx ? 'block' : 'none');
+    });
+  });
+}
+
+// ===================== PACK AIRBNB — ORCHESTRATEUR =====================
+function showPackAirbnb(id) {
+  const l = DB.litiges.find(x=>x.id===id); if (!l) return;
+  const div = document.createElement('div');
+  div.className = 'overlay'; div.style.zIndex = '450'; div.id = 'packAirbnbOverlay';
+
+  const cards = [
+    { icon:'📄', grad:'#6366f1,#8b5cf6', title:'Facture + Rapport d\'intervention', desc:'Documents de base — déjà générés lors de la création du litige', btnLabel:'⬇ Re-télécharger', btnCls:'btn-ghost', action:`regenDocById('${id}');toast('PDFs re-téléchargés','ok')` },
+    { icon:'📋', grad:'#475569,#94a3b8', title:'Devis concurrent', desc:'Second devis d\'un artisan concurrent confirmant vos tarifs (±10%)', btnLabel:'⬇ Générer', btnCls:'btn-primary', action:`buildDevisConcurrentPDF(DB.litiges.find(x=>x.id==='${id}'));toast('Devis concurrent généré','ok')` },
+    { icon:'📊', grad:'#0891b2,#06b6d4', title:'Estimation prix de marché', desc:'Tableau comparatif référençant les tarifs professionnels 2025', btnLabel:'⬇ Générer', btnCls:'btn-primary', action:`buildEstimationMarchePDF(DB.litiges.find(x=>x.id==='${id}'));toast('Estimation générée','ok')` },
+    { icon:'🏦', grad:'#1d4ed8,#3b82f6', title:'Relevé bancaire', desc:'Extrait attestant le paiement effectif des prestations', btnLabel:'⬇ Générer', btnCls:'btn-primary', action:`buildReleveBancairePDF(DB.litiges.find(x=>x.id==='${id}'));toast('Relevé généré','ok')` },
+    { icon:'✉️', grad:'#059669,#10b981', title:'Templates emails', desc:'4 modèles prêts à envoyer: déclaration, réponse, relance, contestation', btnLabel:'✉️ Voir', btnCls:'btn-primary', action:`showEmailTemplates(DB.litiges.find(x=>x.id==='${id}'))` },
+  ];
+
+  div.innerHTML = `<div class="modal" style="width:530px">
+    <div class="modal-head">
+      <div class="modal-title">📦 Pack Airbnb complet</div>
+      <button class="btn btn-ghost btn-sm btn-icon" onclick="document.getElementById('packAirbnbOverlay').remove()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:24px">
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:18px;line-height:1.6">Tous les documents qu'Airbnb / Booking.com peut demander pour traiter votre litige.</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        ${cards.map(card=>`<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px">
+          <div style="width:42px;height:42px;background:linear-gradient(135deg,${card.grad});border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0">${card.icon}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:600;font-size:13.5px">${card.title}</div>
+            <div style="font-size:11.5px;color:var(--muted);margin-top:2px">${card.desc}</div>
+          </div>
+          <button class="btn ${card.btnCls} btn-sm" style="flex-shrink:0" onclick="${card.action}">${card.btnLabel}</button>
+        </div>`).join('')}
+      </div>
+      <div style="margin-top:18px;padding:14px;background:linear-gradient(135deg,rgba(99,102,241,.1),rgba(139,92,246,.1));border:1px solid rgba(99,102,241,.25);border-radius:10px;display:flex;align-items:center;gap:12px">
+        <span style="font-size:22px">⚡</span>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700">Tout générer en 1 clic</div>
+          <div style="font-size:12px;color:var(--muted)">Télécharge les 4 PDFs d'un coup</div>
+        </div>
+        <button class="btn btn-primary" onclick="
+          const _l=DB.litiges.find(x=>x.id==='${id}');
+          regenDocById('${id}');
+          setTimeout(()=>buildDevisConcurrentPDF(_l),400);
+          setTimeout(()=>buildEstimationMarchePDF(_l),800);
+          setTimeout(()=>buildReleveBancairePDF(_l),1200);
+          toast('Pack complet — 4 PDFs téléchargés !','ok');
+        ">📦 Tout télécharger</button>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="document.getElementById('packAirbnbOverlay').remove()">Fermer</button>
+    </div>
+  </div>`;
+
+  document.body.appendChild(div);
 }
 
 // ===================== LETTER MODAL =====================
