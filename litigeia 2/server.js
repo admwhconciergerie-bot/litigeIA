@@ -32,8 +32,53 @@ app.post('/api/analyze', async (req, res) => {
       openaiMessages.push({ role: 'user', content });
 
       const body = {
-        model: 'google/gemini-2.0-flash-exp:free',
+        model: 'google/gemma-4-31b-it:free',
         messages: openaiMessages,
+        max_tokens: 3000
+      };
+
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + openrouterKey,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://litigeia.onrender.com',
+          'X-Title': 'LitigeIA'
+        },
+        body: JSON.stringify(body)
+      });
+
+      const data = await response.json();
+      if (!response.ok) return res.status(response.status).json({ error: (data.error && data.error.message) || 'Erreur OpenRouter' });
+      const text = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
+      return res.json({ content: [{ type: 'text', text }], usage: { input_tokens: 0, output_tokens: 0 } });
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
+    }
+  }
+
+  if (!anthropicKey) return res.status(500).json({ error: 'Aucune cle API configuree.' });
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'x-api-key': anthropicKey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+      body: JSON.stringify(req.body)
+    });
+    const data = await response.json();
+    if (!response.ok) return res.status(response.status).json(data);
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log('OK port ' + PORT));
         max_tokens: 3000
       };
 
