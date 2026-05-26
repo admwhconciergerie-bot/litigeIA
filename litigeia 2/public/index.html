@@ -2219,88 +2219,42 @@ window.addEventListener('load', () => {
 });
 </script>
 <script>
-/* === TIMELINE PROGRESSION LITIGE === */
+/* === TL v2 === */
 (function(){
-  var ETAPES=[
-    {l:'Constaté',i:'1'},
-    {l:'Déclaré',i:'2'},
-    {l:'Appel plateforme',i:'3'},
-    {l:'Eléments envoyés',i:'4'},
-    {l:'Résultat',i:'5'},
-    {l:'Constation',sub:'si besoin',i:'6',opt:true}
-  ];
-
-  function getData(){return JSON.parse(localStorage.getItem('litigeIA')||'{}');}
-  function saveData(d){localStorage.setItem('litigeIA',JSON.stringify(d));}
-
-  function getEtape(id){
-    var d=getData(); var lt=(d.litiges||[]).find(function(l){return l.id===id;});
-    return lt?+(lt.etape||0):0;
-  }
-
-  window.setLitigeEtape=function(id,idx){
-    var d=getData(); var litiges=d.litiges||[];
-    var i=litiges.findIndex(function(l){return l.id===id;});
-    if(i>=0){
-      var cur=+(litiges[i].etape||0);
-      // Clic sur etape active: revenir en arriere; sinon avancer jusqu'a cette etape
-      litiges[i].etape=(idx===cur&&idx>0)?idx-1:idx;
-      d.litiges=litiges; saveData(d);
+  var TL=[{l:"Constaté",n:"1"},{l:"Déclaré",n:"2"},{l:"Appel plateforme",n:"3"},{l:"Éléments envoyés",n:"4"},{l:"Résultat",n:"5"},{l:"Constation (si besoin)",n:"6",x:1}];
+  function gD(){try{return JSON.parse(localStorage.getItem("litigeIA")||"{}");}catch(e){return {};}}
+  function sD(d){localStorage.setItem("litigeIA",JSON.stringify(d));}
+  function gE(id){var d=gD(),a=d.litiges||[];for(var i=0;i<a.length;i++){if(a[i].id===id)return a[i].etape||0;}return 0;}
+  window.setLitigeEtape=function(id,n){var d=gD(),a=d.litiges||[];for(var i=0;i<a.length;i++){if(a[i].id===id){a[i].etape=n;sD(d);rTL();return;}}};
+  function rTL(){
+    var w=document.getElementById("litTLWrap");if(!w)return;
+    var id=window._tlLitigeId,cur=gE(id);
+    var h="<div class=\"litige-timeline-wrap\"><div class=\"tl-header\">Étape "+(cur+1)+" / "+TL.length+"</div><div class=\"litige-timeline\">";
+    for(var i=0;i<TL.length;i++){
+      var s=TL[i];
+      var c="tl-step"+(i<cur?" done":(i===cur?" active":""))+(s.x?" opt":"");
+      var co=i<TL.length-1?"<div class=\"tl-connector"+(i<cur?" done":"")+"\">&nbsp;</div>":"";
+      var ci="<div class=\"tl-circle\">"+(i<cur?"✓":s.n)+"</div>";
+      var lb="<div class=\"tl-label\">"+s.l+"</div>";
+      h+="<div class=\""+c+"\" data-ti=\""+i+"\">"+co+ci+lb+"</div>";
     }
-    renderTL();
-  };
-
-  function renderTL(){
-    var wrap=document.getElementById('litTLWrap'); if(!wrap)return;
-    var id=window._tlLitigeId; if(!id)return;
-    var etape=getEtape(id);
-    var html='';
-    for(var i=0;i<ETAPES.length;i++){
-      var e=ETAPES[i];
-      var cls=i<etape?'done':i===etape?'active':'';
-      if(e.opt)cls+=(cls?' ':')+'opt';
-      var circleContent=i<etape?'&#10003;':String(i+1);
-      var connHtml=i<ETAPES.length-1?'<div class="tl-connector'+(i<etape?' done':'')+'"></div>':'';
-      html+='<div class="tl-step '+cls+'" onclick="setLitigeEtape(\'' +id+ '\','+i+')" title="'+e.l+'">';
-      html+='<div class="tl-circle">'+circleContent+'</div>';
-      html+='<div class="tl-label">'+e.l+(e.sub?'<br><small style=\'opacity:.7\'>'+e.sub+'</small>':'')+'</div>';
-      html+='</div>'+connHtml;
-    }
-    var pct=Math.round(etape/(ETAPES.length-1)*100);
-    wrap.innerHTML='<div class="tl-header">&#128205; Progression du litige</div><div class="litige-timeline">'+html+'</div><div class="tl-progress-text">'+pct+'% accompli &mdash; '+etape+' / '+(ETAPES.length-1)+' étapes</div>';
+    h+="</div></div>";
+    w.innerHTML=h;
+    var steps=w.querySelectorAll(".tl-step");
+    for(var j=0;j<steps.length;j++){(function(idx){steps[idx].addEventListener("click",function(){window.setLitigeEtape(window._tlLitigeId,idx);});})(j);}
   }
-
-  function injectTL(){
-    var mv=document.getElementById('modalView');
-    if(!mv||mv.style.display==='none')return;
-    var existing=document.getElementById('litTLWrap');
-    if(!existing){
-      var dg=mv.querySelector('.detail-grid');
-      if(!dg)return;
-      var div=document.createElement('div');
-      div.id='litTLWrap';
-      div.className='litige-timeline-wrap';
-      dg.insertAdjacentElement('afterend',div);
-    }
-    renderTL();
+  function iTL(){
+    var mv=document.getElementById("modalView");if(!mv||mv.style.display==="none")return;
+    if(document.getElementById("litTLWrap")){rTL();return;}
+    var dg=mv.querySelector(".detail-grid");if(!dg)return;
+    var d=document.createElement("div");d.id="litTLWrap";
+    dg.insertAdjacentElement("afterend",d);rTL();
   }
-
-  // Patcher viewLitige pour capturer l'ID
-  var _orig=window.viewLitige;
-  window.viewLitige=function(id){
-    window._tlLitigeId=id;
-    var r=_orig&&_orig.apply(this,arguments);
-    setTimeout(injectTL,80);
-    return r;
-  };
-
-  // Observer les changements du modal (navigation interne)
-  document.addEventListener('DOMContentLoaded',function(){
-    var mv=document.getElementById('modalView');
-    if(!mv)return;
-    new MutationObserver(function(){
-      if(mv.style.display!=='none'&&window._tlLitigeId){setTimeout(injectTL,80);}
-    }).observe(mv,{attributes:true,attributeFilter:['style','class']});
+  var _o=window.viewLitige;
+  window.viewLitige=function(id){window._tlLitigeId=id;var r=_o&&_o.apply(this,arguments);setTimeout(iTL,100);return r;};
+  document.addEventListener("DOMContentLoaded",function(){
+    var mv=document.getElementById("modalView");if(!mv)return;
+    new MutationObserver(function(ms){for(var i=0;i<ms.length;i++){if(ms[i].type==="attributes"&&mv.style.display!=="none")setTimeout(iTL,100);}}).observe(mv,{attributes:true,attributeFilter:["style","class"]});
   });
 })();
 </script>
