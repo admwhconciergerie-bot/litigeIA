@@ -17,6 +17,7 @@ app.use((req, res, next) => {
     if (pass === password) return next();
   }
 
+  res.set('WWW-Authenticate', 'Basic realm="LitigeIA"');
   res.status(401).send(`
     <!DOCTYPE html>
     <html lang="fr">
