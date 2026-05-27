@@ -2256,6 +2256,8 @@ window.addEventListener('load', () => {
     var mv=document.getElementById("modalView");if(!mv)return;
     new MutationObserver(function(ms){for(var i=0;i<ms.length;i++){if(ms[i].type==="attributes"&&mv.style.display!=="none")setTimeout(iTL,100);}}).observe(mv,{attributes:true,attributeFilter:["style","class"]});
   });
+    if(typeof save==='function'){var _sv=save;save=window.save=function(){_sv();var d=localStorage.getItem('litigeIA');if(d)fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:d}).catch(function(){});};}
+    fetch('/api/state').then(function(r){return r.ok?r.json():null;}).then(function(d){if(d&&(d.litiges||d.properties)){localStorage.setItem('litigeIA',JSON.stringify(d));if(typeof load==='function')load();}}).catch(function(){});
 })();
 </script>
 </body>
