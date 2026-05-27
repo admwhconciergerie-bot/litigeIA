@@ -1,9 +1,35 @@
 const express = require('express');
 const path = require('path');
+const { createClient } = require('@supabase/supabase-js');
 
 const app = express();
 app.use(express.json({ limit: '50mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// ─── Supabase client
+const _supa = (process.env.SUPABASE_URL && process.env.SUPABASE_KEY)
+  ? createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY) : null;
+const DEFAULT_STATE = { config: { apiKey: '', ownerName: '', siret: '', address: '', phone: '', email: '', iban: '' }, properties: [], litiges: [] };
+
+// GET /api/state
+app.get('/api/state', async (req, res) => {
+    if (!_supa) return res.json(DEFAULT_STATE);
+    try {
+          const { data, error } = await _supa.from('app_state').select('data').eq('id', 'main').single();
+          if (error || !data) return res.json(DEFAULT_STATE);
+          res.json(data.data || DEFAULT_STATE);
+    } catch(e) { res.json(DEFAULT_STATE); }
+});
+
+// POST /api/state
+app.post('/api/state', async (req, res) => {
+    if (!_supa) return res.json({ ok: true });
+    try {
+          const { error } = await _supa.from('app_state').upsert({ id: 'main', data: req.body, updated_at: new Date().toISOString() });
+          if (error) return res.status(500).json({ error: error.message });
+          res.json({ ok: true });
+    } catch(e) { res.status(500).json({ error: e.message }); }
+});
 
 app.post('/api/analyze', async (req, res) => {
 const openrouterKey = process.env.OPENROUTER_API_KEY;
