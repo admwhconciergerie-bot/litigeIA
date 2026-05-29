@@ -59,13 +59,36 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
     });
   }
 
+  // Telecharge une image en base64 depuis une URL
+  async function downloadBase64(url) {
+    return new Promise((resolve) => {
+      https.get(url, (res) => {
+        const chunks = [];
+        res.on('data', c => chunks.push(c));
+        res.on('end', () => {
+          try {
+            resolve(Buffer.concat(chunks).toString('base64'));
+          } catch(e) { resolve(null); }
+        });
+      }).on('error', () => resolve(null));
+    });
+  }
+
   // Analyse les photos avec Claude Vision pour detecter type_sinistre et logement
   async function analyserPhotos(photoUrls, texteCaption) {
     if (!ANTHROPIC_KEY || !photoUrls.length) return null;
-    const imageContents = photoUrls.slice(0, 4).map(url => ({
-      type: 'image',
-      source: { type: 'url', url: url }
-    }));
+    // Telecharger en base64 (plus fiable que les URLs Telegram depuis les serveurs d'Anthropic)
+    const imageContents = [];
+    for (const url of photoUrls.slice(0, 4)) {
+      const b64 = await downloadBase64(url);
+      if (b64) {
+        imageContents.push({
+          type: 'image',
+          source: { type: 'base64', media_type: 'image/jpeg', data: b64 }
+        });
+      }
+    }
+    if (!imageContents.length) { console.log('Vision: aucune image telechargee'); return null; }
     const prompt = 'Tu analyses des photos de logement meuble apres passage de voyageurs pour une conciergerie. ' +
       'Identifie: 1) type_sinistre parmi (Nettoyage supplementaire, Tabac/Odeurs, Degradation/Casse, Dommages eau, Autre). ' +
       '2) description courte en francais de ce que tu vois (max 150 mots). ' +
@@ -94,13 +117,14 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
         res.on('end', () => {
           try {
             const j = JSON.parse(d);
+            if (j.error) { console.error('Vision API error:', j.error.message); resolve(null); return; }
             const txt = (j.content && j.content[0] && j.content[0].text) || '';
             const m = txt.match(/\{[\s\S]*\}/);
             resolve(m ? JSON.parse(m[0]) : null);
-          } catch(e) { resolve(null); }
+          } catch(e) { console.error('Vision parse error:', e.message); resolve(null); }
         });
       });
-      req.on('error', () => resolve(null));
+      req.on('error', (e) => { console.error('Vision request error:', e.message); resolve(null); });
       req.write(body);
       req.end();
     });
