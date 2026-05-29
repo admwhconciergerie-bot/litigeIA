@@ -91,8 +91,14 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 .pipeline-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;display:flex;align-items:center;gap:8px}
 .pipeline-dot{width:8px;height:8px;border-radius:50%}
 .pipeline-count{font-size:11px;font-weight:600;background:rgba(0,0,0,.07);padding:2px 7px;border-radius:10px;color:var(--muted)}
-.litige-card{background:var(--card);border-radius:var(--radius);padding:14px;margin-bottom:10px;border:1px solid var(--border);cursor:pointer;transition:all .2s;box-shadow:var(--shadow)}
+.litige-card{background:var(--card);border-radius:var(--radius);padding:14px;margin-bottom:10px;border:1px solid var(--border);cursor:pointer;transition:all .2s;box-shadow:var(--shadow);position:relative}
 .litige-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--accent)}
+.litige-card-del{position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:50%;background:rgba(239,68,68,.12);border:none;color:#ef4444;cursor:pointer;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s;padding:0;z-index:2}
+.litige-card-merge{position:absolute;top:8px;right:34px;width:22px;height:22px;border-radius:50%;background:rgba(99,102,241,.12);border:none;color:#6366f1;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s;padding:0;z-index:2}
+.litige-card:hover .litige-card-del,.litige-card:hover .litige-card-merge{opacity:1}
+.litige-card.merge-sel{border:2px solid var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,.2)}
+.plat-telegram{background:#e8f4ff;color:#0088cc}
+.merge-bar{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;padding:12px 24px;border-radius:50px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 32px rgba(0,0,0,.3);z-index:9999;font-size:14px}
 .litige-card-platform{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px;margin-bottom:8px}
 .plat-airbnb{background:#fff0ee;color:#ff5a5f}
 .plat-booking{background:#eef4ff;color:#003580}
@@ -1019,16 +1025,25 @@ function renderDashboard() {
 
 function litCardHTML(l) {
   const prop = DB.properties.find(p=>p.id===l.property_id);
-  const platClass = l.platform==='airbnb'?'plat-airbnb':'plat-booking';
-  const platLabel = l.platform==='airbnb'?'Airbnb':'Booking.com';
-  return `<div class="litige-card" onclick="viewLitige('${l.id}')">
+  const plat = (l.platform||'').toLowerCase();
+  const platClass = plat==='airbnb'?'plat-airbnb':plat==='telegram'?'plat-telegram':'plat-booking';
+  const platLabel = plat==='airbnb'?'Airbnb':plat==='telegram'?'Telegram':'Booking.com';
+  const isSel = mergeSelected.has(l.id);
+  const cardClick = mergeMode ? "toggleMergeSelect('" + l.id + "')" : "viewLitige('" + l.id + "')";
+  return `<div class="litige-card${isSel?' merge-sel':''}" onclick="${cardClick}">
+    <button class="litige-card-del" onclick="event.stopPropagation();deleteLitige('${l.id}')" title="Supprimer">&times;</button>
+    <button class="litige-card-merge" onclick="event.stopPropagation();startMerge('${l.id}')" title="Fusionner avec un autre">&#8644;</button>
     ${l.photos&&l.photos[0]?`<img class="litige-card-thumb" src="${l.photos[0]}" alt="">`:''}
-    <div><span class="litige-card-platform ${platClass}">${platLabel}</span></div>
-    <div class="litige-card-guest">${l.guest_name}</div>
-    <div class="litige-card-prop">📍 ${prop?.name||'Bien inconnu'}</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span class="litige-card-platform ${platClass}">${platLabel}</span>
+      ${l.photos&&l.photos.length?'<button class="btn btn-ghost btn-sm" style="padding:2px 6px;font-size:10px" onclick="event.stopPropagation();analyserPhotosLitige(\''+l.id+'\')">&#128269;</button>':''}
+    </div>
+    <div class="litige-card-guest">${l.guest_name||'Voyageur inconnu'}</div>
+    <div class="litige-card-prop">&#128205; ${prop?.name||'Bien inconnu'}</div>
     <div class="litige-card-amount">${fmt(l.total_ttc)}</div>
     <div class="litige-card-date">${l.constat_date?new Date(l.constat_date).toLocaleDateString('fr-FR'):''}</div>
   </div>`;
+}
 }
 
 // ===================== LITIGES LIST =====================
@@ -2172,6 +2187,86 @@ function deleteLitige(id) {
   DB.litiges = DB.litiges.filter(l=>l.id!==id);
   save(); updateBadge();
   if (currentNav==='dashboard') renderDashboard(); else renderLitiges();
+}
+
+// === Merge & Analyse IA ===
+let mergeSelected = new Set();
+let mergeMode = false;
+
+function startMerge(id) {
+  mergeSelected.clear(); mergeMode = true; mergeSelected.add(id);
+  if (currentNav==='dashboard') renderDashboard(); else renderLitiges();
+  updateMergeBar();
+}
+
+function toggleMergeSelect(id) {
+  if (mergeSelected.has(id)) mergeSelected.delete(id);
+  else { if (mergeSelected.size>=2) { alert('Max 2'); return; } mergeSelected.add(id); }
+  if (currentNav==='dashboard') renderDashboard(); else renderLitiges();
+  updateMergeBar();
+}
+
+function updateMergeBar() {
+  const old = document.getElementById('mergeBar'); if (old) old.remove();
+  if (!mergeSelected.size) { mergeMode = false; return; }
+  const bar = document.createElement('div');
+  bar.id = 'mergeBar'; bar.className = 'merge-bar';
+  bar.innerHTML = '<span>' + mergeSelected.size + '/2 sélectionné(s)</span>' +
+    (mergeSelected.size===2 ? '<button onclick="mergeLitiges()" style="background:#6366f1;border:none;color:#fff;padding:6px 18px;border-radius:20px;cursor:pointer;font-weight:600">Fusionner</button>' : '') +
+    '<button onclick="cancelMerge()" style="background:rgba(255,255,255,.15);border:none;color:#fff;padding:6px 14px;border-radius:20px;cursor:pointer">Annuler</button>';
+  document.body.appendChild(bar);
+}
+
+function cancelMerge() {
+  mergeSelected.clear(); mergeMode = false;
+  const b = document.getElementById('mergeBar'); if (b) b.remove();
+  if (currentNav==='dashboard') renderDashboard(); else renderLitiges();
+}
+
+function mergeLitiges() {
+  const ids = Array.from(mergeSelected);
+  const a = DB.litiges.find(l=>l.id===ids[0]), b = DB.litiges.find(l=>l.id===ids[1]);
+  if (!a||!b) return;
+  if (!confirm('Fusionner "' + (a.guest_name||'?') + '" + "' + (b.guest_name||'?') + '" ?')) return;
+  a.description = [a.description, b.description].filter(Boolean).join('\n\n--- fusion ---\n\n');
+  a.photos = [...(a.photos||[]), ...(b.photos||[])].slice(0,20);
+  a.total_ttc = (a.total_ttc||0) + (b.total_ttc||0);
+  a.total_ht = (a.total_ht||0) + (b.total_ht||0);
+  a.articles = [...(a.articles||[]), ...(b.articles||[])];
+  a.notes = [a.notes, b.notes].filter(Boolean).join(' | ');
+  DB.litiges = DB.litiges.filter(l=>l.id!==ids[1]);
+  save(); updateBadge(); cancelMerge(); alert('Fusion effectuée !');
+}
+
+async function analyserPhotosLitige(id) {
+  const l = DB.litiges.find(x=>x.id===id);
+  if (!l||!l.photos||!l.photos.length) return alert('Aucune photo');
+  const key = DB.config&&DB.config.apiKey;
+  if (!key) return alert('Clé API Claude requise — Paramètres');
+  if (!confirm('Analyser ' + l.photos.length + ' photo(s) avec Claude Vision ?')) return;
+  try {
+    const imgs = [];
+    for (const url of l.photos.slice(0,4)) {
+      const blob = await (await fetch(url)).blob();
+      const b64 = await new Promise(r => { const rd = new FileReader(); rd.onload = ()=>r(rd.result.split(',')[1]); rd.readAsDataURL(blob); });
+      imgs.push({ type:'image', source:{ type:'base64', media_type:'image/jpeg', data:b64 } });
+    }
+    imgs.push({ type:'text', text:'JSON uniquement: {"type_sinistre":"Nettoyage supplementaire|Tabac/Odeurs|Degradation/Casse|Dommages eau|Autre","description":"<80 mots fr>"}' });
+    const j = await (await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true' },
+      body:JSON.stringify({ model:'claude-haiku-4-5-20251001', max_tokens:300, messages:[{role:'user',content:imgs}] })
+    })).json();
+    if (j.error) throw new Error(j.error.message);
+    const m = ((j.content&&j.content[0]&&j.content[0].text)||'').match(/\{[\s\S]*\}/);
+    if (m) {
+      const res = JSON.parse(m[0]);
+      if (res.type_sinistre) { const suf = l.resume&&l.resume.includes(' - ')?l.resume.substring(l.resume.indexOf(' - ')):''; l.resume = res.type_sinistre + suf; }
+      if (res.description&&!l.description) l.description = res.description;
+      save(); alert('Analyse OK : ' + (res.type_sinistre||'?'));
+      if (currentNav==='dashboard') renderDashboard(); else renderLitiges();
+    }
+  } catch(e) { alert('Erreur analyse : '+e.message); }
 }
 
 // ===================== MODALS =====================
