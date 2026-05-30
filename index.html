@@ -2241,8 +2241,6 @@ function mergeLitiges() {
 async function analyserPhotosLitige(id) {
   const l = DB.litiges.find(x=>x.id===id);
   if (!l||!l.photos||!l.photos.length) return alert('Aucune photo');
-  const key = DB.config&&DB.config.apiKey;
-  if (!key) return alert('Clé API Claude requise — Paramètres');
   if (!confirm('Analyser ' + l.photos.length + ' photo(s) avec Claude Vision ?')) return;
   try {
     const imgs = [];
@@ -2252,12 +2250,12 @@ async function analyserPhotosLitige(id) {
       imgs.push({ type:'image', source:{ type:'base64', media_type:'image/jpeg', data:b64 } });
     }
     imgs.push({ type:'text', text:'JSON uniquement: {"type_sinistre":"Nettoyage supplementaire|Tabac/Odeurs|Degradation/Casse|Dommages eau|Autre","description":"<80 mots fr>"}' });
-    const j = await (await fetch('https://api.anthropic.com/v1/messages', {
+    const j = await (await fetch('/api/analyze', {
       method:'POST',
-      headers:{ 'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true' },
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({ model:'claude-haiku-4-5-20251001', max_tokens:300, messages:[{role:'user',content:imgs}] })
     })).json();
-    if (j.error) throw new Error(j.error.message);
+    if (j.error) throw new Error(j.error.message||j.error);
     const m = ((j.content&&j.content[0]&&j.content[0].text)||'').match(/\{[\s\S]*\}/);
     if (m) {
       const res = JSON.parse(m[0]);
