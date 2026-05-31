@@ -1,1 +1,100 @@
+const express = require('express');
+const path = require('path');
 
+const app = express();
+app.use(express.json({ limit: '50mb' }));
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Proxy image — permet au navigateur de charger des images Telegram (CORS + token bot)
+app.get('/api/proxy-image', async (req, res) => {
+  const url = req.query.url;
+  if (!url) return res.status(400).json({ error: 'Missing url' });
+  try {
+    const r = await fetch(url);
+    if (!r.ok) return res.status(r.status).end();
+    const buf = Buffer.from(await r.arrayBuffer());
+    res.set('Content-Type', r.headers.get('content-type') || 'image/jpeg');
+    res.set('Cache-Control', 'private, max-age=300');
+    res.send(buf);
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/analyze', async (req, res) => {
+  const openrouterKey = process.env.OPENROUTER_API_KEY;
+  const anthropicKey = process.env.ANTHROPIC_API_KEY;
+
+  // Si la requête contient des images → forcer Anthropic Vision (Gemma ne supporte pas les images)
+  const hasImages = (req.body.messages || []).some(m =>
+    (Array.isArray(m.content) ? m.content : []).some(c => c.type === 'image')
+  );
+
+  if (openrouterKey && !hasImages) {
+    try {
+      const { system, messages } = req.body;
+      const userMsg = messages[0];
+
+      // Convertir format Anthropic -> OpenAI pour OpenRouter
+      const openaiMessages = [];
+      if (system) openaiMessages.push({ role: 'system', content: system });
+
+      const content = [];
+      for (const part of (userMsg.content || [])) {
+        if (part.type === 'text') {
+          content.push({ type: 'text', text: part.text });
+        } else if (part.type === 'image' && part.source && part.source.type === 'base64') {
+          content.push({
+            type: 'image_url',
+            image_url: { url: 'data:' + (part.source.media_type || 'image/jpeg') + ';base64,' + part.source.data }
+          });
+        }
+      }
+      openaiMessages.push({ role: 'user', content });
+
+      const body = {
+        model: 'google/gemma-4-31b-it:free',
+        messages: openaiMessages,
+        max_tokens: 3000
+      };
+
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + openrouterKey,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://litigeia.onrender.com',
+          'X-Title': 'LitigeIA'
+        },
+        body: JSON.stringify(body)
+      });
+
+      const data = await response.json();
+      if (!response.ok) return res.status(response.status).json({ error: (data.error && data.error.message) || 'Erreur OpenRouter' });
+      const text = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
+      return res.json({ content: [{ type: 'text', text }], usage: { input_tokens: 0, output_tokens: 0 } });
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
+    }
+  }
+
+  if (!anthropicKey) return res.status(500).json({ error: 'Aucune cle API configuree.' });
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'x-api-key': anthropicKey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+      body: JSON.stringify(req.body)
+    });
+    const data = await response.json();
+    if (!response.ok) return res.status(response.status).json(data);
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log('OK port ' + PORT));
