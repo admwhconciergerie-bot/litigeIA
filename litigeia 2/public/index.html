@@ -895,12 +895,8 @@ let wiz = { step:1, photos:[], articles:[], resume:'', gravite:'', editId:null }
 let viewingId = null;
 
 // ===================== BOOT =====================
-document.addEventListener('DOMContentLoaded', () => {
-  load();
-  if (!DB.properties.length) {
-    DB.properties.push({ id:uid(), name:'Mon premier bien', address:'', type:'appartement', platform:'airbnb', caution:300, photo:null });
-    save();
-  }
+document.addEventListener('DOMContentLoaded', async () => {
+  await load();
   renderPropertySelect();
   nav('dashboard');
   document.getElementById('w_constat_date').valueAsDate = new Date();
@@ -917,9 +913,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // API key stored server-side
 });
 
-function save() { localStorage.setItem('litigeIA', JSON.stringify(DB)); }
-function load() {
-  try { const s = localStorage.getItem('litigeIA'); if (s) Object.assign(DB, JSON.parse(s)); } catch(e){}
+async function save() {
+  try { await fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(DB)}); } catch(e){}
+}
+async function load() {
+  try { const r = await fetch('/api/state'); const d = await r.json(); Object.assign(DB, d); } catch(e){}
 }
 function uid() { return Date.now().toString(36)+Math.random().toString(36).substr(2,5); }
 function fmt(n) { return Number(n||0).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €'; }
