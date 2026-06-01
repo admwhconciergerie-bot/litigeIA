@@ -3,8 +3,9 @@
  * Les messages du meme utilisateur dans une fenetre de 45s sont groupes en 1 litige.
  * Aucun message de confirmation n'est envoye dans le groupe.
  * Les litiges sont crees directement dans app_state (LitigeIA).
- * La legende courte (<=50 chars, pas une date) = nom du logement.
+ * La legende courte (<=50 chars) = nom du logement (ex: "Fevrier 2").
  * Claude Vision analyse les photos pour detecter le type de sinistre.
+ * Firebase query PassPass pour trouver la reservation en cours.
  */
 
 const TelegramBot = require('node-telegram-bot-api');
@@ -18,9 +19,85 @@ const SUPABASE_URL   = process.env.SUPABASE_URL;
 const SUPABASE_KEY   = process.env.SUPABASE_KEY;
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
 const ANTHROPIC_KEY  = process.env.ANTHROPIC_API_KEY;
+const PASSPASS_EMAIL = process.env.PASSPASS_EMAIL;
+const PASSPASS_PASS  = process.env.PASSPASS_PASSWORD;
+
+// Firebase config PassPass (cle publique)
+const FIREBASE_CONFIG = {
+  apiKey: 'AIzaSyCffkmTqLa241aKYMg6l_neYrU8vT3RG38',
+  authDomain: 'passpass-web-public.firebaseapp.com',
+  projectId: 'passpass-web-public',
+  appId: '1:516234997032:web:a67e67975e8df9f4'
+};
 
 // Fenetre de groupage : 45 secondes
 const WINDOW_MS = 45000;
+
+// Firebase singleton
+let _fbDb = null;
+let _fbInitDone = false;
+
+async function initFirebase() {
+  if (_fbInitDone) return _fbDb !== null;
+  _fbInitDone = true;
+  if (!PASSPASS_EMAIL || !PASSPASS_PASS) {
+    console.log('Firebase PassPass: PASSPASS_EMAIL/PASSWORD manquants - lookup desactive');
+    return false;
+  }
+  try {
+    const { initializeApp } = require('firebase/app');
+    const { getFirestore }  = require('firebase/firestore');
+    const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
+    const app  = initializeApp(FIREBASE_CONFIG, 'passpass');
+    const auth = getAuth(app);
+    await signInWithEmailAndPassword(auth, PASSPASS_EMAIL, PASSPASS_PASS);
+    _fbDb = getFirestore(app);
+    console.log('Firebase PassPass: connecte en tant que', PASSPASS_EMAIL);
+    return true;
+  } catch(e) {
+    console.error('Firebase init error:', e.message);
+    return false;
+  }
+}
+
+// Cherche la reservation PassPass en cours pour un logement (propId = ID PassPass)
+async function chercherReservationPassPass(propId, date) {
+  if (!propId) return null;
+  try {
+    if (!await initFirebase()) return null;
+    const { collection, query, where, getDocs } = require('firebase/firestore');
+    const q = query(collection(_fbDb, 'bookings'), where('prop', '==', propId));
+    const snap = await getDocs(q);
+    const doc = snap.docs.find(d => {
+      const b = d.data();
+      return !b.deleted && b.start <= date && b.end > date;
+    });
+    if (!doc) {
+      console.log('PassPass: aucune reservation pour prop', propId, 'le', date);
+      return null;
+    }
+    const b  = doc.data();
+    const ti = b.tenantInfo || {};
+    // Nettoyer les caracteres unicode invisibles (⁨⁩) dans les prenoms Airbnb
+    const prenom = (ti.prenom || '').replace(/[⁨⁩]/g, '').trim();
+    const nom    = (ti.nom    || '').replace(/[⁨⁩]/g, '').trim();
+    const plat   = (b.platform || 'Airbnb');
+    const platLabel = plat.charAt(0).toUpperCase() + plat.slice(1).toLowerCase();
+    const result = {
+      checkin:      b.start    || '',
+      checkout:     b.end      || '',
+      platform:     platLabel,
+      booking_ref:  b.codeRef  || '',
+      guest_name:   [prenom, nom].filter(s => s && s !== '.').join(' ').trim(),
+      guest_email:  ti.email   || ''
+    };
+    console.log('PassPass reservation trouvee:', JSON.stringify(result));
+    return result;
+  } catch(e) {
+    console.error('PassPass lookup error:', e.message);
+    return null;
+  }
+}
 
 if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
   console.log('Bot Telegram desactive (variables manquantes)');
@@ -29,6 +106,9 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
   const bot = new TelegramBot(BOT_TOKEN, { polling: true });
   console.log('Bot Telegram WH demarre - groupe', GROUP_ID);
+
+  // Lancer la connexion Firebase en arriere-plan au demarrage
+  initFirebase().catch(() => {});
 
   // Buffer : { userId: { texts: [], photos: [], firstMsg, timer } }
   const buffer = {};
@@ -48,9 +128,7 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
             const j = JSON.parse(d);
             if (j.ok && j.result && j.result.file_path) {
               resolve('https://api.telegram.org/file/bot' + BOT_TOKEN + '/' + j.result.file_path);
-            } else {
-              resolve(null);
-            }
+            } else { resolve(null); }
           } catch(e) { resolve(null); }
         });
       });
@@ -59,33 +137,28 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
     });
   }
 
-  // Telecharge une image en base64 depuis une URL
+  // Telecharge une image en base64
   async function downloadBase64(url) {
     return new Promise((resolve) => {
       https.get(url, (res) => {
         const chunks = [];
         res.on('data', c => chunks.push(c));
         res.on('end', () => {
-          try {
-            resolve(Buffer.concat(chunks).toString('base64'));
-          } catch(e) { resolve(null); }
+          try { resolve(Buffer.concat(chunks).toString('base64')); }
+          catch(e) { resolve(null); }
         });
       }).on('error', () => resolve(null));
     });
   }
 
-  // Analyse les photos avec Claude Vision pour detecter type_sinistre et logement
+  // Analyse les photos avec Claude Vision
   async function analyserPhotos(photoUrls, texteCaption) {
     if (!ANTHROPIC_KEY || !photoUrls.length) return null;
-    // Telecharger en base64 (plus fiable que les URLs Telegram depuis les serveurs d'Anthropic)
     const imageContents = [];
     for (const url of photoUrls.slice(0, 4)) {
       const b64 = await downloadBase64(url);
       if (b64) {
-        imageContents.push({
-          type: 'image',
-          source: { type: 'base64', media_type: 'image/jpeg', data: b64 }
-        });
+        imageContents.push({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: b64 } });
       }
     }
     if (!imageContents.length) { console.log('Vision: aucune image telechargee'); return null; }
@@ -106,11 +179,7 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
         hostname: 'api.anthropic.com',
         path: '/v1/messages',
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': ANTHROPIC_KEY,
-          'anthropic-version': '2023-06-01'
-        }
+        headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_KEY, 'anthropic-version': '2023-06-01' }
       }, (res) => {
         let d = '';
         res.on('data', c => d += c);
@@ -144,11 +213,7 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
         hostname: 'openrouter.ai',
         path: '/api/v1/chat/completions',
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + OPENROUTER_KEY,
-          'HTTP-Referer': 'https://litigeia.onrender.com'
-        }
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + OPENROUTER_KEY, 'HTTP-Referer': 'https://litigeia.onrender.com' }
       }, (res) => {
         let d = '';
         res.on('data', c => d += c);
@@ -174,8 +239,8 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
     return m ? m[1].trim() : null;
   }
 
-  // Cree le litige directement dans app_state (format LitigeIA)
-  async function sauver(logement, description, typeSinistre, photos, firstMsg) {
+  // Cree le litige dans app_state (format LitigeIA)
+  async function sauver(logement, passpassPropId, description, typeSinistre, photos, firstMsg) {
     const userName = [firstMsg.from.first_name, firstMsg.from.last_name].filter(Boolean).join(' ');
     const today = new Date().toISOString().split('T')[0];
 
@@ -194,25 +259,23 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
     const state = stateRow.data || { config: {}, properties: [], litiges: [] };
     if (!state.litiges) state.litiges = [];
 
-    // Essayer de matcher le logement avec un property_id
-    let property_id = '';
-    if (logement && state.properties && state.properties.length) {
-      const match = state.properties.find(p =>
-        p.name && p.name.toLowerCase().includes(logement.toLowerCase())
-      );
-      if (match) property_id = match.id || '';
+    // Chercher la reservation PassPass AVANT de creer le litige
+    let reserv = null;
+    if (passpassPropId) {
+      reserv = await chercherReservationPassPass(passpassPropId, today);
     }
 
-    // Creer le litige au format LitigeIA
+    // Creer le litige
     const newLitige = {
       id: crypto.randomUUID(),
-      platform: 'Telegram',
-      property_id: property_id,
-      guest_name: userName,
-      guest_email: '',
-      booking_ref: '',
-      checkin: '',
-      checkout: '',
+      platform: reserv && reserv.platform ? reserv.platform : 'Telegram',
+      property_id: passpassPropId || '',
+      logement: logement || '',
+      guest_name: (reserv && reserv.guest_name) ? reserv.guest_name : userName,
+      guest_email: (reserv && reserv.guest_email) ? reserv.guest_email : '',
+      booking_ref: (reserv && reserv.booking_ref) ? reserv.booking_ref : '',
+      checkin:  (reserv && reserv.checkin)  ? reserv.checkin  : '',
+      checkout: (reserv && reserv.checkout) ? reserv.checkout : '',
       constat_date: today,
       description: description || '',
       notes: 'Signalement Telegram' +
@@ -241,7 +304,13 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
       return null;
     }
 
-    console.log('Litige cree:', newLitige.id, '| logement:', logement, '| sinistre:', typeSinistre, '| photos:', photos.length);
+    console.log('Litige cree:', newLitige.id,
+      '| logement:', logement,
+      '| sinistre:', typeSinistre,
+      '| photos:', photos.length,
+      '| guest:', newLitige.guest_name,
+      '| platform:', newLitige.platform,
+      '| reserv:', reserv ? 'oui' : 'non');
     return newLitige;
   }
 
@@ -254,18 +323,18 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
     const texte = entry.texts.join('\n').trim();
     const fileIds = entry.photos;
 
-    // 1. Convertir file_ids en URLs de telechargement reelles
+    // 1. Convertir file_ids en URLs reelles
     const photoUrls = (await Promise.all(fileIds.map(id => fileIdToUrl(id)))).filter(Boolean);
 
-    // 2. Legende courte (<=50 chars, pas une date) = nom du logement direct
-    const DATE_RE = /^(janvier|f.vrier|mars|avril|mai|juin|juillet|ao.t|septembre|octobre|novembre|d.cembre|\d{1,2}[\/\-.]\d{1,2})/i;
+    // 2. Legende courte (<=50 chars) = nom du logement
+    // NOTE: pas de filtre DATE_RE - "Fevrier 2" est un nom d'appartement valide
     let logement = null;
-    if (texte && texte.length > 0 && texte.length <= 50 && !DATE_RE.test(texte)) {
-      logement = texte;
+    if (texte && texte.length > 0 && texte.length <= 50) {
+      logement = texte.trim();
       console.log('Logement depuis legende:', logement);
     }
 
-    // 3. Analyse Vision Claude : detecte type_sinistre et description
+    // 3. Analyse Vision Claude
     let description = texte || '';
     let typeSinistre = 'Constat terrain';
     if (photoUrls.length) {
@@ -278,13 +347,41 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
       }
     }
 
-    // 4. Fallback texte si logement toujours inconnu et texte long
+    // 4. Fallback texte si logement inconnu et texte long
     if (!logement && texte && texte.length > 50) {
       logement = await extraireLogement(texte);
       if (!logement) logement = extraireLogementSimple(texte);
     }
 
-    await sauver(logement, description, typeSinistre, photoUrls, entry.firstMsg);
+    // 5. Matcher le logement avec un property_id PassPass (matching bidirectionnel NFD)
+    let passpassPropId = '';
+    if (logement) {
+      // On doit lire les proprietes depuis Supabase pour le matching
+      try {
+        const { data: stateRow } = await supabase
+          .from('app_state')
+          .select('data')
+          .eq('id', 'main')
+          .single();
+        const properties = (stateRow && stateRow.data && stateRow.data.properties) || [];
+        const lg = logement.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+        const match = properties.find(p => {
+          if (!p.name) return false;
+          const pn = p.name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+          return pn.includes(lg) || lg.includes(pn);
+        });
+        if (match) {
+          passpassPropId = match.id || '';
+          console.log('Property match:', logement, '->', passpassPropId ? 'trouve' : 'aucun', '| id:', passpassPropId);
+        } else {
+          console.log('Property match: aucun pour', logement);
+        }
+      } catch(e) {
+        console.error('Erreur lecture properties:', e.message);
+      }
+    }
+
+    await sauver(logement, passpassPropId, description, typeSinistre, photoUrls, entry.firstMsg);
   }
 
   // Traite chaque message du groupe
@@ -308,7 +405,6 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
 
     if (buffer[userId].timer) clearTimeout(buffer[userId].timer);
     buffer[userId].timer = setTimeout(() => finaliserBuffer(userId), WINDOW_MS);
-    // Pas de bot.sendMessage -- aucune confirmation dans le groupe
   }
 
   bot.on('message', traiterMessage);
@@ -321,23 +417,17 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
       .select('data')
       .eq('id', 'main')
       .single();
-    if (error || !stateRow) {
-      bot.sendMessage(msg.chat.id, 'Aucun litige recent.');
-      return;
-    }
+    if (error || !stateRow) { bot.sendMessage(msg.chat.id, 'Aucun litige recent.'); return; }
     const litiges = (stateRow.data && stateRow.data.litiges) || [];
     const recent = litiges
-      .filter(l => l.platform === 'Telegram')
+      .filter(l => l.platform === 'Telegram' || !l.platform || l.platform === 'telegram')
       .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
       .slice(0, 5);
-    if (!recent.length) {
-      bot.sendMessage(msg.chat.id, 'Aucun litige Telegram recent.');
-      return;
-    }
+    if (!recent.length) { bot.sendMessage(msg.chat.id, 'Aucun litige Telegram recent.'); return; }
     const lines = recent.map((l, i) =>
       (i + 1) + '. *' + (l.resume || 'Logement inconnu') + '*\n' +
       '   ' + (l.description || '').slice(0, 60) + '\n' +
-      '   ' + l.constat_date + ' | ' + l.guest_name
+      '   ' + l.constat_date + ' | ' + (l.guest_name || '?')
     );
     bot.sendMessage(msg.chat.id, '*5 derniers litiges Telegram :*\n\n' + lines.join('\n\n'), { parse_mode: 'Markdown' });
   });

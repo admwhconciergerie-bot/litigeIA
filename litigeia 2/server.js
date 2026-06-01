@@ -13,94 +13,110 @@ const DEFAULT_STATE = { config: { apiKey: '', ownerName: '', siret: '', address:
 
 // GET /api/state
 app.get('/api/state', async (req, res) => {
-    if (!_supa) return res.json(DEFAULT_STATE);
-    try {
-          const { data, error } = await _supa.from('app_state').select('data').eq('id', 'main').single();
-          if (error || !data) return res.json(DEFAULT_STATE);
-          res.json(data.data || DEFAULT_STATE);
-    } catch(e) { res.json(DEFAULT_STATE); }
+  if (!_supa) return res.json(DEFAULT_STATE);
+  try {
+    const { data, error } = await _supa.from('app_state').select('data').eq('id', 'main').single();
+    if (error || !data) return res.json(DEFAULT_STATE);
+    res.json(data.data || DEFAULT_STATE);
+  } catch(e) { res.json(DEFAULT_STATE); }
 });
 
 // POST /api/state
 app.post('/api/state', async (req, res) => {
-    if (!_supa) return res.json({ ok: true });
-    try {
-          const { error } = await _supa.from('app_state').upsert({ id: 'main', data: req.body, updated_at: new Date().toISOString() });
-          if (error) return res.status(500).json({ error: error.message });
-          res.json({ ok: true });
-    } catch(e) { res.status(500).json({ error: e.message }); }
+  if (!_supa) return res.json({ ok: true });
+  try {
+    const { error } = await _supa.from('app_state').upsert({ id: 'main', data: req.body, updated_at: new Date().toISOString() });
+    if (error) return res.status(500).json({ error: error.message });
+    res.json({ ok: true });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+// Proxy image — permet au navigateur de charger des images Telegram (CORS + token bot)
+app.get('/api/proxy-image', async (req, res) => {
+  const url = req.query.url;
+  if (!url) return res.status(400).json({ error: 'Missing url' });
+  try {
+    const r = await fetch(url);
+    if (!r.ok) return res.status(r.status).end();
+    const buf = Buffer.from(await r.arrayBuffer());
+    res.set('Content-Type', r.headers.get('content-type') || 'image/jpeg');
+    res.set('Cache-Control', 'private, max-age=300');
+    res.send(buf);
+  } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
 app.post('/api/analyze', async (req, res) => {
-const openrouterKey = process.env.OPENROUTER_API_KEY;
-const anthropicKey = process.env.ANTHROPIC_API_KEY;
+  const openrouterKey = process.env.OPENROUTER_API_KEY;
+  const anthropicKey  = process.env.ANTHROPIC_API_KEY;
 
-if (openrouterKey) {
-const { system, messages } = req.body;
-const userMsg = messages[0];
-const openaiMessages = [];
-if (system) openaiMessages.push({ role: 'system', content: system });
+  // Si la requete contient des images → Anthropic Vision (les modeles free OpenRouter ne supportent pas les images)
+  const hasImages = (req.body.messages || []).some(m =>
+    (Array.isArray(m.content) ? m.content : []).some(c => c.type === 'image')
+  );
 
-const textParts = (userMsg.content || []).filter(p => p.type === 'text').map(p => p.text);
-const imgCount = (userMsg.content || []).filter(p => p.type === 'image').length;
-let userText = textParts.join('\n');
-if (imgCount > 0) userText += '\n[' + imgCount + ' photo(s) de degats jointe(s)]';
-openaiMessages.push({ role: 'user', content: userText });
+  if (openrouterKey && !hasImages) {
+    const { system, messages } = req.body;
+    const userMsg = messages[0];
+    const openaiMessages = [];
+    if (system) openaiMessages.push({ role: 'system', content: system });
 
-const models = [
-'meta-llama/llama-3.3-70b-instruct:free',
-'openai/gpt-oss-120b:free',
-'nousresearch/hermes-3-llama-3.1-405b:free',
-'nvidia/nemotron-nano-9b-v2:free',
-'minimax/minimax-m2.5:free',
-'meta-llama/llama-3.2-3b-instruct:free'
-];
+    const textParts = (userMsg.content || []).filter(p => p.type === 'text').map(p => p.text);
+    openaiMessages.push({ role: 'user', content: textParts.join('\n') });
 
-let lastError = 'Aucun modele disponible';
-for (const model of models) {
-try {
-const body = { model, messages: openaiMessages, max_tokens: 3000 };
-const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-method: 'POST',
-headers: {
-'Authorization': 'Bearer ' + openrouterKey,
-'Content-Type': 'application/json',
-'HTTP-Referer': 'https://litigeia.onrender.com',
-'X-Title': 'LitigeIA'
-},
-body: JSON.stringify(body)
-});
-const data = await response.json();
-if (response.ok) {
-const text = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
-return res.json({ content: [{ type: 'text', text }], usage: { input_tokens: 0, output_tokens: 0 } });
-}
-lastError = (data.error && data.error.message) || 'Erreur ' + response.status;
-} catch (err) {
-lastError = err.message;
-}
-}
-return res.status(503).json({ error: lastError });
-}
+    const models = [
+      'meta-llama/llama-3.3-70b-instruct:free',
+      'openai/gpt-oss-120b:free',
+      'nousresearch/hermes-3-llama-3.1-405b:free',
+      'nvidia/nemotron-nano-9b-v2:free',
+      'minimax/minimax-m2.5:free',
+      'meta-llama/llama-3.2-3b-instruct:free'
+    ];
 
-if (!anthropicKey) return res.status(500).json({ error: 'Aucune cle API configuree.' });
+    let lastError = 'Aucun modele disponible';
+    for (const model of models) {
+      try {
+        const body = { model, messages: openaiMessages, max_tokens: 3000 };
+        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + openrouterKey,
+            'Content-Type': 'application/json',
+            'HTTP-Referer': 'https://litigeia.onrender.com',
+            'X-Title': 'LitigeIA'
+          },
+          body: JSON.stringify(body)
+        });
+        const data = await response.json();
+        if (response.ok) {
+          const text = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
+          return res.json({ content: [{ type: 'text', text }], usage: { input_tokens: 0, output_tokens: 0 } });
+        }
+        lastError = (data.error && data.error.message) || 'Erreur ' + response.status;
+      } catch (err) {
+        lastError = err.message;
+      }
+    }
+    return res.status(503).json({ error: lastError });
+  }
 
-try {
-const response = await fetch('https://api.anthropic.com/v1/messages', {
-method: 'POST',
-headers: { 'x-api-key': anthropicKey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
-body: JSON.stringify(req.body)
-});
-const data = await response.json();
-if (!response.ok) return res.status(response.status).json(data);
-res.json(data);
-} catch (err) {
-res.status(500).json({ error: err.message });
-}
+  if (!anthropicKey) return res.status(500).json({ error: 'Aucune cle API configuree.' });
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'x-api-key': anthropicKey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+      body: JSON.stringify(req.body)
+    });
+    const data = await response.json();
+    if (!response.ok) return res.status(response.status).json(data);
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.get('*', (req, res) => {
-res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
