@@ -97,6 +97,25 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 .litige-card-merge{position:absolute;top:8px;right:34px;width:22px;height:22px;border-radius:50%;background:rgba(99,102,241,.12);border:none;color:#6366f1;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s;padding:0;z-index:2}
 .litige-card:hover .litige-card-del,.litige-card:hover .litige-card-merge{opacity:1}
 .litige-card.merge-sel{border:2px solid var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,.2)}
+/* DRAG-TO-MERGE */
+.litige-card[draggable]{cursor:grab}
+.litige-card[draggable]:active{cursor:grabbing}
+.litige-card.dragging{opacity:.35;border:2px dashed var(--accent)!important;box-shadow:none!important;transform:none!important}
+.litige-card.drag-over{border:2px solid #22d3ee!important;box-shadow:0 0 0 4px rgba(34,211,238,.25)!important;transform:scale(1.03)!important;background:rgba(34,211,238,.06)}
+#dragMergeModal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:10001;display:flex;align-items:center;justify-content:center;animation:fadeIn .15s ease}
+#dragMergeModal .dm-box{background:#1e293b;border-radius:18px;padding:28px 32px;max-width:480px;width:90%;box-shadow:0 32px 80px rgba(0,0,0,.5);color:#f1f5f9}
+#dragMergeModal h3{margin:0 0 18px;font-size:1.15rem;color:#f1f5f9}
+#dragMergeModal .dm-cards{display:flex;gap:14px;margin-bottom:16px}
+#dragMergeModal .dm-card{flex:1;background:#0f172a;border-radius:12px;padding:14px;border:1px solid #334155}
+#dragMergeModal .dm-card .dm-name{font-weight:700;font-size:1rem;margin-bottom:4px}
+#dragMergeModal .dm-card .dm-meta{font-size:.78rem;color:#94a3b8}
+#dragMergeModal .dm-arrow{display:flex;align-items:center;font-size:1.5rem;color:#6366f1;padding-top:20px}
+#dragMergeModal .dm-note{background:#0f172a;border-radius:10px;padding:10px 14px;font-size:.82rem;color:#94a3b8;margin-bottom:20px;border:1px solid #1e293b}
+#dragMergeModal .dm-btns{display:flex;gap:10px;justify-content:flex-end}
+#dragMergeModal .dm-btn-cancel{background:#1e293b;color:#94a3b8;border:1px solid #334155;border-radius:10px;padding:10px 18px;cursor:pointer;font-size:.9rem}
+#dragMergeModal .dm-btn-cancel:hover{background:#334155}
+#dragMergeModal .dm-btn-merge{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;border-radius:10px;padding:10px 22px;cursor:pointer;font-size:.9rem;font-weight:700}
+#dragMergeModal .dm-btn-merge:hover{opacity:.9}
 .plat-telegram{background:#e8f4ff;color:#0088cc}
 .merge-bar{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;padding:12px 24px;border-radius:50px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 32px rgba(0,0,0,.3);z-index:9999;font-size:14px}
 .litige-card-platform{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px;margin-bottom:8px}
@@ -1028,7 +1047,7 @@ function litCardHTML(l) {
   const platLabel = plat==='airbnb'?'Airbnb':plat==='telegram'?'Telegram':'Booking.com';
   const isSel = mergeSelected.has(l.id);
   const cardClick = mergeMode ? "toggleMergeSelect('" + l.id + "')" : "viewLitige('" + l.id + "')";
-  return `<div class="litige-card${isSel?' merge-sel':''}" onclick="${cardClick}">
+  return `<div class="litige-card${isSel?' merge-sel':''}" onclick="${cardClick}" draggable="${mergeMode?'false':'true'}" ondragstart="onDragStart(event,'${l.id}')" ondragend="onDragEnd(event)" ondragover="onDragOver(event,'${l.id}')" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'${l.id}')">
     <button class="litige-card-del" onclick="event.stopPropagation();deleteLitige('${l.id}')" title="Supprimer">&times;</button>
     <button class="litige-card-merge" onclick="event.stopPropagation();startMerge('${l.id}')" title="Fusionner avec un autre">&#8644;</button>
     ${l.photos&&l.photos[0]?`<img class="litige-card-thumb" src="${l.photos[0]}" alt="">`:''}
@@ -2234,6 +2253,80 @@ function mergeLitiges() {
   DB.litiges = DB.litiges.filter(l=>l.id!==ids[1]);
   save(); updateBadge(); cancelMerge(); alert('Fusion effectuée !');
 }
+
+// ============ DRAG-TO-MERGE ============
+let _dragSrcId = null;
+
+function onDragStart(e, id) {
+  _dragSrcId = id;
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', id);
+  const card = e.currentTarget; if(card) setTimeout(()=>card.classList.add('dragging'),0);
+}
+
+function onDragEnd(e) {
+  if(e.currentTarget) e.currentTarget.classList.remove('dragging');
+  document.querySelectorAll('.litige-card.drag-over').forEach(el=>el.classList.remove('drag-over'));
+}
+
+function onDragOver(e, id) {
+  if (!_dragSrcId || _dragSrcId === id) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  e.currentTarget.classList.add('drag-over');
+}
+
+function onDragLeave(e) {
+  if (!e.currentTarget.contains(e.relatedTarget)) {
+    e.currentTarget.classList.remove('drag-over');
+  }
+}
+
+function onDrop(e, targetId) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  const srcId = _dragSrcId; _dragSrcId = null;
+  if (!srcId || srcId === targetId) return;
+  showDragMergeModal(srcId, targetId);
+}
+
+function showDragMergeModal(srcId, tgtId) {
+  const a = DB.litiges.find(x=>x.id===srcId);
+  const b = DB.litiges.find(x=>x.id===tgtId);
+  if (!a || !b) return;
+  const fmt = l => {
+    const d = l.constat_date ? new Date(l.constat_date).toLocaleDateString('fr-FR') : '\u2014';
+    const p = (l.photos||[]).length, ar = (l.articles||[]).length;
+    return '<div class="dm-card"><div class="dm-name">'+( l.guest_name||'\u2014')+'</div><div class="dm-meta">'+d+' \u00b7 '+p+' photo'+(p!==1?'s':'')+'</div></div>';
+  };
+  const modal = document.createElement('div');
+  modal.id = 'dragMergeModal';
+  modal.innerHTML = '<div class="dm-box"><h3>\uD83D\uDD00 Fusionner ces 2 litiges ?</h3><div class="dm-cards">'+fmt(a)+'<div class="dm-arrow">\u2192</div>'+fmt(b)+'</div><div class="dm-note">Photos, articles et notes de <strong>'+(b.guest_name||'\u2014')+'</strong> fusionn\u00e9s dans <strong>'+(a.guest_name||'\u2014')+'</strong>, le second litige sera supprim\u00e9.</div><div class="dm-btns"><button class="dm-btn-cancel" onclick="closeDragMergeModal()">Annuler</button><button class="dm-btn-merge" onclick="executeDragMerge(\''+srcId+'\',\''+tgtId+'\')">Fusionner</button></div></div>';
+  modal.addEventListener('click', e => { if(e.target === modal) closeDragMergeModal(); });
+  document.body.appendChild(modal);
+}
+
+function closeDragMergeModal() {
+  const m = document.getElementById('dragMergeModal'); if(m) m.remove();
+}
+
+function executeDragMerge(srcId, tgtId) {
+  const a = DB.litiges.find(x=>x.id===srcId);
+  const b = DB.litiges.find(x=>x.id===tgtId);
+  if (!a || !b) return closeDragMergeModal();
+  a.photos = [...(a.photos||[]), ...(b.photos||[])];
+  a.articles = [...(a.articles||[]), ...(b.articles||[])];
+  if (b.description) a.description = (a.description||'') + '\n\n[Fusionne] ' + b.description;
+  if (b.notes) a.notes = (a.notes||'') + '\n\n[Fusionne] ' + b.notes;
+  DB.litiges = DB.litiges.filter(x=>x.id!==tgtId);
+  save(); updateBadge(); closeDragMergeModal(); renderLitiges();
+  const toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#10b981;color:#fff;padding:12px 20px;border-radius:12px;font-weight:700;z-index:10002;box-shadow:0 8px 32px rgba(0,0,0,.3);animation:fadeIn .2s ease';
+  toast.textContent = '\u2705 Fusion effectu\u00e9e !';
+  document.body.appendChild(toast);
+  setTimeout(()=>toast.remove(), 2500);
+}
+
 
 async function analyserPhotosLitige(id) {
   const l = DB.litiges.find(x=>x.id===id);
