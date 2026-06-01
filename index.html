@@ -148,7 +148,9 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 .photo-item{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
 .photo-item img{width:100%;height:100%;object-fit:cover}
 .photo-item .rm{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.7);color:white;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;line-height:1}
-.photo-item .ai-badge{position:absolute;bottom:4px;left:4px;background:rgba(99,102,241,.9);color:white;font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px}
+.photo-item .ai-badge{position:absolute;bottom:4px;left:4px;background:rgba(99,102,241,.9);color:white;font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px}.photo-item .dl{position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,.7);color:white;border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;line-height:1;text-decoration:none;transition:background .15s}
+.photo-item .dl:hover{background:var(--accent)}
+
 
 /* AI ANALYSIS */
 .ai-box{background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:var(--radius-lg);padding:20px 22px;margin-bottom:20px;position:relative;overflow:hidden}
@@ -1278,6 +1280,42 @@ function renderPhotoGrid() {
     </div>`).join('');
 }
 
+// ===================== PHOTO DOWNLOAD =====================
+async function downloadPhoto(url, filename) {
+  try {
+    const resp = await fetch('/api/proxy-image?url=' + encodeURIComponent(url));
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const blob = await resp.blob();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename || 'photo_litige.jpg';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  } catch(e) {
+    alert('Erreur tÃ©lÃ©chargement: ' + e.message);
+  }
+}
+
+function downloadPhotoByIndex(litigeId, idx) {
+  const l = DB.litiges.find(x => x.id === litigeId);
+  if (!l || !l.photos || !l.photos[idx]) return;
+  const prop = DB.properties.find(p => p.id === l.property_id);
+  const propName = prop ? prop.name.replace(/\s+/g, '_') : 'logement';
+  downloadPhoto(l.photos[idx], `litige_${propName}_photo${idx + 1}.jpg`);
+}
+
+async function downloadAllPhotosForLitige(litigeId) {
+  const l = DB.litiges.find(x => x.id === litigeId);
+  if (!l || !l.photos || !l.photos.length) return;
+  const prop = DB.properties.find(p => p.id === l.property_id);
+  const propName = prop ? prop.name.replace(/\s+/g, '_') : 'logement';
+  for (let i = 0; i < l.photos.length; i++) {
+    await downloadPhoto(l.photos[i], `litige_${propName}_photo${i + 1}.jpg`);
+    if (i < l.photos.length - 1) await new Promise(r => setTimeout(r, 400));
+  }
+}
 // ===================== AI ANALYSIS =====================
 async function runAIAnalysis() {
   // API key managed server-side via Render env var
@@ -2154,8 +2192,7 @@ function viewLitige(id) {
             ${['new','pending','sent','resolved','refused'].map(s=>`<button class="btn ${l.status===s?'btn-primary':'btn-ghost'} btn-sm" onclick="setStatus('${s}');viewLitige('${l.id}')">${statLabels[s]}</button>`).join('')}
           </div>
         </div>
-        ${l.photos&&l.photos.length?`<div class="detail-section"><div class="detail-section-title">Photos (${l.photos.length})</div><div class="photo-grid" style="margin-top:0">${l.photos.map(p=>`<div class="photo-item"><img src="${p}"></div>`).join('')}</div></div>`:''}
-        ${l.notes?`<div class="detail-section"><div class="detail-section-title">Notes</div><div style="font-size:13px;color:var(--muted);line-height:1.6">${l.notes}</div></div>`:''}
+        ${l.photos&&l.photos.length?`<div class="detail-section"><div class="detail-section-title" style="display:flex;justify-content:space-between;align-items:center">Photos (${l.photos.length})<button class="btn btn-ghost btn-sm" onclick="downloadAllPhotosForLitige('${l.id}')" style="font-size:11px;padding:4px 10px">â¬ Tout tÃ©lÃ©charger</button></div><div class="photo-grid" style="margin-top:8px">${l.photos.map((p,idx)=>`<div class="photo-item"><img src="${p}"><a class="dl" onclick="downloadPhotoByIndex('${l.id}',${idx})" title="TÃ©lÃ©charger cette photo">â¬</a></div>`).join('')}</div></div>`:''}        ${l.notes?`<div class="detail-section"><div class="detail-section-title">Notes</div><div style="font-size:13px;color:var(--muted);line-height:1.6">${l.notes}</div></div>`:''}
       </div>
     </div>`;
   openModal('modalView');
