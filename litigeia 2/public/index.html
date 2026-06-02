@@ -2338,11 +2338,16 @@ async function analyserPhotosLitige(id) {
       const b64 = await new Promise(r => { const rd = new FileReader(); rd.onload = ()=>r(rd.result.split(',')[1]); rd.readAsDataURL(blob); });
       imgs.push({ type:'image', source:{ type:'base64', media_type:'image/jpeg', data:b64 } });
     }
-    imgs.push({ type:'text', text:'JSON uniquement: {"type_sinistre":"Nettoyage supplementaire|Tabac/Odeurs|Degradation/Casse|Dommages eau|Autre","description":"<80 mots fr>"}' });
+        // Catalogue templates pour l'IA
+    const tmplCatalog = Object.entries(TL).map(([k,v]) => {
+      const prix = v.articles.reduce((s,a) => s + (a.p||0)*(a.q||1), 0);
+      return k + ':' + v.label + '(' + prix + '€)';
+    }).join('|');
+    imgs.push({ type:'text', text: 'Analyse ces photos de dgats de logement. Templates disponibles: ' + tmplCatalog + '. Reponds JSON uniquement: {"type_sinistre":"<categorie principale>","description":"<80 mots fr>","templates":["key1","key2"]}. Ne retourne que les templates reellement visibles sur les photos.' });
     const j = await (await fetch('/api/analyze', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({ model:'claude-haiku-4-5-20251001', max_tokens:300, messages:[{role:'user',content:imgs}] })
+      body:JSON.stringify({ model:'claude-haiku-4-5-20251001', max_tokens:600, messages:[{role:'user',content:imgs}] })
     })).json();
     if (j.error) throw new Error(j.error.message||j.error);
     const m = ((j.content&&j.content[0]&&j.content[0].text)||'').match(/\{[\s\S]*\}/);
@@ -2350,7 +2355,20 @@ async function analyserPhotosLitige(id) {
       const res = JSON.parse(m[0]);
       if (res.type_sinistre) { const suf = l.resume&&l.resume.includes(' - ')?l.resume.substring(l.resume.indexOf(' - ')):''; l.resume = res.type_sinistre + suf; }
       if (res.description&&!l.description) l.description = res.description;
-      save(); alert('Analyse OK : ' + (res.type_sinistre||'?'));
+      if (res.templates && res.templates.length) {
+        const newArts = [];
+        for (const key of res.templates) {
+          const arts = getTemplateArticles(key);
+          newArts.push(...arts);
+        }
+        if (newArts.length) {
+          l.articles = newArts;
+          l.total_ttc = Math.round(newArts.reduce((s,a) => s + (a.prix_ht||0)*(a.quantite||1)*1.2, 0)*100)/100;
+        }
+      }
+      save();
+      const budgetMsg = l.total_ttc ? ' | Budget estim: ' + l.total_ttc.toFixed(2) + '€ TTC' : '';
+      alert('Analyse OK : ' + (res.type_sinistre||'?') + budgetMsg);
       if (currentNav==='dashboard') renderDashboard(); else renderLitiges();
     }
   } catch(e) { alert('Erreur analyse : '+e.message); }
