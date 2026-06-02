@@ -2361,12 +2361,12 @@ async function analyserPhotosLitige(id, silent = false) {
       const b64 = await new Promise(r => { const rd = new FileReader(); rd.onload = ()=>r(rd.result.split(',')[1]); rd.readAsDataURL(blob); });
       imgs.push({ type:'image', source:{ type:'base64', media_type:'image/jpeg', data:b64 } });
     }
-        // Catalogue templates pour l'IA
-    const tmplCatalog = Object.entries(TL).map(([k,v]) => {
-      const prix = v.articles.reduce((s,a) => s + (a.p||0)*(a.q||1), 0);
-      return k + ':' + v.label + '(' + prix + '€)';
-    }).join('|');
-    imgs.push({ type:'text', text: 'Analyse ces photos de dgats de logement. Templates disponibles: ' + tmplCatalog + '. Reponds JSON uniquement: {"type_sinistre":"<categorie principale>","description":"<80 mots fr>","templates":["key1","key2"]}. Ne retourne que les templates reellement visibles sur les photos.' });
+            // Catalogue templates pour l'IA
+    const userTmpl = (DB.config && DB.config.templates && DB.config.templates.length)
+      ? DB.config.templates
+      : Object.entries(TL).map(([k,v]) => ({nom:v.label, prix:Math.round(v.articles.reduce((s,a)=>s+(a.p||0)*(a.q||1),0)), unite:v.articles[0]?v.articles[0].u:'forfait'}));
+    const tmplCatalog = userTmpl.map(t => t.nom+' ('+t.prix+'€/'+( t.unite||'forfait')+')').join(', ');
+    imgs.push({ type:'text', text: 'Tu analyses des photos de logement meuble pour une conciergerie. Articles disponibles: '+tmplCatalog+'. Reponds JSON strict uniquement: {"type_sinistre":"<categorie>","description":"<80 mots fr>","articles":[{"nom":"<nom exact du catalogue>","quantite":1,"prix_unitaire":<prix>,"montant":<total>}]}. Inclure uniquement les articles justifies par les degats visibles sur les photos.' });
     const j = await (await fetch('/api/analyze', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -2378,16 +2378,13 @@ async function analyserPhotosLitige(id, silent = false) {
       const res = JSON.parse(m[0]);
       if (res.type_sinistre) { const suf = l.resume&&l.resume.includes(' - ')?l.resume.substring(l.resume.indexOf(' - ')):''; l.resume = res.type_sinistre + suf; }
       if (res.description&&!l.description) l.description = res.description;
-      if (res.templates && res.templates.length) {
-        const newArts = [];
-        for (const key of res.templates) {
-          const arts = getTemplateArticles(key);
-          newArts.push(...arts);
-        }
-        if (newArts.length) {
-          l.articles = newArts;
-          l.total_ttc = Math.round(newArts.reduce((s,a) => s + (a.prix_ht||0)*(a.quantite||1)*1.2, 0)*100)/100;
-        }
+            if (res.articles && res.articles.length) {
+        l.articles = res.articles.map(a => ({
+          designation: a.nom, categorie: res.type_sinistre||'litige',
+          quantite: a.quantite||1, unite: 'forfait',
+          prix_ht: a.prix_unitaire||0, montant: a.montant||(a.prix_unitaire||0)*(a.quantite||1)
+        }));
+        l.total_ttc = Math.round(l.articles.reduce((s,a) => s+(a.montant||0), 0));
       }
       save();
       const budgetMsg = l.total_ttc ? ' | Budget estim: ' + l.total_ttc.toFixed(2) + '€ TTC' : '';
