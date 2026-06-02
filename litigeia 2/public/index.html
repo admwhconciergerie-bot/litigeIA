@@ -125,6 +125,7 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 .litige-card-prop{font-size:12px;color:var(--muted);margin-bottom:8px}
 .litige-card-amount{font-weight:700;font-size:15px;color:var(--accent)}
 .litige-card-date{font-size:11px;color:var(--subtle);margin-top:4px}
+.litige-card-sinistre{font-size:11px;color:var(--subtle);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .litige-card-thumb{width:100%;height:56px;object-fit:cover;border-radius:6px;margin-bottom:8px;background:var(--bg)}
 
 /* BUTTONS */
@@ -1056,6 +1057,7 @@ function litCardHTML(l) {
       <span class="litige-card-platform ${platClass}">${l.constat_date ? new Date(l.constat_date).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '—'}</span>
     </div>
     <div class="litige-card-guest">📍 ${prop?.name||(l.logement?l.logement:'Bien inconnu')}</div>
+    <div class="litige-card-sinistre">💣 ${(l.description||(l.resume?l.resume.split(' - ')[0]:'')||'').substring(0,55)||'—'}</div>
     <div class="litige-card-amount">${fmt(l.total_ttc)}</div>
     <div class="litige-card-date">${l.guest_name||'—'}</div>
   </div>`;
