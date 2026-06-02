@@ -68,10 +68,9 @@ async function chercherReservationPassPass(propId, date) {
     const { collection, query, where, getDocs } = require('firebase/firestore');
     const q = query(collection(_fbDb, 'bookings'), where('prop', '==', propId));
     const snap = await getDocs(q);
-    const doc = snap.docs.find(d => {
-      const b = d.data();
-      return !b.deleted && b.start <= date && b.end > date;
-    });
+    // Resa sortante en priorite (checkout = date litige), sinon resa en cours
+    let doc = snap.docs.find(d => { const b = d.data(); return !b.deleted && b.end === date && b.start < date; });
+    if (!doc) doc = snap.docs.find(d => { const b = d.data(); return !b.deleted && b.start <= date && b.end > date; });
     if (!doc) {
       console.log('PassPass: aucune reservation pour prop', propId, 'le', date);
       return null;
