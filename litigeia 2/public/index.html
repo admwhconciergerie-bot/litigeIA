@@ -121,7 +121,7 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 .litige-card-platform{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px;margin-bottom:8px}
 .plat-airbnb{background:#fff0ee;color:#ff5a5f}
 .plat-booking{background:#eef4ff;color:#003580}
-.litige-card-guest{font-weight:600;font-size:14px;margin-bottom:4px}
+.litige-card-guest{font-weight:700;font-size:14px;margin-bottom:4px}
 .litige-card-prop{font-size:12px;color:var(--muted);margin-bottom:8px}
 .litige-card-amount{font-weight:700;font-size:15px;color:var(--accent)}
 .litige-card-date{font-size:11px;color:var(--subtle);margin-top:4px}
@@ -1052,7 +1052,7 @@ function litCardHTML(l) {
     <button class="litige-card-merge" onclick="event.stopPropagation();startMerge('${l.id}')" title="Fusionner avec un autre">&#8644;</button>
     ${l.photos&&l.photos[0]?`<img class="litige-card-thumb" src="${l.photos[0]}" alt="">`:''}
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-      <span class="litige-card-platform ${platClass}">${l.constat_date ? new Date(l.constat_date).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}) : '—'}</span>
+      <span class="litige-card-platform ${platClass}">${l.constat_date ? new Date(l.constat_date).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '—'}</span>
       ${l.photos&&l.photos.length?'<button class="btn btn-ghost btn-sm" style="padding:2px 6px;font-size:10px" onclick="event.stopPropagation();analyserPhotosLitige(\''+l.id+'\')">&#128269;</button>':''}
     </div>
     <div class="litige-card-guest">📍 ${prop?.name||(l.logement?l.logement:'Bien inconnu')}</div>
