@@ -73,7 +73,7 @@ app.post('/api/analyze', async (req, res) => {
   }
 
   const model = hasImages
-    ? 'meta-llama/llama-3.2-11b-vision-instruct:free'
+    ? 'qwen/qwen2-vl-7b-instruct:free'
     : 'meta-llama/llama-3.3-70b-instruct:free';
 
   try {
