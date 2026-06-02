@@ -46,74 +46,52 @@ app.get('/api/proxy-image', async (req, res) => {
 });
 
 app.post('/api/analyze', async (req, res) => {
-  const openrouterKey = process.env.OPENROUTER_API_KEY;
-  const anthropicKey  = process.env.ANTHROPIC_API_KEY;
+  const key = process.env.OPENROUTER_API_KEY;
+  if (!key) return res.status(500).json({ error: 'OPENROUTER_API_KEY manquante' });
 
-  // Si la requete contient des images → Anthropic Vision (les modeles free OpenRouter ne supportent pas les images)
-  const hasImages = (req.body.messages || []).some(m =>
-    (Array.isArray(m.content) ? m.content : []).some(c => c.type === 'image')
+  const messages = req.body.messages || [];
+  const system   = req.body.system || '';
+
+  // Detecter images (format Anthropic ou OpenAI)
+  const hasImages = messages.some(m =>
+    (Array.isArray(m.content) ? m.content : []).some(c => c.type === 'image' || c.type === 'image_url')
   );
 
-  if (openrouterKey && !hasImages) {
-    const { system, messages } = req.body;
-    const userMsg = messages[0];
-    const openaiMessages = [];
-    if (system) openaiMessages.push({ role: 'system', content: system });
-
-    const textParts = (userMsg.content || []).filter(p => p.type === 'text').map(p => p.text);
-    openaiMessages.push({ role: 'user', content: textParts.join('\n') });
-
-    const models = [
-      'meta-llama/llama-3.3-70b-instruct:free',
-      'openai/gpt-oss-120b:free',
-      'nousresearch/hermes-3-llama-3.1-405b:free',
-      'nvidia/nemotron-nano-9b-v2:free',
-      'minimax/minimax-m2.5:free',
-      'meta-llama/llama-3.2-3b-instruct:free'
-    ];
-
-    let lastError = 'Aucun modele disponible';
-    for (const model of models) {
-      try {
-        const body = { model, messages: openaiMessages, max_tokens: 3000 };
-        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + openrouterKey,
-            'Content-Type': 'application/json',
-            'HTTP-Referer': 'https://litigeia.onrender.com',
-            'X-Title': 'LitigeIA'
-          },
-          body: JSON.stringify(body)
-        });
-        const data = await response.json();
-        if (response.ok) {
-          const text = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
-          return res.json({ content: [{ type: 'text', text }], usage: { input_tokens: 0, output_tokens: 0 } });
-        }
-        lastError = (data.error && data.error.message) || 'Erreur ' + response.status;
-      } catch (err) {
-        lastError = err.message;
-      }
-    }
-    return res.status(503).json({ error: lastError });
+  // Convertir Anthropic → OpenAI pour OpenRouter
+  const oaMsgs = [];
+  if (system) oaMsgs.push({ role: 'system', content: system });
+  for (const msg of messages) {
+    const parts = Array.isArray(msg.content) ? msg.content : [{ type: 'text', text: String(msg.content || '') }];
+    const content = parts.map(p => {
+      if (p.type === 'text') return { type: 'text', text: p.text };
+      if (p.type === 'image' && p.source && p.source.type === 'base64')
+        return { type: 'image_url', image_url: { url: 'data:' + (p.source.media_type || 'image/jpeg') + ';base64,' + p.source.data } };
+      if (p.type === 'image_url') return p;
+      return { type: 'text', text: JSON.stringify(p) };
+    });
+    oaMsgs.push({ role: msg.role || 'user', content: content.length === 1 && content[0].type === 'text' ? content[0].text : content });
   }
 
-  if (!anthropicKey) return res.status(500).json({ error: 'Aucune cle API configuree.' });
+  const model = hasImages
+    ? 'meta-llama/llama-3.2-11b-vision-instruct:free'
+    : 'meta-llama/llama-3.3-70b-instruct:free';
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
-      headers: { 'x-api-key': anthropicKey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
-      body: JSON.stringify(req.body)
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key,
+                 'HTTP-Referer': 'https://litigeia.onrender.com', 'X-Title': 'LitigeIA' },
+      body: JSON.stringify({ model, messages: oaMsgs, max_tokens: 3000 })
     });
-    const data = await response.json();
-    if (!response.ok) return res.status(response.status).json(data);
-    res.json(data);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    const data = await r.json();
+    if (!r.ok) return res.status(r.status).json({ error: (data.error && data.error.message) || 'Erreur OpenRouter' });
+    const text = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
+    res.json({ content: [{ type: 'text', text }], usage: { input_tokens: 0, output_tokens: 0 } });
+  } catch(e) {
+    res.status(500).json({ error: e.message });
   }
 });
+
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
