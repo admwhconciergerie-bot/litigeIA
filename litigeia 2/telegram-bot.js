@@ -325,12 +325,16 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
     // 1. Convertir file_ids en URLs reelles
     const photoUrls = (await Promise.all(fileIds.map(id => fileIdToUrl(id)))).filter(Boolean);
 
-    // 2. Legende courte (<=50 chars) = nom du logement
-    // NOTE: pas de filtre DATE_RE - "Fevrier 2" est un nom d'appartement valide
+    // 2. Chercher le logement dans les messages/captions individuels
+    // La personne note toujours l'appart (avant, apres ou en legende des photos)
     let logement = null;
-    if (texte && texte.length > 0 && texte.length <= 50) {
+    const msgCourt = entry.texts.find(t => t && t.trim().length > 0 && t.trim().length <= 50);
+    if (msgCourt) {
+      logement = msgCourt.trim();
+      console.log('Logement depuis message court:', logement);
+    } else if (texte && texte.length > 0 && texte.length <= 50) {
       logement = texte.trim();
-      console.log('Logement depuis legende:', logement);
+      console.log('Logement depuis texte court total:', logement);
     }
 
     // 3. Analyse Vision Claude
