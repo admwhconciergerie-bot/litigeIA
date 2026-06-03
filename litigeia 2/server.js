@@ -107,16 +107,56 @@ for (const model of models) {
 res.status(500).json({ error: lastErr });
 });
 
-// GET /api/passpass-lookup — cherche la resa PassPass pour un logement et une date
-app.get('/api/passpass-lookup', async (req, res) => {
-const { propId, date } = req.query;
-if (!propId || !date) return res.status(400).json({ error: 'propId et date requis' });
-try {
-const bot = require('./telegram-bot');
-const result = await bot.chercherReservation(propId, date);
-res.json(result ? { found: true, ...result } : { found: false });
-} catch(e) { res.status(500).json({ error: e.message }); }
+// Firebase PassPass helpers (inline)
+const FIREBASE_CONFIG = {apiKey:'AIzaSyCffkmTqLa241aKYMg6l_neYrU8vT3RG38',authDomain:'passpass-web-public.firebaseapp.com',projectId:'passpass-web-public'};
+let _fbApp=null,_fbDb=null,_fbAuth=false;
+async function initFB() {
+  if (_fbDb) return true;
+  const em=process.env.PASSPASS_EMAIL,pw=process.env.PASSPASS_PASSWORD;
+  if (!em||!pw) return false;
+  try {
+    const {initializeApp}=require('firebase/app');
+    const {getFirestore,collection,query,where,getDocs}=require('firebase/firestore');
+    const {getAuth,signInWithEmailAndPassword}=require('firebase/auth');
+    if (!_fbApp) _fbApp=initializeApp(FIREBASE_CONFIG,'pp');
+    if (!_fbAuth) { await signInWithEmailAndPassword(getAuth(_fbApp),em,pw); _fbAuth=true; }
+    _fbDb=getFirestore(_fbApp);
+    return true;
+  } catch(e){console.error('FB init:',e.message);return false;}
+}
+async function queryBookings(propId,date) {
+  if (!await initFB()) return {found:false,error:'Firebase non connecté (variables PASSPASS_EMAIL/PASSWORD manquantes?)'};
+  const {collection,query,where,getDocs}=require('firebase/firestore');
+  const snap=await getDocs(query(collection(_fbDb,'bookings'),where('prop','==',propId)));
+  let doc=snap.docs.find(d=>{const b=d.data();return !b.deleted&&b.end===date&&b.start<date;});
+  if (!doc) doc=snap.docs.find(d=>{const b=d.data();return !b.deleted&&b.start<=date&&b.end>date;});
+  if (!doc) return {found:false};
+  const b=doc.data(),ti=b.tenantInfo||{};
+  const clean=s=>(s||'').replace(/[\u2068\u2069]/g,'').trim();
+  const plat=(b.platform||'Airbnb'); 
+  return {found:true,guest_name:[clean(ti.prenom),clean(ti.nom)].filter(s=>s&&s!=='.').join(' ').trim(),guest_email:ti.email||'',platform:plat.charAt(0).toUpperCase()+plat.slice(1).toLowerCase(),booking_ref:b.codeRef||'',checkin:b.start||'',checkout:b.end||''};
+}
+
+// GET /api/passpass-lookup
+app.get('/api/passpass-lookup', async (req,res) => {
+  const {propId,date}=req.query;
+  if (!propId||!date) return res.status(400).json({error:'propId et date requis'});
+  try { res.json(await queryBookings(propId,date)); }
+  catch(e){ res.status(500).json({error:e.message}); }
 });
+
+// GET /api/passpass-properties — liste tous les IDs de propriétés PassPass (pour configuration)
+app.get('/api/passpass-properties', async (req,res) => {
+  try {
+    if (!await initFB()) return res.json({error:'Firebase non connecté',props:[]});
+    const {collection,getDocs,query,orderBy,limit}=require('firebase/firestore');
+    const snap=await getDocs(query(collection(_fbDb,'bookings'),limit(200)));
+    const props={};
+    snap.docs.forEach(d=>{const b=d.data();if(b.prop&&b.propName) props[b.prop]=b.propName; else if(b.prop) props[b.prop]=props[b.prop]||b.prop;});
+    res.json({props:Object.entries(props).map(([id,name])=>({id,name}))});
+  } catch(e){ res.status(500).json({error:e.message,props:[]}); }
+});
+
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
