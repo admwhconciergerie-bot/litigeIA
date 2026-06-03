@@ -71,15 +71,16 @@ for (const msg of messages) {
 }
 
 const visionModels = [
+  'openrouter/free',
   'moonshotai/kimi-k2.6:free',
-  'google/gemma-4-27b-it:free',
-  'nvidia/nemotron-nano-12b-v2-vl:free',
-  'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free'
+  'google/gemma-4-31b-it:free',
+  'nvidia/nemotron-nano-12b-v2-vl:free'
 ];
 const textModels = [
-  'openai/gpt-oss-20b:free',
-  'openai/gpt-oss-120b:free',
-  'nvidia/nemotron-3-super-120b-a12b:free',
+  'openrouter/free',
+  'moonshotai/kimi-k2.6:free',
+  'google/gemma-4-31b-it:free',
+  'qwen/qwen3-next-80b-a3b-instruct:free',
   'meta-llama/llama-3.3-70b-instruct:free'
 ];
 const models = hasImages ? visionModels : textModels;
