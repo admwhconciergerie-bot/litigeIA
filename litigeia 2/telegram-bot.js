@@ -61,41 +61,45 @@ async function initFirebase() {
 }
 
 // Cherche la reservation PassPass en cours pour un logement (propId = ID PassPass)
-async function chercherReservationPassPass(propId, date) {
-  if (!propId) return null;
-  try {
-    if (!await initFirebase()) return null;
-    const { collection, query, where, getDocs } = require('firebase/firestore');
-    const q = query(collection(_fbDb, 'bookings'), where('prop', '==', propId));
-    const snap = await getDocs(q);
-    // Resa sortante en priorite (checkout = date litige), sinon resa en cours
-    let doc = snap.docs.find(d => { const b = d.data(); return !b.deleted && b.end === date && b.start < date; });
-    if (!doc) doc = snap.docs.find(d => { const b = d.data(); return !b.deleted && b.start <= date && b.end > date; });
-    if (!doc) {
-      console.log('PassPass: aucune reservation pour prop', propId, 'le', date);
-      return null;
-    }
-    const b  = doc.data();
-    const ti = b.tenantInfo || {};
-    // Nettoyer les caracteres unicode invisibles (⁨⁩) dans les prenoms Airbnb
-    const prenom = (ti.prenom || '').replace(/[⁨⁩]/g, '').trim();
-    const nom    = (ti.nom    || '').replace(/[⁨⁩]/g, '').trim();
-    const plat   = (b.platform || 'Airbnb');
-    const platLabel = plat.charAt(0).toUpperCase() + plat.slice(1).toLowerCase();
-    const result = {
-      checkin:      b.start    || '',
-      checkout:     b.end      || '',
-      platform:     platLabel,
-      booking_ref:  b.codeRef  || '',
-      guest_name:   [prenom, nom].filter(s => s && s !== '.').join(' ').trim(),
-      guest_email:  ti.email   || ''
-    };
-    console.log('PassPass reservation trouvee:', JSON.stringify(result));
-    return result;
-  } catch(e) {
-    console.error('PassPass lookup error:', e.message);
-    return null;
+async function chercherReservationPassPass(propId, date, logementName) {
+if (!propId && !logementName) return null;
+try {
+if (!await initFirebase()) return null;
+const { collection, query, where, getDocs } = require('firebase/firestore');
+const snap = await getDocs(
+  propId
+    ? query(collection(_fbDb, 'bookings'), where('prop', '==', propId))
+    : collection(_fbDb, 'bookings')
+);
+// Normalise pour comparaison
+const norm = s => (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+const logNorm = norm(logementName);
+// Filtrer : resa sortante en priorite, puis active
+const match = (b) => {
+  if (b.deleted) return false;
+  // Si pas de propId, filtrer par similarite de nom
+  if (!propId && logementName) {
+    const pn = norm(b.propName||b.propAddress||'');
+    if (!pn || (!pn.includes(logNorm) && !logNorm.includes(pn))) return false;
   }
+  return true;
+};
+let doc = snap.docs.find(d => { const b=d.data(); return match(b) && b.end===date && b.start<date; });
+if (!doc) doc = snap.docs.find(d => { const b=d.data(); return match(b) && b.start<=date && b.end>date; });
+if (!doc) { console.log('PassPass: aucune resa pour', propId||logementName, date); return null; }
+const b = doc.data();
+const ti = b.tenantInfo || {};
+const clean = s => (s||'').replace(/[\u2068\u2069]/g,'').trim();
+const plat = b.platform || 'Airbnb';
+const result = {
+  checkin: b.start||'', checkout: b.end||'', platform: plat.charAt(0).toUpperCase()+plat.slice(1).toLowerCase(),
+  booking_ref: b.codeRef||'', property_id: b.prop||propId||'',
+  guest_name: [clean(ti.prenom),clean(ti.nom)].filter(s=>s&&s!=='.').join(' ').trim(),
+  guest_email: ti.email||''
+};
+console.log('PassPass resa:', JSON.stringify(result));
+return result;
+} catch(e) { console.error('PassPass error:', e.message); return null; }
 }
 
 if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
@@ -261,7 +265,7 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
     // Chercher la reservation PassPass AVANT de creer le litige
     let reserv = null;
     if (passpassPropId) {
-      reserv = await chercherReservationPassPass(passpassPropId, today);
+      reserv = await chercherReservationPassPass(passpassPropId, today, logement);
     }
 
     // Creer le litige
