@@ -127,10 +127,10 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 .litige-card-date{font-size:11px;color:var(--subtle);margin-top:4px}
 .litige-card-sinistre{font-size:11px;color:var(--subtle);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tpl-list{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:6px}
-.tpl-row{display:flex;align-items:center;justify-content:space-between;gap:5px;padding:5px 7px;border-radius:6px;background:var(--surface);cursor:pointer;font-size:11px;line-height:1.2}
-.tpl-row span{flex:1}
-.tpl-row em{font-style:normal;font-weight:600;color:var(--accent);font-size:10px;white-space:nowrap}
-.tpl-row input{accent-color:var(--accent);width:14px;height:14px;flex-shrink:0;cursor:pointer;margin-left:4px}
+.tpl-row{display:flex;align-items:center;gap:5px;padding:4px 6px;border-radius:6px;background:var(--surface);cursor:pointer;font-size:11px;line-height:1.2}
+.tpl-row input{accent-color:var(--accent);width:13px;height:13px;flex-shrink:0;cursor:pointer}
+.tpl-row span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tpl-row em{font-style:normal;font-weight:600;color:var(--accent);font-size:10px;flex-shrink:0}
 .tpl-active{background:color-mix(in srgb,var(--accent) 15%,var(--surface))}
 
 /* BUTTONS */
@@ -868,59 +868,8 @@ function toggleTemplate(id, key, checked) {
     l.articles = l.articles.filter(a => a._tpl !== key);
   }
   l.total_ttc = Math.round(l.articles.reduce((s,a) => s+(a.montant||a.prix_ht||0),0));
-  // Live price update
-  const totalEl = document.getElementById('total-' + id);
-  if (totalEl) totalEl.textContent = fmt(l.total_ttc);
-  document.querySelectorAll('.tpl-row').forEach(row => {
-    const k = row.dataset.tplKey;
-    if (k) row.classList.toggle('tpl-active', l.articles.some(a=>a._tpl===k));
-  });
   sauver();
-}
-
-function openPhoto(url) {
-  const ov = document.createElement('div');
-  ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:zoom-out';
-  ov.onclick = () => ov.remove();
-  const img = document.createElement('img');
-  img.src = '/api/proxy-image?url=' + encodeURIComponent(url);
-  img.onerror = () => { img.src = url; };
-  img.style.cssText = 'max-width:95vw;max-height:95vh;border-radius:8px;object-fit:contain';
-  ov.appendChild(img);
-  document.body.appendChild(ov);
-}
-
-async function downloadPhotos(id) {
-  const l = DB.litiges.find(x => x.id === id);
-  if (!l || !l.photos.length) return;
-  const btn = event.target;
-  btn.textContent = '⏳';
-  const imgs = [];
-  for (const url of l.photos) {
-    try {
-      const r = await fetch('/api/proxy-image?url=' + encodeURIComponent(url));
-      if (!r.ok) continue;
-      const blob = await r.blob();
-      const bmp = await createImageBitmap(blob);
-      imgs.push(bmp);
-    } catch(e) {}
-  }
-  if (!imgs.length) { btn.textContent = '⬇ Télécharger'; return; }
-  const W = Math.max(...imgs.map(i => i.width));
-  const H = imgs.reduce((s,i) => s + i.height + 8, 0);
-  const canvas = new OffscreenCanvas(W, H);
-  const ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#fff';
-  ctx.fillRect(0, 0, W, H);
-  let y = 0;
-  for (const img of imgs) { ctx.drawImage(img, Math.round((W-img.width)/2), y); y += img.height + 8; }
-  const resBlob = await canvas.convertToBlob({ type:'image/jpeg', quality:0.92 });
-  const a = document.createElement('a');
-  a.download = 'photos-' + (l.logement||'litige').replace(/[^a-z0-9]/gi,'-') + '.jpg';
-  a.href = URL.createObjectURL(resBlob);
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
-  btn.textContent = '⬇ Télécharger';
+  viewLitige(id);
 }
 
 
@@ -2230,9 +2179,17 @@ function viewLitige(id) {
         <div class="detail-section">
           <div class="detail-section-title">Articles (${l.articles.length})</div>
           <div style="font-size:12.5px;color:var(--muted);line-height:1.8">${l.articles.map(a=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span>${a.designation}</span><strong style="color:var(--accent)">${fmt((a.quantite||0)*(a.prix_ht||0))}</strong></div>`).join('')}</div>
-          <div style="text-align:right;margin-top:8px;font-size:15px;font-weight:700;co          <div class="detail-section">${l.photos&&l.photos.length?
-`<div class="detail-section-title" style="display:flex;justify-content:space-between;align-items:center">Photos (${l.photos.length})<button onclick="downloadPhotos('${l.id}')" style="font-size:11px;padding:3px 8px;border-radius:6px;background:var(--accent);color:#fff;border:none;cursor:pointer">⬇ Télécharger</button></div>
-<div class="photo-grid" style="margin-top:6px">${l.photos.map((p,i)=>`<div class="photo-item" onclick="openPhoto('${p}')" style="cursor:zoom-in"><img src="/api/proxy-image?url=${encodeURIComponent(p)}" loading="lazy" alt="" onerror="this.src='${p}'"></div>`).join('')}</div>`:''}</div><div class="detail-section"><div class="detail-section-title">Lettre de litige</div><button class="btn btn-ghost btn-sm" onclick="showLetter(DB.litiges.find(x=>x.id==='${l.id}'))">✉️ Voir la lettre</button></div>`:''}
+          <div style="text-align:right;margin-top:8px;font-size:15px;font-weight:700;co          <div class="detail-section">
+            <div class="detail-section-title">Templates ${l.articles&&l.articles.length?'('+l.articles.length+' art.)':''}</div>
+            <div class="tpl-list">${Object.entries(TL).map(([k,t])=>{
+              const prix=t.articles.reduce((s,a)=>s+(a.p||0)*(a.q||1),0);
+              const active=l.articles&&l.articles.some(a=>a._tpl===k);
+              return '<label class="tpl-row'+(active?' tpl-active':'')+'"><input type="checkbox"'+(active?' checked':'')+'onchange="toggleTemplate(\''+id+'\',\''+k+'\',this.checked)"><span>'+t.label+'</span><em>'+prix+'€</em></label>';
+            }).join('')}</div>
+          </div>
+lor:var(--accent)">Total TTC: ${fmt(l.total_ttc)}</div>
+        </div>
+        ${l.lettre?`<div class="detail-section"><div class="detail-section-title">Lettre de litige</div><button class="btn btn-ghost btn-sm" onclick="showLetter(DB.litiges.find(x=>x.id==='${l.id}'))">✉️ Voir la lettre</button></div>`:''}
       </div>
       <div>
         <div class="detail-section">
@@ -2241,17 +2198,7 @@ function viewLitige(id) {
             ${['new','pending','sent','resolved','refused'].map(s=>`<button class="btn ${l.status===s?'btn-primary':'btn-ghost'} btn-sm" onclick="setStatus('${s}');viewLitige('${l.id}')">${statLabels[s]}</button>`).join('')}
           </div>
         </div>
-        ${l.photos&&l.photos.length?`<div class="detail-section">
-            <div class="detail-section-title">Templates ${l.articles&&l.articles.length?'('+l.articles.length+' art.)':''}</div>
-            <div class="tpl-list">${Object.entries(TL).map(([k,t])=>{
-              const prix=t.articles.reduce((s,a)=>s+(a.p||0)*(a.q||1),0);
-              const active=l.articles&&l.articles.some(a=>a._tpl===k);
-              return '<label class="tpl-row'+(active?' tpl-active':'')+'" data-tpl-key="'+k+'"><span>'+t.label+'</span><em>'+prix+'€</em><input type="checkbox"'+(active?' checked':'')+'onchange="toggleTemplate(\''+id+', \''+k+',this.checked)"></label>';
-            }).join('')}</div>
-          </div>
-lor:var(--accent)" id="total-${id}">Total TTC: ${fmt(l.total_ttc)}</div>
-        </div>
-        ${l.lettre?`
+        ${l.photos&&l.photos.length?`<div class="detail-section"><div class="detail-section-title">Photos (${l.photos.length})</div><div class="photo-grid" style="margin-top:0">${l.photos.map(p=>`<div class="photo-item"><img src="${p}"></div>`).join('')}</div></div>`:''}
         ${l.notes?`<div class="detail-section"><div class="detail-section-title">Notes</div><div style="font-size:13px;color:var(--muted);line-height:1.6">${l.notes}</div></div>`:''}
       </div>
     </div>`;
