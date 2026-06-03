@@ -2359,9 +2359,16 @@ async function analyserPhotosLitige(id, silent = false) {
   try {
     const imgs = [];
     for (const url of l.photos.slice(0,4)) {
-      const blob = await (await fetch('/api/proxy-image?url='+encodeURIComponent(url))).blob();
-      const b64 = await new Promise(r => { const rd = new FileReader(); rd.onload = ()=>r(rd.result.split(',')[1]); rd.readAsDataURL(blob); });
-      imgs.push({ type:'image', source:{ type:'base64', media_type:'image/jpeg', data:b64 } });
+      const resp = await fetch('/api/proxy-image?url='+encodeURIComponent(url));
+      if (!resp.ok) continue;
+      const blob = await resp.blob();
+      const bmp = await createImageBitmap(blob);
+      const scale = Math.min(1, 800 / Math.max(bmp.width, bmp.height));
+      const oc = new OffscreenCanvas(Math.round(bmp.width*scale), Math.round(bmp.height*scale));
+      oc.getContext('2d').drawImage(bmp, 0, 0, oc.width, oc.height);
+      const resized = await oc.convertToBlob({ type: 'image/jpeg', quality: 0.75 });
+      const b64 = await new Promise(r => { const rd = new FileReader(); rd.onload = ()=>r(rd.result.split(',')[1]); rd.readAsDataURL(resized); });
+      imgs.push({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: b64 } });
     }
             // Catalogue templates pour l'IA
     const userTmpl = (DB.config && DB.config.templates && DB.config.templates.length)
