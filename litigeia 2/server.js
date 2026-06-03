@@ -46,53 +46,58 @@ app.get('/api/proxy-image', async (req, res) => {
 });
 
 app.post('/api/analyze', async (req, res) => {
-  const key = process.env.OPENROUTER_API_KEY;
-  if (!key) return res.status(500).json({ error: 'OPENROUTER_API_KEY manquante' });
+const key = process.env.OPENROUTER_API_KEY;
+if (!key) return res.status(500).json({ error: 'OPENROUTER_API_KEY manquante' });
 
-  const messages = req.body.messages || [];
-  const system   = req.body.system || '';
+const messages = req.body.messages || [];
+const system = req.body.system || '';
 
-  // Detecter images (format Anthropic ou OpenAI)
-  const hasImages = messages.some(m =>
-    (Array.isArray(m.content) ? m.content : []).some(c => c.type === 'image' || c.type === 'image_url')
-  );
+const hasImages = messages.some(m =>
+  (Array.isArray(m.content) ? m.content : []).some(c => c.type === 'image' || c.type === 'image_url')
+);
 
-  // Convertir Anthropic → OpenAI pour OpenRouter
-  const oaMsgs = [];
-  if (system) oaMsgs.push({ role: 'system', content: system });
-  for (const msg of messages) {
-    const parts = Array.isArray(msg.content) ? msg.content : [{ type: 'text', text: String(msg.content || '') }];
-    const content = parts.map(p => {
-      if (p.type === 'text') return { type: 'text', text: p.text };
-      if (p.type === 'image' && p.source && p.source.type === 'base64')
-        return { type: 'image_url', image_url: { url: 'data:' + (p.source.media_type || 'image/jpeg') + ';base64,' + p.source.data } };
-      if (p.type === 'image_url') return p;
-      return { type: 'text', text: JSON.stringify(p) };
-    });
-    oaMsgs.push({ role: msg.role || 'user', content: content.length === 1 && content[0].type === 'text' ? content[0].text : content });
-  }
+const oaMsgs = [];
+if (system) oaMsgs.push({ role: 'system', content: system });
+for (const msg of messages) {
+  const parts = Array.isArray(msg.content) ? msg.content : [{ type: 'text', text: String(msg.content || '') }];
+  const content = parts.map(p => {
+    if (p.type === 'text') return { type: 'text', text: p.text };
+    if (p.type === 'image' && p.source && p.source.type === 'base64')
+      return { type: 'image_url', image_url: { url: 'data:' + (p.source.media_type || 'image/jpeg') + ';base64,' + p.source.data } };
+    if (p.type === 'image_url') return p;
+    return { type: 'text', text: JSON.stringify(p) };
+  });
+  oaMsgs.push({ role: msg.role || 'user', content: content.length === 1 && content[0].type === 'text' ? content[0].text : content });
+}
 
-  const model = hasImages
-    ? 'google/gemma-4-31b-it:free'
-    : 'meta-llama/llama-3.3-70b-instruct:free';
+const visionModels = [
+  'nvidia/nemotron-nano-12b-v2-vl:free',
+  'moonshotai/kimi-k2.6:free',
+  'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free'
+];
+const models = hasImages ? visionModels : ['meta-llama/llama-3.3-70b-instruct:free'];
 
+let lastErr = 'Aucun modele disponible';
+for (const model of models) {
   try {
     const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key,
-                 'HTTP-Referer': 'https://litigeia.onrender.com', 'X-Title': 'LitigeIA' },
-      body: JSON.stringify({ model, messages: oaMsgs, max_tokens: 3000 })
+        'HTTP-Referer': 'https://litigeia.onrender.com', 'X-Title': 'LitigeIA' },
+      body: JSON.stringify({ model, messages: oaMsgs, max_tokens: 1000 })
     });
     const data = await r.json();
-    if (!r.ok) return res.status(r.status).json({ error: (data.error && data.error.message) || 'Erreur OpenRouter' });
+    const errMsg = (data.error && data.error.message) || '';
+    if (!r.ok || errMsg.toLowerCase().includes('provider') || errMsg.includes('endpoint')) {
+      lastErr = model + ': ' + errMsg;
+      continue;
+    }
     const text = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
-    res.json({ content: [{ type: 'text', text }], usage: { input_tokens: 0, output_tokens: 0 } });
-  } catch(e) {
-    res.status(500).json({ error: e.message });
-  }
+    return res.json({ content: [{ type: 'text', text }], usage: {} });
+  } catch(e) { lastErr = model + ': ' + e.message; }
+}
+res.status(500).json({ error: lastErr });
 });
-
-
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
