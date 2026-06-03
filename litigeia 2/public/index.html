@@ -2200,7 +2200,7 @@ function viewLitige(id) {
             ${['new','pending','sent','resolved','refused'].map(s=>`<button class="btn ${l.status===s?'btn-primary':'btn-ghost'} btn-sm" onclick="setStatus('${s}');viewLitige('${l.id}')">${statLabels[s]}</button>`).join('')}
           </div>
         </div>
-        ${l.photos&&l.photos.length?`<div class="detail-section"><div class="detail-section-title">Photos (${l.photos.length})</div><div class="photo-grid" style="margin-top:6px">${l.photos.map(p=>'<div class="photo-item" style="position:relative;overflow:hidden"><img src="'+p+'" data-url="'+p+'" onclick="openPhoto(this.dataset.url)" style="cursor:zoom-in;width:100%;object-fit:cover"><a class="photo-dl" href="/api/proxy-image?url='+encodeURIComponent(p)+'" download title="T\u00e9l\u00e9charger">\u2b07</a></div>').join('')}</div></div>`:''}
+        ${l.photos&&l.photos.length?`<div class="detail-section"><div class="detail-section-title">Photos (${l.photos.length})</div><div class="photo-grid" style="margin-top:6px">${l.photos.map(p=>'<div class="photo-item" style="position:relative;overflow:hidden"><img src="'+p+'" data-url="'+p+'" onclick="openPhoto(this)" style="cursor:zoom-in;width:100%;object-fit:cover"><a class="photo-dl" href="/api/proxy-image?url='+encodeURIComponent(p)+'" download title="T\u00e9l\u00e9charger">\u2b07</a></div>').join('')}</div></div>`:''}
         ${l.notes?`<div class="detail-section"><div class="detail-section-title">Notes</div><div style="font-size:13px;color:var(--muted);line-height:1.6">${l.notes}</div></div>`:''}
       </div>
     </div>`;
@@ -2458,15 +2458,53 @@ window.addEventListener('load', () => {
   if (DB.config.iban) document.getElementById('ownerIbanInput').value = DB.config.iban;
 });
 
-function openPhoto(url) {
-  const ov=document.createElement("div");
-  ov.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:zoom-out";
-  ov.onclick=()=>ov.remove();
-  const img=document.createElement("img");
-  img.src=url;
-  img.style.cssText="max-width:95vw;max-height:95vh;border-radius:8px;object-fit:contain";
+function openPhoto(el) {
+  const grid = el.closest ? el.closest('.photo-grid') : null;
+  const imgs = grid ? [...grid.querySelectorAll('img[data-url]')] : [el];
+  let idx = imgs.indexOf(el);
+  if (idx < 0) idx = 0;
+
+  const ov = document.createElement('div');
+  ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:9999;display:flex;align-items:center;justify-content:center';
+
+  const img = document.createElement('img');
+  img.style.cssText = 'max-width:92vw;max-height:92vh;border-radius:8px;object-fit:contain;transition:opacity .15s';
   ov.appendChild(img);
+
+  function show(i) {
+    idx = (i + imgs.length) % imgs.length;
+    img.style.opacity = '0';
+    setTimeout(() => { img.src = imgs[idx].dataset.url; img.style.opacity = '1'; }, 100);
+  }
+
+  // Nav arrows (only if multiple photos)
+  if (imgs.length > 1) {
+    ['←','→'].forEach((ar, d) => {
+      const btn = document.createElement('button');
+      btn.textContent = ar;
+      btn.style.cssText = 'position:absolute;'+(d?'right':'left')+':16px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:20px;cursor:pointer';
+      btn.onclick = e => { e.stopPropagation(); show(idx + (d ? 1 : -1)); };
+      ov.appendChild(btn);
+    });
+  }
+
+  // Counter
+  const ctr = document.createElement('div');
+  ctr.style.cssText = 'position:absolute;bottom:16px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.7);font-size:13px';
+  ov.appendChild(ctr);
+
+  img.onload = () => { ctr.textContent = (idx+1)+' / '+imgs.length; };
+
+  const onKey = e => {
+    if (e.key === 'ArrowRight') show(idx + 1);
+    if (e.key === 'ArrowLeft') show(idx - 1);
+    if (e.key === 'Escape') close();
+  };
+  const close = () => { ov.remove(); document.removeEventListener('keydown', onKey); };
+  ov.onclick = close;
+  document.addEventListener('keydown', onKey);
   document.body.appendChild(ov);
+  show(idx);
 }
 </script>
 </body>
