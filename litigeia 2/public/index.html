@@ -171,6 +171,8 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 .photo-drop-sub{font-size:12px;color:var(--subtle);margin-top:4px}
 .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;margin-top:14px}
 .photo-item{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.photo-dl{position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,.55);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:13px;text-decoration:none;opacity:0;transition:opacity .2s}
+.photo-item:hover .photo-dl{opacity:1}
 .photo-item img{width:100%;height:100%;object-fit:cover}
 .photo-item .rm{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.7);color:white;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;line-height:1}
 .photo-item .ai-badge{position:absolute;bottom:4px;left:4px;background:rgba(99,102,241,.9);color:white;font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px}
@@ -2198,7 +2200,7 @@ function viewLitige(id) {
             ${['new','pending','sent','resolved','refused'].map(s=>`<button class="btn ${l.status===s?'btn-primary':'btn-ghost'} btn-sm" onclick="setStatus('${s}');viewLitige('${l.id}')">${statLabels[s]}</button>`).join('')}
           </div>
         </div>
-        ${l.photos&&l.photos.length?`<div class="detail-section"><div class="detail-section-title">Photos (${l.photos.length})</div><div class="photo-grid" style="margin-top:0">${l.photos.map(p=>`<div class="photo-item"><img src="${p}"></div>`).join('')}</div></div>`:''}
+        ${l.photos&&l.photos.length?`<div class="detail-section"><div class="detail-section-title">Photos (${l.photos.length})</div><div class="photo-grid" style="margin-top:6px">${l.photos.map(p=>'<div class="photo-item" style="position:relative;overflow:hidden"><img src="'+p+'" data-url="'+p+'" onclick="openPhoto(this.dataset.url)" style="cursor:zoom-in;width:100%;object-fit:cover"><a class="photo-dl" href="/api/proxy-image?url='+encodeURIComponent(p)+'" download title="T\u00e9l\u00e9charger">\u2b07</a></div>').join('')}</div></div>`:''}
         ${l.notes?`<div class="detail-section"><div class="detail-section-title">Notes</div><div style="font-size:13px;color:var(--muted);line-height:1.6">${l.notes}</div></div>`:''}
       </div>
     </div>`;
@@ -2455,6 +2457,17 @@ window.addEventListener('load', () => {
   if (DB.config.email) document.getElementById('ownerEmailInput').value = DB.config.email;
   if (DB.config.iban) document.getElementById('ownerIbanInput').value = DB.config.iban;
 });
+
+function openPhoto(url) {
+  const ov=document.createElement("div");
+  ov.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:zoom-out";
+  ov.onclick=()=>ov.remove();
+  const img=document.createElement("img");
+  img.src=url;
+  img.style.cssText="max-width:95vw;max-height:95vh;border-radius:8px;object-fit:contain";
+  ov.appendChild(img);
+  document.body.appendChild(ov);
+}
 </script>
 </body>
 </html>
