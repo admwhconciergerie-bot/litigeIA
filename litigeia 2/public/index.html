@@ -2187,7 +2187,7 @@ function viewLitige(id) {
               return '<label class="tpl-row'+(active?' tpl-active':'')+'"><input type="checkbox"'+(active?' checked':'')+'onchange="toggleTemplate(\''+id+'\',\''+k+'\',this.checked)"><span>'+t.label+'</span><em>'+prix+'€</em></label>';
             }).join('')}</div>
           </div>
-lor:var(--accent)">Total TTC: ${fmt(l.total_ttc)}</div>
+<div style="color:var(--accent)">Total litige : ${fmt(l.total_ttc)}</div>
         </div>
         ${l.lettre?`<div class="detail-section"><div class="detail-section-title">Lettre de litige</div><button class="btn btn-ghost btn-sm" onclick="showLetter(DB.litiges.find(x=>x.id==='${l.id}'))">✉️ Voir la lettre</button></div>`:''}
       </div>
