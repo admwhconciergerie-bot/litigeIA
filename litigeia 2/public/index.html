@@ -917,7 +917,6 @@ let viewingId = null;
 // ===================== BOOT =====================
 document.addEventListener('DOMContentLoaded', async () => {
   await load();
-    setTimeout(autoAnalyseQueue, 2000);
   renderPropertySelect();
   nav('dashboard');
   document.getElementById('w_constat_date').valueAsDate = new Date();
