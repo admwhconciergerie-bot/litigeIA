@@ -33,16 +33,25 @@ app.post('/api/state', async (req, res) => {
 
 // Proxy image — permet au navigateur de charger des images Telegram (CORS + token bot)
 app.get('/api/proxy-image', async (req, res) => {
-  const url = req.query.url;
-  if (!url) return res.status(400).json({ error: 'Missing url' });
-  try {
-    const r = await fetch(url);
-    if (!r.ok) return res.status(r.status).end();
-    const buf = Buffer.from(await r.arrayBuffer());
-    res.set('Content-Type', r.headers.get('content-type') || 'image/jpeg');
-    res.set('Cache-Control', 'private, max-age=300');
-    res.send(buf);
-  } catch(e) { res.status(500).json({ error: e.message }); }
+let url = req.query.url;
+if (!url) return res.status(400).json({ error: 'Missing url' });
+try {
+  // Si c'est un file_id Telegram (pas une URL http), on résout d'abord
+  if (!url.startsWith('http')) {
+    const tok = process.env.TELEGRAM_BOT_TOKEN;
+    if (!tok) return res.status(400).json({ error: 'No bot token' });
+    const meta = await fetch('https://api.telegram.org/bot'+tok+'/getFile?file_id='+encodeURIComponent(url));
+    const mj = await meta.json();
+    if (!mj.ok || !mj.result?.file_path) return res.status(404).json({ error: 'File not found' });
+    url = 'https://api.telegram.org/file/bot'+tok+'/'+mj.result.file_path;
+  }
+  const r = await fetch(url);
+  if (!r.ok) return res.status(r.status).end();
+  const buf = Buffer.from(await r.arrayBuffer());
+  res.set('Content-Type', r.headers.get('content-type') || 'image/jpeg');
+  res.set('Cache-Control', 'private, max-age=300');
+  res.send(buf);
+} catch(e) { res.status(500).json({ error: e.message }); }
 });
 
 app.post('/api/analyze', async (req, res) => {
