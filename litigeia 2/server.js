@@ -106,6 +106,18 @@ for (const model of models) {
 }
 res.status(500).json({ error: lastErr });
 });
+
+// GET /api/passpass-lookup — cherche la resa PassPass pour un logement et une date
+app.get('/api/passpass-lookup', async (req, res) => {
+const { propId, date } = req.query;
+if (!propId || !date) return res.status(400).json({ error: 'propId et date requis' });
+try {
+const bot = require('./telegram-bot');
+const result = await bot.chercherReservation(propId, date);
+res.json(result ? { found: true, ...result } : { found: false });
+} catch(e) { res.status(500).json({ error: e.message }); }
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
