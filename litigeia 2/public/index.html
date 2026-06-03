@@ -2196,7 +2196,8 @@ function viewLitige(id) {
             <div class="info-cell"><div class="info-cell-label">Séjour</div><div class="info-cell-val">${l.checkin?new Date(l.checkin).toLocaleDateString('fr-FR'):'-'} → ${l.checkout?new Date(l.checkout).toLocaleDateString('fr-FR'):'-'}</div></div>
             <div class="info-cell"><div class="info-cell-label">Constat</div><div class="info-cell-val">${l.constat_date?new Date(l.constat_date).toLocaleDateString('fr-FR'):'—'}</div></div>
           </div>
-        </div>
+        <
+        <div style="margin:10px 0 4px 0"><button onclick="lookupPassPass('${id}')" id="pp-btn-${id}" style="font-size:12px;padding:5px 14px;border-radius:8px;background:var(--accent);color:#fff;border:none;cursor:pointer">🔍 Matcher PassPass</button></div>/div>
         
         ${l.notes?`<div class="detail-section"><div class="detail-section-title">Notes</div><div style="font-size:13px;color:var(--muted);line-height:1.6">${l.notes}</div></div>`:''}
       </div>
@@ -2485,6 +2486,33 @@ async function downloadAllPhotos(id) {
   a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),5000);
   btn.textContent = orig;
+}
+
+async function lookupPassPass(id) {
+  const l = DB.litiges.find(x=>x.id===id);
+  if (!l) return;
+  const btn = document.getElementById('pp-btn-'+id);
+  if (btn) btn.textContent = '⏳ Recherche...';
+  try {
+    const r = await fetch('/api/passpass-lookup?propId='+encodeURIComponent(l.property_id||'')+'&date='+encodeURIComponent(l.constat_date||new Date().toISOString().split('T')[0]));
+    const data = await r.json();
+    if (data.found) {
+      if (data.guest_name) l.guest_name = data.guest_name;
+      if (data.platform) l.platform = data.platform;
+      if (data.booking_ref) l.booking_ref = data.booking_ref;
+      if (data.checkin) l.checkin = data.checkin;
+      if (data.checkout) l.checkout = data.checkout;
+      if (data.guest_email) l.guest_email = data.guest_email;
+      sauver();
+      viewLitige(id);
+    } else {
+      if (btn) btn.textContent = '❌ Aucune réservation trouvée';
+      setTimeout(() => { if (btn) btn.textContent = '🔍 Matcher PassPass'; }, 3000);
+    }
+  } catch(e) {
+    if (btn) btn.textContent = '❌ Erreur: '+e.message;
+    setTimeout(() => { if (btn) btn.textContent = '🔍 Matcher PassPass'; }, 3000);
+  }
 }
 
 function openPhoto(el) {
