@@ -174,7 +174,7 @@ app.get('/api/passpass-lookup-by-name', async (req,res) => {
   const em=process.env.PASSPASS_EMAIL, pw=process.env.PASSPASS_PASSWORD;
   if (!em||!pw) return res.json({found:false,error:'credentials manquants'});
   try {
-    const authR=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBvLr6wKVpvdS5nH8LpZjD5YWzG3tKGLKk',
+    const authR=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCffkmTqLa241aKYMg6l_neYrU8vT3RG38',
       {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em,password:pw,returnSecureToken:true})});
     const authJ=await authR.json();
     if (!authJ.idToken) return res.json({found:false,error:'auth PassPass echouee'});
@@ -183,7 +183,7 @@ app.get('/api/passpass-lookup-by-name', async (req,res) => {
     const nameNorm=norm(name);
     const runQ=async(where)=>{
       const body=JSON.stringify({structuredQuery:{from:[{collectionId:'bookings'}],where,limit:50}});
-      const r=await fetch('https://firestore.googleapis.com/v1/projects/passpass/databases/(default)/documents:runQuery',
+      const r=await fetch('https://firestore.googleapis.com/v1/projects/passpass-web-public/databases/(default)/documents:runQuery',
         {method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body});
       const d=await r.json(); return Array.isArray(d)?d:[];
     };
@@ -280,7 +280,7 @@ app.get('/api/passpass-import', async (req, res) => {
   if (!em || !pw) return res.json({error: 'PASSPASS_EMAIL/PASSWORD manquants', props: []});
   try {
     var https2 = require('https');
-    var FA_KEY = 'AIzaSyBvLr6wKVpvdS5nH8LpZjD5YWzG3tKGLKk';
+    var FA_KEY = 'AIzaSyCffkmTqLa241aKYMg6l_neYrU8vT3RG38';
     var FB_PROJECT = 'passpass';
     var token = await new Promise(function(resolve) {
       var body = JSON.stringify({email:em,password:pw,returnSecureToken:true});
