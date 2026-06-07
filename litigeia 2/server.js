@@ -4,7 +4,7 @@ const { createClient } = require('@supabase/supabase-js');
 
 const app = express();
 app.use(express.json({ limit: '50mb' }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), {index: false}));
 
 // ─── Supabase client
 const _supa = (process.env.SUPABASE_URL && process.env.SUPABASE_KEY)
