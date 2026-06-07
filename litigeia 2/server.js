@@ -167,6 +167,52 @@ app.get('/api/passpass-properties', async (req,res) => {
 });
 
 
+// GET /api/passpass-lookup-by-name — lookup par nom de logement + date
+app.get('/api/passpass-lookup-by-name', async (req,res) => {
+  const {name,date}=req.query;
+  if (!name||!date) return res.status(400).json({error:'name et date requis'});
+  const em=process.env.PASSPASS_EMAIL, pw=process.env.PASSPASS_PASSWORD;
+  if (!em||!pw) return res.json({found:false,error:'credentials manquants'});
+  try {
+    const authR=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBvLr6wKVpvdS5nH8LpZjD5YWzG3tKGLKk',
+      {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em,password:pw,returnSecureToken:true})});
+    const authJ=await authR.json();
+    if (!authJ.idToken) return res.json({found:false,error:'auth PassPass echouee'});
+    const token=authJ.idToken;
+    const norm=s=>(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase().trim();
+    const nameNorm=norm(name);
+    const runQ=async(where)=>{
+      const body=JSON.stringify({structuredQuery:{from:[{collectionId:'bookings'}],where,limit:50}});
+      const r=await fetch('https://firestore.googleapis.com/v1/projects/passpass/databases/(default)/documents:runQuery',
+        {method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body});
+      const d=await r.json(); return Array.isArray(d)?d:[];
+    };
+    const findMatch=docs=>docs.find(item=>{
+      if (!item.document?.fields) return false;
+      const pn=norm(item.document.fields.propName?.stringValue||'');
+      return pn&&(pn.includes(nameNorm)||nameNorm.includes(pn.split(' ')[0])||pn.split(' ')[0]===nameNorm);
+    });
+    const parseDoc=doc=>{
+      const f=doc.document.fields, ti=f.tenantInfo?.mapValue?.fields||{};
+      const c=s=>(s||'').replace(/[⁨⁩]/g,'').trim();
+      return {found:true,
+        guest_name:[c(ti.prenom?.stringValue),c(ti.nom?.stringValue)].filter(s=>s&&s!=='.').join(' ').trim(),
+        guest_email:ti.email?.stringValue||'',checkin:f.start?.stringValue||'',
+        checkout:f.end?.stringValue||'',platform:f.platform?.stringValue||'Airbnb',booking_ref:f.codeRef?.stringValue||''};
+    };
+    const d1=await runQ({compositeFilter:{op:'AND',filters:[
+      {fieldFilter:{field:{fieldPath:'end'},op:'EQUAL',value:{stringValue:date}}},
+      {fieldFilter:{field:{fieldPath:'deleted'},op:'EQUAL',value:{booleanValue:false}}}]}});
+    const m1=findMatch(d1); if (m1) return res.json(parseDoc(m1));
+    const d2=await runQ({compositeFilter:{op:'AND',filters:[
+      {fieldFilter:{field:{fieldPath:'start'},op:'LESS_THAN_OR_EQUAL',value:{stringValue:date}}},
+      {fieldFilter:{field:{fieldPath:'end'},op:'GREATER_THAN',value:{stringValue:date}}},
+      {fieldFilter:{field:{fieldPath:'deleted'},op:'EQUAL',value:{booleanValue:false}}}]}});
+    const m2=findMatch(d2); if (m2) return res.json(parseDoc(m2));
+    res.json({found:false});
+  } catch(e){res.status(500).json({error:e.message});}
+});
+
 app.get('/', function(req, res) {
   var fs = require('fs');
   var indexPath = require('path').join(__dirname, 'public', 'index.html');
@@ -192,6 +238,38 @@ if (!html.includes('LitigeIA iOS')){
       html = html.replace('</style>', css + '</style>');
     }
     res.set('Cache-Control', 'no-cache');
+    // PassPass auto-fill script injection
+    const ppScript = '<scr'+'ipt>(function(){' +
+      'function ppLookup(){' +
+      'var propEl=document.getElementById("w_property");' +
+      'if(!propEl||!propEl.value)return;' +
+      'var propName=propEl.options[propEl.selectedIndex]?propEl.options[propEl.selectedIndex].text:"";' +
+      'var dateEl=document.getElementById("w_constat_date")||document.querySelector("input[type=date]");' +
+      'var date=(dateEl&&dateEl.value)||new Date().toISOString().split("T")[0];' +
+      'var badge=document.getElementById("pp-auto-badge");' +
+      'if(!badge){badge=document.createElement("div");badge.id="pp-auto-badge";' +
+      'badge.style="font-size:12px;margin-top:6px;padding:4px 10px;border-radius:6px;background:#ede9fe;color:#7c3aed;display:inline-block;";' +
+      'propEl.parentElement.appendChild(badge);}' +
+      'badge.textContent="Recherche PassPass...";badge.style.display="inline-block";' +
+      'fetch("/api/passpass-lookup-by-name?name="+encodeURIComponent(propName)+"&date="+date)' +
+      '.then(function(r){return r.json();}).then(function(d){' +
+      'if(d.found){' +
+      'var s=function(id,v){var el=document.getElementById(id);if(el&&v)el.value=v;};' +
+      's("w_guest",d.guest_name);s("w_guest_email",d.guest_email);' +
+      's("w_booking_ref",d.booking_ref);s("w_checkin",d.checkin);s("w_checkout",d.checkout);' +
+      'if(d.platform){var pl=document.getElementById("w_platform");if(pl){var opts=[].slice.call(pl.options);var opt=opts.find(function(x){return x.value.toLowerCase().indexOf((d.platform||"").toLowerCase().slice(0,4))>=0;});if(opt)pl.value=opt.value;}}' +
+      'badge.style.background="#d1fae5";badge.style.color="#065f46";' +
+      'badge.textContent="Reservation trouvee : "+d.guest_name+(d.checkin?" ("+d.checkin+" -> "+d.checkout+")":"");' +
+      '}else{badge.style.background="#f1f5f9";badge.style.color="#94a3b8";badge.textContent="Pas de reservation PassPass pour cette date";}' +
+      '}).catch(function(){badge.style.display="none";});' +
+      '}' +
+      'var obs=new MutationObserver(function(){' +
+      'var el=document.getElementById("w_property");' +
+      'if(el&&!el._ppHooked){el._ppHooked=true;el.addEventListener("change",ppLookup);}' +
+      '});' +
+      'obs.observe(document.body,{childList:true,subtree:true});' +
+      '})();<\/scr'+'ipt>';
+    html = html.replace('</body>', ppScript + '</body>');
     res.send(html);
   } catch(e) { res.sendFile(indexPath); }
 });
