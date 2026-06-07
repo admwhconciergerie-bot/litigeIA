@@ -236,4 +236,16 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log('OK port ' + PORT));
 
 // Demarrer le bot Telegram
-try { require('./telegram-bot'); } catch(e) { console.error('Bot error:', e.message); }
+var _botError = null;
+try {
+  require('./telegram-bot');
+  console.log('Bot Telegram demarre avec succes');
+} catch(e) {
+  _botError = e.message;
+  console.error('Bot ERREUR:', e.message, e.stack);
+}
+
+app.get('/api/bot-status', (req, res) => {
+  res.json({ running: !_botError, error: _botError || null, ts: new Date().toISOString() });
+});
+
