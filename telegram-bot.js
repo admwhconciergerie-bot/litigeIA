@@ -19,6 +19,12 @@ const SUPABASE_KEY   = process.env.SUPABASE_KEY;
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
 const ANTHROPIC_KEY  = process.env.ANTHROPIC_API_KEY;
 
+// PassPass / Firebase
+const PASSPASS_EMAIL = process.env.PASSPASS_EMAIL;
+const PASSPASS_PASSWORD = process.env.PASSPASS_PASSWORD;
+const FIREBASE_PROJECT = 'passpass';
+const FIREBASE_API_KEY = 'AIzaSyBvLr6wKVpvdS5nH8LpZjD5YWzG3tKGLKk';
+
 // Fenetre de groupage : 45 secondes
 const WINDOW_MS = 45000;
 
@@ -37,72 +43,119 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
   /**
    * Cherche une réservation PassPass par property_id et date.
    * Deux passes (Supabase):
-   *   1. D'abord chercher end === date (resa sortante = checkout = jour du constat)
-   *   2. Fallback: start <= date && end > date (resa active)
-   */
-  async function chercherReservationPassPass(propId, date) {
-    if (!propId) return null;
+   *   1. D'abord chercher end === date (resa sortante = checkout = jour d// ==================== PassPass / Firestore ====================
+/**
+ * Authentifie avec Firebase (email/password) et retourne un token ID
+ */
+async function getFirebaseToken() {
+return new Promise((resolve) => {
+const body = JSON.stringify({
+email: PASSPASS_EMAIL,
+password: PASSPASS_PASSWORD,
+returnSecureToken: true
+});
+const req = https.request({
+hostname: 'identitytoolkit.googleapis.com',
+path: '/v1/accounts:signInWithPassword?key=' + FIREBASE_API_KEY,
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+'Content-Length': Buffer.byteLength(body)
+}
+}, (res) => {
+let data = '';
+res.on('data', chunk => data += chunk);
+res.on('end', () => {
+try {
+const json = JSON.parse(data);
+if (json.error) { console.error('Firebase auth error:', json.error.message); resolve(null); }
+else if (json.idToken) { resolve(json.idToken); }
+else { resolve(null); }
+} catch (e) { console.error('Firebase auth parse error:', e.message); resolve(null); }
+});
+});
+req.on('error', (e) => { console.error('Firebase auth request error:', e.message); resolve(null); });
+req.write(body);
+req.end();
+});
+}
 
-    try {
-      // Première passe: chercher b.end === date (resa sortante)
-      const { data: checkoutBooking, error: err1 } = await supabase
-        .from('passpass_bookings')
-        .select('*')
-        .eq('prop', propId)
-        .eq('end', date)
-        .eq('deleted', false)
-        .maybeSingle();
+/**
+ * Query Firestore - cherche resa PassPass par property_id et date (deux passes)
+ */
+async function chercherReservationPassPass(propId, date) {
+if (!propId || !PASSPASS_EMAIL || !PASSPASS_PASSWORD) {
+console.log('PassPass search: missing config');
+return null;
+}
+try {
+const token = await getFirebaseToken();
+if (!token) { console.log('PassPass: impossible d\'obtenir le token Firebase'); return null; }
 
-      if (err1) {
-        console.error('PassPass checkout query error:', err1.message);
-      } else if (checkoutBooking) {
-        console.log('PassPass found (checkout match):', checkoutBooking.tenant_prenom, checkoutBooking.tenant_nom);
-        return {
-          tenantName: [checkoutBooking.tenant_prenom, checkoutBooking.tenant_nom].filter(Boolean).join(' '),
-          tenantEmail: checkoutBooking.tenant_email || '',
-          start: checkoutBooking.start,
-          end: checkoutBooking.end
-        };
-      }
+const firestoreQuery = (whereClause, label) => {
+return new Promise((res) => {
+const body = JSON.stringify({ structuredQuery: { from: [{ collectionId: 'bookings' }], where: whereClause } });
+const req = https.request({
+hostname: 'firestore.googleapis.com',
+path: '/v1/projects/' + FIREBASE_PROJECT + '/databases/(default)/documents:runQuery',
+method: 'POST',
+headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token, 'Content-Length': Buffer.byteLength(body) }
+}, (response) => {
+let data = '';
+response.on('data', chunk => data += chunk);
+response.on('end', () => {
+try {
+const lines = data.trim().split('\n');
+for (const line of lines) {
+try {
+const json = JSON.parse(line);
+if (json.document && json.document.fields) {
+const f = json.document.fields;
+res({
+tenantName: [f.tenantInfo?.mapValue?.fields?.prenom?.stringValue||'', f.tenantInfo?.mapValue?.fields?.nom?.stringValue||''].filter(Boolean).join(' '),
+tenantEmail: f.tenantInfo?.mapValue?.fields?.email?.stringValue||'',
+start: f.start?.stringValue||'',
+end: f.end?.stringValue||''
+});
+return;
+}
+} catch(e) {}
+}
+res(null);
+} catch(e) { console.error('PassPass ' + label + ' parse error:', e.message); res(null); }
+});
+});
+req.on('error', (e) => { console.error('PassPass ' + label + ' error:', e.message); res(null); });
+req.write(body);
+req.end();
+});
+};
 
-      // Fallback: chercher start <= date && end > date (resa active)
-      const { data: activeBookings, error: err2 } = await supabase
-        .from('passpass_bookings')
-        .select('*')
-        .eq('prop', propId)
-        .lte('start', date)
-        .gt('end', date)
-        .eq('deleted', false)
-        .limit(1);
+// Passe 1: end === date (checkout = jour du constat)
+const checkoutQ = { compositeFilter: { op: 'AND', filters: [
+{ fieldFilter: { field: { fieldPath: 'prop' }, op: 'EQUAL', value: { stringValue: propId } } },
+{ fieldFilter: { field: { fieldPath: 'end' }, op: 'EQUAL', value: { stringValue: date } } },
+{ fieldFilter: { field: { fieldPath: 'deleted' }, op: 'EQUAL', value: { booleanValue: false } } }
+]}};
+const found1 = await firestoreQuery(checkoutQ, 'checkout');
+if (found1) { console.log('PassPass found (checkout):', found1.tenantName); return found1; }
 
-      if (err2) {
-        console.error('PassPass active query error:', err2.message);
-      } else if (activeBookings && activeBookings.length > 0) {
-        const booking = activeBookings[0];
-        console.log('PassPass found (active match):', booking.tenant_prenom, booking.tenant_nom);
-        return {
-          tenantName: [booking.tenant_prenom, booking.tenant_nom].filter(Boolean).join(' '),
-          tenantEmail: booking.tenant_email || '',
-          start: booking.start,
-          end: booking.end
-        };
-      }
+// Passe 2: start <= date && end > date (resa active)
+const activeQ = { compositeFilter: { op: 'AND', filters: [
+{ fieldFilter: { field: { fieldPath: 'prop' }, op: 'EQUAL', value: { stringValue: propId } } },
+{ fieldFilter: { field: { fieldPath: 'start' }, op: 'LESS_THAN_OR_EQUAL', value: { stringValue: date } } },
+{ fieldFilter: { field: { fieldPath: 'end' }, op: 'GREATER_THAN', value: { stringValue: date } } },
+{ fieldFilter: { field: { fieldPath: 'deleted' }, op: 'EQUAL', value: { booleanValue: false } } }
+]}};
+const found2 = await firestoreQuery(activeQ, 'active');
+if (found2) { console.log('PassPass found (active):', found2.tenantName); return found2; }
 
-      console.log('PassPass not found for', propId, 'on', date);
-      return null;
-    } catch (e) {
-      console.error('PassPass search error:', e.message);
-      return null;
-    }
-  }
+console.log('PassPass not found for', propId, 'on', date);
+return null;
+} catch(e) { console.error('PassPass search error:', e.message); return null; }
+}
 
-  // ==================== Utilitaires ====================
-
-  // Convertit un file_id Telegram en URL de telechargement
-  async function fileIdToUrl(fileId) {
-    return new Promise((resolve) => {
-      const req = https.request({
-        hostname: 'api.telegram.org',
+hostname: 'api.telegram.org',
         path: '/bot' + BOT_TOKEN + '/getFile?file_id=' + fileId,
         method: 'GET'
       }, (res) => {
