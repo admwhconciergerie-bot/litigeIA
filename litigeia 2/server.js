@@ -228,6 +228,10 @@ app.get('/api/passpass-import', async (req, res) => {
   } catch(e) { res.json({error: e.message, props: []}); }
 });
 
+app.get('/api/bot-status', (req, res) => {
+  res.json({ running: !_botError, error: _botError || null, ts: new Date().toISOString() });
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
