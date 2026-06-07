@@ -128,7 +128,7 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 .litige-card-sinistre{font-size:11px;color:var(--subtle);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tpl-list{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:6px}
 .tpl-row{display:flex;align-items:center;gap:5px;padding:4px 6px;border-radius:6px;background:var(--surface);cursor:pointer;font-size:11px;line-height:1.2}
-.tpl-row input{accent-color:var(--accent);width:13px;height:13px;flex-shrink:0;cursor:pointer}
+.tpl-row input{accent-color:var(--accent);width:13px;height:13px;flex-shrink:0;cursor:pointerorder:3;margin-left:auto;}
 .tpl-row span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tpl-row em{font-style:normal;font-weight:600;color:var(--accent);font-size:10px;flex-shrink:0}
 .tpl-active{background:color-mix(in srgb,var(--accent) 15%,var(--surface))}
@@ -146,13 +146,13 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 .btn-icon{padding:8px;border-radius:8px}
 
 /* MODAL */
-.overlay{position:fixed;inset:0;background:rgba(15,23,42,.65);z-index:300;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
-.modal{background:var(--card);border-radius:20px;box-shadow:var(--shadow-lg);width:760px;max-width:97vw;max-height:96vh;overflow:hidden;display:flex;flex-direction:column}
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.65);z-index:300;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.modal{background:var(--card);border-radius:28px;box-shadow:var(--shadow-lg);width:760px;max-width:97vw;max-height:96vh;overflow:hidden;display:flex;flex-direction:column}
 .modal-lg{width:1100px}
 .modal-head{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .modal-title{font-size:17px;font-weight:700}
 .modal-body{flex:1;overflow-y:auto;padding:24px}
-.modal-foot{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;background:var(--bg);flex-shrink:0;border-radius:0 0 20px 20px}
+.modal-foot{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;background:var(--bg);flex-shrink:0;border-radius:0 0 28px 28px}
 
 /* FORM */
 .fg{display:flex;flex-direction:column;gap:5px;margin-bottom:16px}
