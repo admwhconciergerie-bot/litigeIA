@@ -748,8 +748,9 @@ function litRowHTML(l) {
       ${l.photos&&l.photos[0]?`<img src="${l.photos[0]}" style="width:100%;height:100%;object-fit:cover">`:'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px">📸</div>'}
     </div>
     <div>
-      <div style="font-weight:600;font-size:14px">${l.guest_name}</div>
-      <div style="font-size:12px;color:var(--muted)">${prop?.name||''} · Réf: ${l.booking_ref||'—'}</div>
+      <div style="font-weight:600;font-size:14px">📍 ${(l.logement||'').toUpperCase()}</div>
+      <div style="font-size:12px;color:var(--muted)">💣 ${(l.description||'').substring(0, 70).replace(/
+/g, ' ')}</div>
     </div>
     <div style="font-size:12px;color:var(--muted)">${l.constat_date?new Date(l.constat_date).toLocaleDateString('fr-FR'):''}</div>
     <div><span class="badge ${statBadges[l.status||'new']}">${statLabels[l.status||'new']}</span></div>
