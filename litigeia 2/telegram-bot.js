@@ -1,1 +1,1 @@
-require('../telegram-bot');
+require('../telegram-bot-passpass');
