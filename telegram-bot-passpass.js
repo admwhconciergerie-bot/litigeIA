@@ -94,171 +94,76 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
    * Query Firestore avec token d'authentification
    * Cherche une réservation par property_id et date (deux passes)
    */
-  async function chercherReservationPassPass(propId, date) {
-    if (!propId || !PASSPASS_EMAIL || !PASSPASS_PASSWORD) {
-      console.log('PassPass search: missing config');
-      return null;
-    }
-
-    try {
-      // Obtenir le token Firebase
-      const token = await getFirebaseToken();
-      if (!token) {
-        console.log('PassPass: impossible d\'obtenir le token Firebase');
-        return null;
-      }
-
-      const firestoreQuery = (whereClause, label) => {
-        return new Promise((res) => {
-          const body = JSON.stringify({
-            structuredQuery: {
-              from: [{ collectionId: 'bookings' }],
-              where: whereClause
-            }
-          });
-
-          const req = https.request({
-            hostname: 'firestore.googleapis.com',
-            path: `/v1/projects/${FIREBASE_PROJECT}/databases/(default)/documents:runQuery`,
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token,
-              'Content-Length': Buffer.byteLength(body)
-            }
-          }, (response) => {
-            let data = '';
-            response.on('data', chunk => data += chunk);
-            response.on('end', () => {
-              try {
-                // Firestore retourne un stream de documents
-                const lines = data.trim().split('\n');
-                for (const line of lines) {
-                  try {
-                    const json = JSON.parse(line);
-                    if (json.document && json.document.fields) {
-                      const fields = json.document.fields;
-                      res({
-                        tenantName: [
-                          fields.tenantInfo?.mapValue?.fields?.prenom?.stringValue || '',
-                          fields.tenantInfo?.mapValue?.fields?.nom?.stringValue || ''
-                        ].filter(Boolean).join(' '),
-                        tenantEmail: fields.tenantInfo?.mapValue?.fields?.email?.stringValue || '',
-                        start: fields.start?.stringValue || '',
-                        end: fields.end?.stringValue || ''
-                      });
-                      return;
-                    }
-                  } catch (e) {
-                    // Ignore parse errors, continue to next line
-                  }
-                }
-                res(null);
-              } catch (e) {
-                console.error(`PassPass ${label} parse error:`, e.message);
-                res(null);
-              }
-            });
-          });
-
-          req.on('error', (e) => {
-            console.error(`PassPass ${label} request error:`, e.message);
-            res(null);
-          });
-
-          req.write(body);
-          req.end();
-        });
-      };
-
-      // Première passe: chercher end === date (resa sortante = checkout = jour du constat)
-      const checkoutQuery = {
-        compositeFilter: {
-          op: 'AND',
-          filters: [
-            {
-              fieldFilter: {
-                field: { fieldPath: 'prop' },
-                op: 'EQUAL',
-                value: { stringValue: propId }
-              }
-            },
-            {
-              fieldFilter: {
-                field: { fieldPath: 'end' },
-                op: 'EQUAL',
-                value: { stringValue: date }
-              }
-            },
-            {
-              fieldFilter: {
-                field: { fieldPath: 'deleted' },
-                op: 'EQUAL',
-                value: { booleanValue: false }
-              }
-            }
-          ]
-        }
-      };
-
-      const checkoutBooking = await firestoreQuery(checkoutQuery, 'checkout');
-      if (checkoutBooking) {
-        console.log('PassPass found (checkout match):', checkoutBooking.tenantName);
-        return checkoutBooking;
-      }
-
-      // Fallback: chercher start <= date && end > date (resa active)
-      const activeQuery = {
-        compositeFilter: {
-          op: 'AND',
-          filters: [
-            {
-              fieldFilter: {
-                field: { fieldPath: 'prop' },
-                op: 'EQUAL',
-                value: { stringValue: propId }
-              }
-            },
-            {
-              fieldFilter: {
-                field: { fieldPath: 'start' },
-                op: 'LESS_THAN_OR_EQUAL',
-                value: { stringValue: date }
-              }
-            },
-            {
-              fieldFilter: {
-                field: { fieldPath: 'end' },
-                op: 'GREATER_THAN',
-                value: { stringValue: date }
-              }
-            },
-            {
-              fieldFilter: {
-                field: { fieldPath: 'deleted' },
-                op: 'EQUAL',
-                value: { booleanValue: false }
-              }
-            }
-          ]
-        }
-      };
-
-      const activeBooking = await firestoreQuery(activeQuery, 'active');
-      if (activeBooking) {
-        console.log('PassPass found (active match):', activeBooking.tenantName);
-        return activeBooking;
-      }
-
-      console.log('PassPass not found for', propId, 'on', date);
-      return null;
-    } catch (e) {
-      console.error('PassPass search error:', e.message);
-      return null;
-    }
+  async function chercherReservationPassPass(logement, date) {
+  if (!logement || !PASSPASS_EMAIL || !PASSPASS_PASSWORD) {
+    console.log('PassPass: missing config');
+    return null;
   }
+  try {
+    const token = await getFirebaseToken();
+    if (!token) { console.log('PassPass: auth failed'); return null; }
 
-  // ==================== Utilitaires ====================
+    const normalize = s => (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().trim();
+    const logNorm = normalize(logement);
+
+    const queryAndMatch = (whereClause, label) => new Promise(res => {
+      const body = JSON.stringify({ structuredQuery: { from: [{ collectionId: 'bookings' }], where: whereClause, limit: 50 } });
+      const req = https.request({
+        hostname: 'firestore.googleapis.com',
+        path: '/v1/projects/' + FIREBASE_PROJECT + '/databases/(default)/documents:runQuery',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token, 'Content-Length': Buffer.byteLength(body) }
+      }, (response) => {
+        let data = '';
+        response.on('data', chunk => data += chunk);
+        response.on('end', () => {
+          try {
+            const docs = JSON.parse(data);
+            const found = (Array.isArray(docs) ? docs : []).find(item => {
+              if (!item.document || !item.document.fields) return false;
+              const f = item.document.fields;
+              const propName = normalize(f.propName && f.propName.stringValue || '');
+              return propName.includes(logNorm) || logNorm.includes(propName.split(' ')[0]) || propName.split(' ')[0] === logNorm;
+            });
+            if (!found) { res(null); return; }
+            const f = found.document.fields;
+            const ti = f.tenantInfo && f.tenantInfo.mapValue && f.tenantInfo.mapValue.fields || {};
+            res({
+              tenantName: [(ti.prenom && ti.prenom.stringValue || ''), (ti.nom && ti.nom.stringValue || '')].filter(Boolean).join(' '),
+              tenantEmail: (ti.email && ti.email.stringValue || ''),
+              start: (f.start && f.start.stringValue || ''),
+              end: (f.end && f.end.stringValue || '')
+            });
+          } catch(e) { console.error('PassPass parse error:', e.message); res(null); }
+        });
+      });
+      req.on('error', e => { console.error('PassPass req error:', e.message); res(null); });
+      req.write(body); req.end();
+    });
+
+    // Passe 1: checkout aujourd'hui
+    const checkoutQ = { compositeFilter: { op: 'AND', filters: [
+      { fieldFilter: { field: { fieldPath: 'end' }, op: 'EQUAL', value: { stringValue: date } } },
+      { fieldFilter: { field: { fieldPath: 'deleted' }, op: 'EQUAL', value: { booleanValue: false } } }
+    ]}};
+    const r1 = await queryAndMatch(checkoutQ, 'checkout');
+    if (r1) { console.log('PassPass match checkout:', logement, '->', r1.tenantName); return r1; }
+
+    // Passe 2: reservation active
+    const activeQ = { compositeFilter: { op: 'AND', filters: [
+      { fieldFilter: { field: { fieldPath: 'start' }, op: 'LESS_THAN_OR_EQUAL', value: { stringValue: date } } },
+      { fieldFilter: { field: { fieldPath: 'end' }, op: 'GREATER_THAN', value: { stringValue: date } } },
+      { fieldFilter: { field: { fieldPath: 'deleted' }, op: 'EQUAL', value: { booleanValue: false } } }
+    ]}};
+    const r2 = await queryAndMatch(activeQ, 'active');
+    if (r2) { console.log('PassPass match active:', logement, '->', r2.tenantName); return r2; }
+
+    console.log('PassPass: no match for', logement, 'on', date);
+    return null;
+  } catch(e) { console.error('PassPass error:', e.message); return null; }
+}
+
+// ==================== Utilitaires ====================
 
   // Convertit un file_id Telegram en URL de telechargement
   async function fileIdToUrl(fileId) {
