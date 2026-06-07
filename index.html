@@ -115,13 +115,13 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 .btn-icon{padding:8px;border-radius:8px}
 
 /* MODAL */
-.overlay{position:fixed;inset:0;background:rgba(15,23,42,.65);z-index:300;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
-.modal{background:var(--card);border-radius:20px;box-shadow:var(--shadow-lg);width:760px;max-width:96vw;max-height:92vh;overflow:hidden;display:flex;flex-direction:column}
-.modal-lg{width:960px}
-.modal-head{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.modal-title{font-size:17px;font-weight:700}
-.modal-body{flex:1;overflow-y:auto;padding:24px}
-.modal-foot{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;background:var(--bg);flex-shrink:0;border-radius:0 0 20px 20px}
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.75);z-index:300;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.modal{background:linear-gradient(135deg,var(--card) 0%,rgba(255,255,255,.02) 100%);border-radius:28px;box-shadow:0 20px 60px rgba(0,0,0,.3),0 0 1px rgba(255,255,255,.1);width:850px;max-width:98vw;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;border:1px solid rgba(255,255,255,.05)}
+.modal-lg{width:1100px}
+.modal-head{padding:28px 32px;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:linear-gradient(135deg,rgba(255,255,255,.02) 0%,transparent 100%)}
+.modal-title{font-size:20px;font-weight:700;letter-spacing:-.5px}
+.modal-body{flex:1;overflow-y:auto;padding:32px;background:linear-gradient(to bottom,rgba(255,255,255,.01) 0%,transparent 50%)}
+.modal-foot{padding:20px 32px;border-top:1px solid rgba(255,255,255,.05);display:flex;gap:12px;justify-content:flex-end;background:linear-gradient(135deg,rgba(0,0,0,.1) 0%,transparent 100%);flex-shrink:0;border-radius:0 0 28px 28px}
 
 /* FORM */
 .fg{display:flex;flex-direction:column;gap:5px;margin-bottom:16px}
@@ -226,10 +226,11 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 .badge-pending{background:var(--orange-bg);color:#92400e}
 
 /* DETAIL VIEW */
-.detail-grid{display:grid;grid-template-columns:1fr 320px;gap:24px}
-.detail-section{margin-bottom:24px}
-.detail-section-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.detail-section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.detail-section{margin-bottom:32px;padding:20px;background:rgba(255,255,255,.02);border-radius:16px;border:1px solid rgba(255,255,255,.03)}
+.detail-section:hover{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.08);transition:all .3s}
+.detail-section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.detail-section-title::after{content:'';flex:1;height:1px;background:linear-gradient(to right,currentColor,transparent)}
 .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .info-cell{background:var(--bg);border-radius:8px;padding:12px}
 .info-cell-label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
@@ -1405,8 +1406,22 @@ function viewLitige(id) {
         </div>
         <div class="detail-section">
           <div class="detail-section-title">Articles (${l.articles.length})</div>
-          <div style="font-size:12.5px;color:var(--muted);line-height:1.8">${l.articles.map(a=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span>${a.designation}</span><strong style="color:var(--accent)">${fmt((a.quantite||0)*(a.prix_ht||0))}</strong></div>`).join('')}</div>
-          <div style="text-align:right;margin-top:8px;font-size:15px;font-weight:700;color:var(--accent)">Total TTC: ${fmt(l.total_ttc)}</div>
+          <div style="display:flex;flex-direction:column;gap:10px">${l.articles.map((a,i)=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:rgba(255,255,255,.01);border:1px solid rgba(255,255,255,.04);border-radius:10px;hover:background:rgba(255,255,255,.03)">
+        <label style="display:flex;align-items:center;gap:12px;flex:1;cursor:pointer">
+          <input type="checkbox" style="width:18px;height:18px;cursor:pointer;accent-color:var(--accent)">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--text)">${a.designation}</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:2px">${a.quantite||1} × ${fmt(a.prix_ht||0)} €</div>
+          </div>
+        </label>
+        <div style="text-align:right">
+          <strong style="color:var(--accent);font-size:15px">${fmt((a.quantite||0)*(a.prix_ht||0))} €</strong>
+        </div>
+      </div>`).join('')}</div>
+          <div style="margin-top:20px;padding:16px;background:linear-gradient(135deg,rgba(99,102,241,.1) 0%,rgba(139,92,246,.05) 100%);border-radius:12px;border:1px solid rgba(99,102,241,.2);text-align:right">
+          <div style="font-size:13px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em;font-weight:700">Total TTC</div>
+          <div style="font-size:24px;font-weight:700;color:var(--accent);letter-spacing:-1px">${fmt(l.total_ttc)} €</div>
+        </div>
         </div>
         ${l.lettre?`<div class="detail-section"><div class="detail-section-title">Lettre de litige</div><button class="btn btn-ghost btn-sm" onclick="showLetter(DB.litiges.find(x=>x.id==='${l.id}'))">✉️ Voir la lettre</button></div>`:''}
       </div>
