@@ -172,12 +172,23 @@ app.get('/', function(req, res) {
   var indexPath = require('path').join(__dirname, 'public', 'index.html');
   try {
     var html = fs.readFileSync(indexPath, 'utf8');
-    var css = '/* iOS fixes */';
-    css += '.overlay{backdrop-filter:blur(8px)!important}';
-    css += '.modal{border-radius:28px!important}';
-    css += '.modal-foot{border-radius:0 0 28px 28px!important}';
-    css += '.tpl-row input{order:3!important;margin-left:auto!important}';
-    if (!html.includes('blur(8px)')) {
+    var css = '';
+css += '/* LitigeIA iOS Redesign */';
+css += '.overlay{backdrop-filter:blur(20px)!important;background:rgba(10,10,30,.55)!important}';
+css += '.modal,.modal-lg{border-radius:28px!important;width:min(1280px,96vw)!important;box-shadow:0 32px 80px rgba(0,0,0,.28),0 0 0 1px rgba(255,255,255,.08)!important;background:linear-gradient(160deg,#fafbff 0%,#f0f2ff 100%)!important}';
+css += '.modal-head{background:linear-gradient(135deg,#4f46e5,#7c3aed)!important;border-bottom:none!important;padding:24px 30px!important;border-radius:28px 28px 0 0!important}';
+css += '.modal-title{color:#fff!important;font-size:19px!important;font-weight:700!important;letter-spacing:-.3px!important}';
+css += '.modal-body{padding:28px 30px!important;background:transparent!important}';
+css += '.modal-foot{border-radius:0 0 28px 28px!important;background:rgba(248,249,255,.95)!important;border-top:1px solid rgba(99,102,241,.12)!important;backdrop-filter:blur(8px)!important}';
+css += '.tpl-list{gap:6px!important}';
+css += '.tpl-row{display:flex!important;align-items:center!important;justify-content:space-between!important;background:rgba(255,255,255,.7)!important;border:1.5px solid rgba(99,102,241,.12)!important;border-radius:10px!important;padding:7px 12px!important;backdrop-filter:blur(4px)!important;transition:all .18s!important}';
+css += '.tpl-row:hover{background:rgba(99,102,241,.08)!important;border-color:rgba(99,102,241,.3)!important;transform:translateY(-1px)!important}';
+css += '.tpl-row span{flex:1!important;font-weight:500!important;color:#1e1b4b!important}';
+css += '.tpl-row em{font-style:normal!important;font-weight:700!important;color:#4f46e5!important;font-size:11px!important;background:rgba(99,102,241,.1)!important;padding:2px 6px!important;border-radius:20px!important;margin:0 8px!important}';
+css += '.tpl-row input[type=checkbox]{width:17px!important;height:17px!important;flex-shrink:0!important;order:99!important;accent-color:#4f46e5!important;cursor:pointer!important}';
+css += '.tpl-active{background:rgba(99,102,241,.14)!important;border-color:#6366f1!important}';
+css += '.lit-detail-section{background:rgba(255,255,255,.6)!important;border-radius:14px!important;border:1.5px solid rgba(99,102,241,.1)!important;padding:16px!important;backdrop-filter:blur(4px)!important}';
+if (!html.includes('LitigeIA iOS')){
       html = html.replace('</style>', css + '</style>');
     }
     res.set('Cache-Control', 'no-cache');
