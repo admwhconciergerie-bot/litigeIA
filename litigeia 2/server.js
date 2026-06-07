@@ -196,6 +196,38 @@ if (!html.includes('LitigeIA iOS')){
   } catch(e) { res.sendFile(indexPath); }
 });
 
+// GET /api/passpass-import — importe tous les logements PassPass via REST API
+app.get('/api/passpass-import', async (req, res) => {
+  var em = process.env.PASSPASS_EMAIL, pw = process.env.PASSPASS_PASSWORD;
+  if (!em || !pw) return res.json({error: 'PASSPASS_EMAIL/PASSWORD manquants', props: []});
+  try {
+    var https2 = require('https');
+    var FA_KEY = 'AIzaSyBvLr6wKVpvdS5nH8LpZjD5YWzG3tKGLKk';
+    var FB_PROJECT = 'passpass';
+    var token = await new Promise(function(resolve) {
+      var body = JSON.stringify({email:em,password:pw,returnSecureToken:true});
+      var req2 = https2.request({hostname:'identitytoolkit.googleapis.com',path:'/v1/accounts:signInWithPassword?key='+FA_KEY,method:'POST',headers:{'Content-Type':'application/json'}}, function(r) {
+        var d=''; r.on('data',function(c){d+=c;}); r.on('end',function(){try{var j=JSON.parse(d);resolve(j.idToken||null);}catch(e){resolve(null);}});
+      }); req2.on('error',function(){resolve(null);}); req2.write(body); req2.end();
+    });
+    if (!token) return res.json({error: 'Auth Firebase echouee', props: []});
+    var docs = await new Promise(function(resolve) {
+      var req3 = https2.request({hostname:'firestore.googleapis.com',path:'/v1/projects/'+FB_PROJECT+'/databases/(default)/documents/bookings?pageSize=300',method:'GET',headers:{'Authorization':'Bearer '+token}}, function(r) {
+        var d=''; r.on('data',function(c){d+=c;}); r.on('end',function(){try{resolve(JSON.parse(d));}catch(e){resolve({});}});
+      }); req3.on('error',function(){resolve({});}); req3.end();
+    });
+    var propMap = {};
+    (docs.documents || []).forEach(function(doc) {
+      var f = doc.fields || {};
+      var propId = f.prop && f.prop.stringValue;
+      var propName = f.propName && f.propName.stringValue;
+      if (propId && !propMap[propId]) propMap[propId] = propName || propId;
+    });
+    var props = Object.entries(propMap).map(function(e){return {id:e[0],name:e[1]};});
+    res.json({props: props, count: props.length});
+  } catch(e) { res.json({error: e.message, props: []}); }
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
