@@ -167,23 +167,22 @@ app.get('/api/passpass-properties', async (req,res) => {
 });
 
 
-// Serve index.html with iOS modal CSS overrides
-const _fs = require('fs');
-app.get('/', (req, res) => {
+app.get('/', function(req, res) {
+  var fs = require('fs');
+  var indexPath = require('path').join(__dirname, 'public', 'index.html');
   try {
-    let html = _fs.readFileSync(path.join(__dirname, 'public', 'index.html'), 'utf8');
+    var html = fs.readFileSync(indexPath, 'utf8');
+    var css = '/* iOS fixes */';
+    css += '.overlay{backdrop-filter:blur(8px)!important}';
+    css += '.modal{border-radius:28px!important}';
+    css += '.modal-foot{border-radius:0 0 28px 28px!important}';
+    css += '.tpl-row input{order:3!important;margin-left:auto!important}';
     if (!html.includes('blur(8px)')) {
-      html = html.replace('</style>', `/* iOS fixes */
-.overlay{backdrop-filter:blur(8px)!important}
-.modal{border-radius:28px!important}
-.modal-foot{border-radius:0 0 28px 28px!important}
-.tpl-row input{order:3!important;margin-left:auto!important}
-</style>`);
+      html = html.replace('</style>', css + '</style>');
     }
-    res.set('Content-Type', 'text/html; charset=utf-8');
     res.set('Cache-Control', 'no-cache');
     res.send(html);
-  } catch(e) { res.sendFile(path.join(__dirname, 'public', 'index.html')); }
+  } catch(e) { res.sendFile(indexPath); }
 });
 
 app.get('*', (req, res) => {
