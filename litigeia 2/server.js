@@ -204,4 +204,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log('OK port ' + PORT));
 
 // Demarrer le bot Telegram
-require('./telegram-bot');
+try { require('./telegram-bot'); } catch(e) { console.error('Bot error:', e.message); }
