@@ -22,8 +22,8 @@ const ANTHROPIC_KEY  = process.env.ANTHROPIC_API_KEY;
 // PassPass / Firebase
 const PASSPASS_EMAIL    = process.env.PASSPASS_EMAIL;
 const PASSPASS_PASSWORD = process.env.PASSPASS_PASSWORD;
-const FIREBASE_PROJECT  = 'passpass';
-const FIREBASE_API_KEY  = 'AIzaSyBvLr6wKVpvdS5nH8LpZjD5YWzG3tKGLKk'; // Public API key (visible en public)
+const FIREBASE_PROJECT  = ''passpass-web-public';
+const FIREBASE_API_KEY  = 'AIzaSyCffkmTqLa241aKYMg6l_neYrU8vT3RG38; // Public API key (visible en public)
 
 // Fenetre de groupage : 45 secondes
 const WINDOW_MS = 45000;
@@ -96,43 +96,72 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
    */
   async function chercherReservationPassPass(logement, date) {
   if (!logement || !PASSPASS_EMAIL || !PASSPASS_PASSWORD) {
-    console.log('PassPass: missing config');
-    return null;
+    console.log('PassPass: missing config'); return null;
   }
   try {
     const token = await getFirebaseToken();
     if (!token) { console.log('PassPass: auth failed'); return null; }
 
-    const normalize = s => (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().trim();
-    const logNorm = normalize(logement);
+    // Étape 1 : retrouver le passpassId depuis les propriétés LitigeIA
+    let propId = null;
+    if (_supa) {
+      try {
+        const { data: stateRow } = await _supa.from('app_state').select('data').eq('id', 'main').single();
+        const properties = stateRow?.data?.properties || [];
+        const norm = s => (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().trim();
+        const logNorm = norm(logement);
+        const match = properties.find(p => {
+          const n = norm(p.name || '');
+          return n && (n.includes(logNorm) || logNorm.includes(n.split(' ')[0]) || n.split(' ')[0] === logNorm.split(' ')[0]);
+        });
+        if (match) { propId = match.passpassId || match.id; console.log('PassPass: propId found:', propId, 'for', logement); }
+        else { console.log('PassPass: no property match for', logement, 'in', properties.length, 'props'); }
+      } catch(e) { console.error('PassPass property lookup error:', e.message); }
+    }
+    if (!propId) return null;
 
-    const queryAndMatch = (whereClause, label) => new Promise(res => {
-      const body = JSON.stringify({ structuredQuery: { from: [{ collectionId: 'bookings' }], where: whereClause, limit: 50 } });
+    // Étape 2 : requête Firestore par prop ID (pas de range, filtrage date côté serveur)
+    const result = await new Promise(res => {
+      const body = JSON.stringify({structuredQuery: {
+        from: [{collectionId: 'bookings'}],
+        where: {compositeFilter: {op: 'AND', filters: [
+          {fieldFilter: {field: {fieldPath: 'prop'}, op: 'EQUAL', value: {stringValue: propId}}},
+          {fieldFilter: {field: {fieldPath: 'deleted'}, op: 'EQUAL', value: {booleanValue: false}}}
+        ]}},
+        limit: 100
+      }});
       const req = https.request({
         hostname: 'firestore.googleapis.com',
         path: '/v1/projects/' + FIREBASE_PROJECT + '/databases/(default)/documents:runQuery',
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token, 'Content-Length': Buffer.byteLength(body) }
+        headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token, 'Content-Length': Buffer.byteLength(body)}
       }, (response) => {
         let data = '';
         response.on('data', chunk => data += chunk);
         response.on('end', () => {
           try {
             const docs = JSON.parse(data);
-            const found = (Array.isArray(docs) ? docs : []).find(item => {
-              if (!item.document || !item.document.fields) return false;
+            const arr = Array.isArray(docs) ? docs : [];
+            // Priorité 1 : checkout aujourd'hui
+            let found = arr.find(item => {
+              if (!item.document?.fields) return false;
+              return item.document.fields.end?.stringValue === date;
+            });
+            // Priorité 2 : séjour en cours
+            if (!found) found = arr.find(item => {
+              if (!item.document?.fields) return false;
               const f = item.document.fields;
-              const propName = normalize(f.propName && f.propName.stringValue || '');
-              return propName.includes(logNorm) || logNorm.includes(propName.split(' ')[0]) || propName.split(' ')[0] === logNorm;
+              return f.start?.stringValue <= date && f.end?.stringValue > date;
             });
             if (!found) { res(null); return; }
             const f = found.document.fields;
-            const ti = f.tenantInfo && f.tenantInfo.mapValue && f.tenantInfo.mapValue.fields || {};
+            const ti = f.tenantInfo?.mapValue?.fields || {};
+            const clean = s => (s||'').replace(/[\u2068\u2069]/g,'').trim();
             res({
-              tenantName: [(ti.prenom && ti.prenom.stringValue || ''), (ti.nom && ti.nom.stringValue || '')].filter(Boolean).join(' '),
-              tenantEmail: (ti.email && ti.email.stringValue || ''),
-              start: (f.start && f.start.stringValue || ''),
-              end: (f.end && f.end.stringValue || '')
+              tenantName: [clean(ti.prenom?.stringValue), clean(ti.nom?.stringValue)].filter(Boolean).join(' '),
+              tenantEmail: ti.email?.stringValue || '',
+              start: f.start?.stringValue || '',
+              end: f.end?.stringValue || ''
             });
           } catch(e) { console.error('PassPass parse error:', e.message); res(null); }
         });
@@ -141,25 +170,9 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
       req.write(body); req.end();
     });
 
-    // Passe 1: checkout aujourd'hui
-    const checkoutQ = { compositeFilter: { op: 'AND', filters: [
-      { fieldFilter: { field: { fieldPath: 'end' }, op: 'EQUAL', value: { stringValue: date } } },
-      { fieldFilter: { field: { fieldPath: 'deleted' }, op: 'EQUAL', value: { booleanValue: false } } }
-    ]}};
-    const r1 = await queryAndMatch(checkoutQ, 'checkout');
-    if (r1) { console.log('PassPass match checkout:', logement, '->', r1.tenantName); return r1; }
-
-    // Passe 2: reservation active
-    const activeQ = { compositeFilter: { op: 'AND', filters: [
-      { fieldFilter: { field: { fieldPath: 'start' }, op: 'LESS_THAN_OR_EQUAL', value: { stringValue: date } } },
-      { fieldFilter: { field: { fieldPath: 'end' }, op: 'GREATER_THAN', value: { stringValue: date } } },
-      { fieldFilter: { field: { fieldPath: 'deleted' }, op: 'EQUAL', value: { booleanValue: false } } }
-    ]}};
-    const r2 = await queryAndMatch(activeQ, 'active');
-    if (r2) { console.log('PassPass match active:', logement, '->', r2.tenantName); return r2; }
-
-    console.log('PassPass: no match for', logement, 'on', date);
-    return null;
+    if (result) console.log('PassPass match OK:', logement, '->', result.tenantName);
+    else console.log('PassPass: aucune résa trouvée pour', logement, 'le', date);
+    return result;
   } catch(e) { console.error('PassPass error:', e.message); return null; }
 }
 
