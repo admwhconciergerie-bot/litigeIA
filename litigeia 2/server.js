@@ -176,6 +176,15 @@ app.get('/api/passpass-properties', async (req,res) => {
 // GET /api/passpass-lookup-by-name — lookup par nom de logement + date
 app.get('/api/passpass-lookup-by-name', async (req,res) => {
   const {name,date}=req.query;
+  // Check cache first (App Check workaround)
+  if (_supa) { try {
+    const {data:sd}=await _supa.from('app_state').select('data').eq('id','main').single();
+    const bcache=((sd&&sd.data&&sd.data.bookings_cache)||{})[date]||[];
+    const normC=s=>(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().trim();
+    const nnC=normC(name);
+    const hit=bcache.find(b=>{const pn=normC(b.propName||'');return pn&&(pn.includes(nnC)||nnC.includes(pn.split(' ')[0])||pn.split(' ')[0]===nnC);});
+    if (hit) return res.json({found:true,guest_name:hit.guest_name||'',guest_email:hit.guest_email||'',checkin:hit.checkin||'',checkout:hit.checkout||'',platform:hit.platform||'Airbnb',booking_ref:hit.booking_ref||''});
+  } catch(e){} }
   if (!name||!date) return res.status(400).json({error:'name et date requis'});
   const em=process.env.PASSPASS_EMAIL, pw=process.env.PASSPASS_PASSWORD;
   if (!em||!pw) return res.json({found:false,error:'credentials manquants'});
@@ -216,6 +225,36 @@ app.get('/api/passpass-lookup-by-name', async (req,res) => {
       {fieldFilter:{field:{fieldPath:'deleted'},op:'EQUAL',value:{booleanValue:false}}}]}});
     const m2=findMatch(d2); if (m2) return res.json(parseDoc(m2));
     res.json({found:false});
+  } catch(e){res.status(500).json({error:e.message});}
+});
+
+// GET /api/bookings-cache
+app.get('/api/bookings-cache', async (req,res) => {
+  const {date}=req.query;
+  if (!date) return res.status(400).json({error:'date requis'});
+  if (!_supa) return res.json({bookings:[]});
+  try {
+    const {data}=await _supa.from('app_state').select('data').eq('id','main').single();
+    const cache=((data&&data.data&&data.data.bookings_cache)||{})[date]||[];
+    res.json({bookings:cache,date});
+  } catch(e){res.status(500).json({error:e.message});}
+});
+
+// POST /api/bookings-cache
+app.post('/api/bookings-cache', async (req,res) => {
+  const {date,bookings}=req.body;
+  if (!date||!Array.isArray(bookings)) return res.status(400).json({error:'date et bookings[] requis'});
+  if (!_supa) return res.json({ok:true});
+  try {
+    const {data}=await _supa.from('app_state').select('data').eq('id','main').single();
+    const state=(data&&data.data)||{};
+    const cache=state.bookings_cache||{};
+    cache[date]=bookings;
+    const dates=Object.keys(cache).sort();
+    if(dates.length>7) dates.slice(0,dates.length-7).forEach(d=>delete cache[d]);
+    state.bookings_cache=cache;
+    await _supa.from('app_state').upsert({id:'main',data:state,updated_at:new Date().toISOString()});
+    res.json({ok:true,count:bookings.length,date});
   } catch(e){res.status(500).json({error:e.message});}
 });
 
