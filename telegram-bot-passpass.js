@@ -119,6 +119,20 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
       } catch(e) { console.error('PassPass property lookup error:', e.message); }
     }
     if (!propId) return null;
+  // Step 2: Check bookings cache first (App Check workaround)
+  try {
+    const cacheUrl = 'https://litigeia.onrender.com/api/bookings-cache?date=' + encodeURIComponent(date);
+    const cacheRes = await fetch(cacheUrl);
+    const cacheJson = await cacheRes.json();
+    const bcache = cacheJson.bookings || [];
+    const normB = s => (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().trim();
+    const nameNormB = normB(logement);
+    const hit = bcache.find(b => {
+      const pn = normB(b.propName || '');
+      return pn && (pn.includes(nameNormB) || nameNormB.includes(pn.split(' ')[0]) || pn.split(' ')[0] === nameNormB);
+    });
+    if (hit) return { tenantName: hit.guest_name||'', tenantEmail: hit.guest_email||'', start: hit.checkin||'', end: hit.checkout||'', platform: hit.platform||'Airbnb', ref: hit.booking_ref||'' };
+  } catch(cacheErr) { console.log('Cache miss:', cacheErr.message); }
 
     // Étape 2 : requête Firestore par prop ID (pas de range, filtrage date côté serveur)
     const result = await new Promise(res => {
