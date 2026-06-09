@@ -104,9 +104,9 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
 
     // Étape 1 : retrouver le passpassId depuis les propriétés LitigeIA
     let propId = null;
-    if (_supa) {
+    if (supabase) {
       try {
-        const { data: stateRow } = await _supa.from('app_state').select('data').eq('id', 'main').single();
+        const { data: stateRow } = await supabase.from('app_state').select('data').eq('id', 'main').single();
         const properties = stateRow?.data?.properties || [];
         const norm = s => (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().trim();
         const logNorm = norm(logement);
@@ -374,8 +374,8 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
     let checkin = '';
     let checkout = '';
 
-    if (property_id) {
-      passpassBooking = await chercherReservationPassPass(property_id, today);
+    if (logement) {
+      passpassBooking = await chercherReservationPassPass(logement, today);
       if (passpassBooking) {
         guest_name = passpassBooking.tenantName || userName;
         guest_email = passpassBooking.tenantEmail || '';
@@ -461,7 +461,13 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
       }
     }
 
-    // 4. Fallback texte si logement toujours inconnu et texte long
+        // 2b. Pattern "LOGEMENT : description" au debut du message (ex: "Loge : trou au mur")
+    if (!logement && texte) {
+      const cm = texte.match(/^([A-Za-z\u00C0-\u024F]{2,25}(?:\s+[A-Za-z\u00C0-\u024F0-9]{1,10})?)\s*[:\u2013-]\s/);
+      if (cm) { logement = cm[1].trim(); console.log('Logement depuis pattern colon:', logement); }
+    }
+
+// 4. Fallback texte si logement toujours inconnu et texte long
     if (!logement && texte && texte.length > 50) {
       logement = await extraireLogement(texte);
       if (!logement) logement = extraireLogementSimple(texte);
