@@ -749,9 +749,8 @@ function litRowHTML(l) {
       ${l.photos&&l.photos[0]?`<img src="${l.photos[0]}" style="width:100%;height:100%;object-fit:cover">`:'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px">📸</div>'}
     </div>
     <div>
-      <div style="font-weight:600;font-size:14px">📍 ${(l.logement||'').toUpperCase()}</div>
-      <div style="font-size:12px;color:var(--muted)">💣 ${(l.description||'').substring(0, 70).replace(/
-/g, ' ')}</div>
+      <div style="font-weight:600;font-size:14px">📍 ${(DB.properties.find(p=>p.id===l.property_id)?.name||l.logement||'Bien inconnu').toUpperCase()}</div>
+      <div style="font-size:12px;color:var(--muted)">💣 ${(()=>{let d=(l.description||'').replace(/\n/g,' ');if(l.logement){const w=l.logement.split(' ')[0];d=d.replace(new RegExp(w+'\\s*','gi'),'').replace(/\s{2,}/g,' ').trim();}return d.substring(0,70);})()} </div>
     </div>
     <div style="font-size:12px;color:var(--muted)">${l.constat_date?new Date(l.constat_date).toLocaleDateString('fr-FR'):''}</div>
     <div><span class="badge ${statBadges[l.status||'new']}">${statLabels[l.status||'new']}</span></div>
@@ -1398,7 +1397,7 @@ function viewLitige(id) {
           <div class="info-grid">
             <div class="info-cell"><div class="info-cell-label">Voyageur</div><div class="info-cell-val">${l.guest_name}</div></div>
             <div class="info-cell"><div class="info-cell-label">Plateforme</div><div class="info-cell-val">${l.platform}</div></div>
-            <div class="info-cell"><div class="info-cell-label">Bien</div><div class="info-cell-val">${prop?.name||'—'}</div></div>
+            <div class="info-cell"><div class="info-cell-label">Bien</div><div class="info-cell-val">${prop?.name||`<select onchange="updateLitigeProp('${l.id}',this.value)" style="background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:13px;max-width:200px"><option value="">— Choisir un bien</option>${DB.properties.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}</select>`}</div></div>
             <div class="info-cell"><div class="info-cell-label">Référence</div><div class="info-cell-val">${l.booking_ref||'—'}</div></div>
             <div class="info-cell"><div class="info-cell-label">Séjour</div><div class="info-cell-val">${l.checkin?new Date(l.checkin).toLocaleDateString('fr-FR'):'-'} → ${l.checkout?new Date(l.checkout).toLocaleDateString('fr-FR'):'-'}</div></div>
             <div class="info-cell"><div class="info-cell-label">Constat</div><div class="info-cell-val">${l.constat_date?new Date(l.constat_date).toLocaleDateString('fr-FR'):'—'}</div></div>
@@ -1445,6 +1444,15 @@ function setStatus(s) {
   if (currentNav==='dashboard') renderDashboard();
   else if (currentNav==='litiges') renderLitiges();
   toast('Statut mis à jour : '+s, 'ok');
+}
+
+function updateLitigeProp(id, propId) {
+  const l = DB.litiges.find(x=>x.id===id); if(!l||!propId) return;
+  const prop = DB.properties.find(p=>p.id===propId); if(!prop) return;
+  l.property_id=propId; l.logement=prop.name;
+  save();
+  viewLitige(id);
+  toast('Bien assigné : '+prop.name,'ok');
 }
 
 function regenDocs() {
