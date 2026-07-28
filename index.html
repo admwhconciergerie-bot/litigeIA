@@ -265,6 +265,10 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
       <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       Mes biens
     </button>
+    <button class="nav-item" onclick="nav('constat')" id="nav-constat">
+      <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      Constat
+    </button>
   </div>
   <div class="nav-section" style="margin-top:8px">
     <div class="nav-label">Paramètres</div>
@@ -622,8 +626,8 @@ function nav(v) {
   currentNav = v;
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('nav-'+v)?.classList.add('active');
-  const titles = { dashboard:'Tableau de bord', litiges:'Litiges', properties:'Mes biens', settings:'Configuration' };
-  const subs = { dashboard:'Vue d\'ensemble de vos litiges actifs', litiges:'Tous vos litiges par statut', properties:'Gérez vos biens en location', settings:'API, société, préférences' };
+  const titles = { dashboard:'Tableau de bord', litiges:'Litiges', properties:'Mes biens', settings:'Configuration', constat:'📸 Constat du jour' };
+  const subs = { dashboard:'Vue d\'ensemble de vos litiges actifs', litiges:'Tous vos litiges par statut', properties:'Gérez vos biens en location', settings:'API, société, préférences', constat:'Photos collectées · Créer un nouveau litige' };
   document.getElementById('topbarTitle').textContent = titles[v]||v;
   document.getElementById('topbarSub').textContent = subs[v]||'';
   updateBadge();
@@ -631,6 +635,7 @@ function nav(v) {
   else if (v==='litiges') renderLitiges();
   else if (v==='properties') renderProperties();
   else if (v==='settings') renderSettings();
+  else if (v==='constat') renderConstat();
 }
 
 function updateBadge() {
@@ -1500,6 +1505,132 @@ window.addEventListener('load', () => {
   if (DB.config.email) document.getElementById('ownerEmailInput').value = DB.config.email;
   if (DB.config.iban) document.getElementById('ownerIbanInput').value = DB.config.iban;
 });
+
+
+// ===================== CONSTAT =====================
+function renderConstat() {
+  const today = new Date().toISOString().slice(0,10);
+  const todayLitiges = DB.litiges.filter(l => (l.created_at||'').slice(0,10) === today);
+  const allPhotos = todayLitiges.flatMap(l => l.photos || []);
+  window._constatPhotos = allPhotos;
+  window._constatSelected = [];
+
+  const prestataires = [...new Set(DB.litiges.map(l => l.prestataire).filter(Boolean))];
+  if (!prestataires.length) prestataires.push('Équipe ménage','Gestionnaire','Propriétaire');
+
+  const propOptions = DB.properties.slice().sort((a,b)=>a.name.localeCompare(b.name))
+    .map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+
+  document.getElementById('content').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;height:calc(100vh - 116px)">
+      <div class="card card-pad" style="overflow-y:auto;display:flex;flex-direction:column">
+        <div style="font-size:16px;font-weight:700;margin-bottom:4px">📸 Photos du jour</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:16px">${today} · ${allPhotos.length} photo(s) — cliquez pour sélectionner</div>
+        ${allPhotos.length ? `<div class="photo-grid" id="constatPhotosGrid">
+          ${allPhotos.map((p,i) => `
+            <div class="photo-item" id="cph-${i}" onclick="toggleConstatPhoto(${i})" style="cursor:pointer;border:3px solid transparent;border-radius:9px;transition:border-color .15s">
+              <img src="${p}" onerror="this.parentElement.innerHTML='<div style=padding:10px;font-size:10px;color:var(--muted)>Erreur</div>'">
+            </div>
+          `).join('')}
+        </div>
+        <div style="margin-top:12px;font-size:12px;color:var(--accent)" id="selCount">0 photo(s) sélectionnée(s) — toutes incluses si aucune</div>` 
+        : `<div style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;text-align:center"><div><div style="font-size:36px;margin-bottom:12px">📭</div><div>Aucune photo collectée aujourd'hui<br>Le bot Telegram les récupère automatiquement</div></div></div>`}
+      </div>
+      <div class="card card-pad" style="overflow-y:auto">
+        <div style="font-size:16px;font-weight:700;margin-bottom:20px">Nouveau constat</div>
+        <div class="fg">
+          <label>Appartement *</label>
+          <select id="c_prop"><option value="">— Choisir un bien</option>${propOptions}</select>
+        </div>
+        <div class="fg">
+          <label>Date du sinistre *</label>
+          <input type="date" id="c_date" value="${today}">
+        </div>
+        <div class="fg">
+          <label>Plateforme *</label>
+          <select id="c_plat">
+            <option value="airbnb">🏠 Airbnb</option>
+            <option value="booking">🔵 Booking.com</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Déclaré par (prestataire)</label>
+          <select id="c_prest" onchange="toggleNewPrest(this.value)">
+            <option value="">— Choisir</option>
+            ${prestataires.map(p=>`<option value="${p}">${p}</option>`).join('')}
+            <option value="__new__">+ Nouveau prestataire...</option>
+          </select>
+        </div>
+        <div class="fg hidden" id="c_prest_new_wrap">
+          <label>Nom du prestataire</label>
+          <input type="text" id="c_prest_new" placeholder="Nom du prestataire">
+        </div>
+        <button class="btn btn-primary" style="width:100%;margin-top:16px;justify-content:center;padding:14px" onclick="validerConstat()">
+          Valider — Ouvrir le constat ✓
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function toggleConstatPhoto(i) {
+  const el = document.getElementById('cph-'+i);
+  if (!el) return;
+  const idx = (window._constatSelected||[]).indexOf(i);
+  if (idx === -1) {
+    window._constatSelected.push(i);
+    el.style.borderColor = 'var(--accent)';
+  } else {
+    window._constatSelected.splice(idx,1);
+    el.style.borderColor = 'transparent';
+  }
+  const cnt = document.getElementById('selCount');
+  if (cnt) cnt.textContent = window._constatSelected.length
+    ? window._constatSelected.length + ' photo(s) sélectionnée(s)'
+    : '0 photo(s) sélectionnée(s) — toutes incluses si aucune';
+}
+
+function toggleNewPrest(v) {
+  const wrap = document.getElementById('c_prest_new_wrap');
+  if (wrap) wrap.classList.toggle('hidden', v !== '__new__');
+}
+
+function validerConstat() {
+  const propId = document.getElementById('c_prop')?.value;
+  const date = document.getElementById('c_date')?.value;
+  const platform = document.getElementById('c_plat')?.value;
+  let prestataire = document.getElementById('c_prest')?.value;
+  if (prestataire === '__new__') prestataire = document.getElementById('c_prest_new')?.value?.trim() || '';
+  if (!propId) { toast('Choisissez un appartement','err'); return; }
+  if (!date) { toast('Choisissez une date','err'); return; }
+  const prop = DB.properties.find(p => p.id === propId);
+  const photos = (window._constatSelected||[]).length > 0
+    ? window._constatSelected.map(i => (window._constatPhotos||[])[i])
+    : [...(window._constatPhotos||[])];
+  const id = 'lit-' + Date.now();
+  const num = 'LIT-' + String(DB.litiges.length + 1).padStart(3,'0');
+  const litige = {
+    id, status:'new', platform,
+    logement: prop?.name||'',
+    property_id: propId,
+    guest: 'Constat ' + date,
+    description: 'Constat établi par ' + (prestataire||'prestataire') + ' le ' + date,
+    prestataire, date_sinistre: date,
+    photos, articles:[],
+    created_at: new Date().toISOString(),
+    invoice_num: num,
+    total_ht:0, total_ttc:0
+  };
+  DB.litiges.push(litige);
+  if (prestataire && DB.config) {
+    if (!DB.config.prestataires) DB.config.prestataires = [];
+    if (!DB.config.prestataires.includes(prestataire)) DB.config.prestataires.push(prestataire);
+  }
+  save();
+  toast('Constat créé — ' + photos.length + ' photo(s)','ok');
+  viewLitige(id);
+}
+
 </script>
 </body>
 </html>
