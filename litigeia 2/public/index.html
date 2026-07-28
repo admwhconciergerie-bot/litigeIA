@@ -2764,7 +2764,9 @@ function vlValider(){
   lit.articles=articles;lit.factures=vl.factures;
   lit.total_ht=articles.reduce(function(s,a){return s+(a.p*a.q);},0);lit.total_ttc=lit.total_ht;
   save();
-  vlShowDocs(lit);
+  document.getElementById("vl-overlay").remove();
+  renderLitiges();
+  showPackAirbnb(lit.id);
 }
 function vlShowDocs(lit){
   var vl=window._vl;
