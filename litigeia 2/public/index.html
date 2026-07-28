@@ -1001,8 +1001,8 @@ function nav(v) {
   else if (v==='properties') renderProperties();
   else if (v==='templates') renderTemplates();
   else if (v==='settings') renderSettings();
-}
     else if(v==='constat') renderConstat();
+}
 
 function updateBadge() {
   const active = DB.litiges.filter(l => !['resolved','refused'].includes(l.status)).length;
@@ -2542,6 +2542,7 @@ function openPhoto(el) {
   show(idx);
 }
 
+/* ===== CONSTAT PAGE ===== */
 function renderConstat(){
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
   const nb=document.getElementById('nav-constat');if(nb)nb.classList.add('active');
