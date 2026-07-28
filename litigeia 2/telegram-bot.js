@@ -359,11 +359,34 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
     }
 
     // Creer le litige au format LitigeIA
-    // Creation litige auto desactivee - photos dans pending_photos uniquement
-    if (!state.pending_photos) state.pending_photos = [];
-    const _date = new Date().toISOString().slice(0,10);
-    const _sender = userName || '';
-    photos.forEach(function(url){ state.pending_photos.push({ url: url, date: _date, sender: _sender }); });
+    const newLitige = {
+      id: crypto.randomUUID(),
+      platform: 'Telegram',
+      property_id: property_id,
+      logement: logement || '',
+      guest_name: guest_name,
+      guest_email: guest_email,
+      booking_ref: booking_ref,
+      checkin: checkin,
+      checkout: checkout,
+      constat_date: today,
+      description: description || '',
+      notes: 'Signalement Telegram' +
+        (firstMsg.from.username ? ' @' + firstMsg.from.username : '') +
+        (logement ? ' - ' + logement : '') +
+        (passpassBooking ? ' [PassPass auto-match]' : ''),
+      caution: 0,
+      articles: [],
+      total_ht: 0, total_tva: 0, total_ttc: 0,
+      photos: photos || [],
+      resume: (typeSinistre || 'Constat') + (logement ? ' - ' + logement : ''),
+      gravite: '',
+      lettre: '',
+      status: 'new',
+      created_at: new Date().toISOString()
+    };
+
+    state.litiges.push(newLitige);
 
     // Sauvegarder
     const { error: writeErr } = await supabase
