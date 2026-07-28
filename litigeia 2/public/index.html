@@ -2544,7 +2544,7 @@ function renderConstat(){
   document.getElementById("topbarTitle").textContent="📸 Constat du jour";
   document.getElementById("topbarSub").textContent="Photos collectées · Créer un nouveau litige";
   var today=new Date().toISOString().slice(0,10);
-  var allP=(DB.pending_photos||[]).filter(function(p){return (p.date||"")===today;}).map(function(p){return p.url;});
+  var _pp=(DB.pending_photos||[]).filter(function(p){return (p.date||"")===today;}).map(function(p){return p.url;});var _lp=(DB.litiges||[]).filter(function(l){return (l.platform==="Telegram"||(l.created_at||"").slice(0,10)===today)&&(l.photos||[]).length;}).reduce(function(a,l){return a.concat(l.photos||[]);},[]);var _seen={};var allP=_pp.concat(_lp).filter(function(u){if(!u||_seen[u])return false;_seen[u]=1;return true;});
   window._constatPhotos=allP;window._constatSelected=[];
   var prest=[];
   var seen={};
