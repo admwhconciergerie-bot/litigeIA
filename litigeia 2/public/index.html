@@ -2544,8 +2544,7 @@ function renderConstat(){
   document.getElementById("topbarTitle").textContent="📸 Constat du jour";
   document.getElementById("topbarSub").textContent="Photos collectées · Créer un nouveau litige";
   var today=new Date().toISOString().slice(0,10);
-  var todayL=DB.litiges.filter(function(l){return (l.created_at||"").slice(0,10)===today;});
-  var allP=todayL.reduce(function(a,l){return a.concat(l.photos||[]);},[]);
+  var allP=(DB.pending_photos||[]).filter(function(p){return (p.date||"")===today;}).map(function(p){return p.url;});
   window._constatPhotos=allP;window._constatSelected=[];
   var prest=[];
   var seen={};
@@ -2558,7 +2557,7 @@ function renderConstat(){
 }
 function toggleConstatPhoto(k){var el=document.getElementById("cph-"+k);if(!el)return;var idx=(window._constatSelected||[]).indexOf(k);if(idx===-1){window._constatSelected.push(k);el.style.borderColor="var(--accent)";}else{window._constatSelected.splice(idx,1);el.style.borderColor="transparent";}var sc=document.getElementById("selCount");if(sc)sc.textContent=(window._constatPhotos||[]).length+" photo(s) — "+(window._constatSelected||[]).length+" sélectionnée(s)";}
 function toggleNewPrest(v){var w=document.getElementById("c_prest_new_wrap");if(w)w.style.display=(v==="__new__")?"block":"none";}
-function validerConstat(){var propId=document.getElementById("c_prop").value;var date=document.getElementById("c_date").value;var platform=document.getElementById("c_plat").value;var prest=document.getElementById("c_prest").value;if(prest==="__new__")prest=(document.getElementById("c_prest_new").value||"").trim();if(!propId){alert("Sélectionnez un appartement");return;}var prop=DB.properties.filter(function(p){return p.id===propId;})[0];var photos=(window._constatSelected||[]).map(function(k){return (window._constatPhotos||[])[k];}).filter(Boolean);var id="lit_"+Date.now();DB.litiges.push({id:id,status:"new",platform:platform,logement:prop?prop.name:"",property_id:propId,guest:"Constat "+date,description:"Constat le "+date,prestataire:prest,date_sinistre:date,photos:photos,articles:[],created_at:new Date().toISOString(),invoice_num:"LIT-"+String(DB.litiges.length+1).padStart(3,"0"),total_ht:0,total_ttc:0});if(prest&&!(DB.config.prestataires||[]).includes(prest)){if(!DB.config.prestataires)DB.config.prestataires=[];DB.config.prestataires.push(prest);}save();viewLitige(id);}
+function validerConstat(){var propId=document.getElementById("c_prop").value;var date=document.getElementById("c_date").value;var platform=document.getElementById("c_plat").value;var prest=document.getElementById("c_prest").value;if(prest==="__new__")prest=(document.getElementById("c_prest_new").value||"").trim();if(!propId){alert("Sélectionnez un appartement");return;}var prop=DB.properties.filter(function(p){return p.id===propId;})[0];var photos=(window._constatSelected||[]).map(function(k){return (window._constatPhotos||[])[k];}).filter(Boolean);var id="lit_"+Date.now();DB.litiges.push({id:id,status:"new",platform:platform,logement:prop?prop.name:"",property_id:propId,guest:"Constat "+date,description:"Constat le "+date,prestataire:prest,date_sinistre:date,photos:photos,articles:[],created_at:new Date().toISOString(),invoice_num:"LIT-"+String(DB.litiges.length+1).padStart(3,"0"),total_ht:0,total_ttc:0});if(prest&&!(DB.config.prestataires||[]).includes(prest)){if(!DB.config.prestataires)DB.config.prestataires=[];DB.config.prestataires.push(prest);}DB.pending_photos=(DB.pending_photos||[]).filter(function(pp){return !photos.includes(pp.url);});save();viewLitige(id);}
 (function(){var _nav=nav;window.nav=function(v){if(v==="constat"){renderConstat();return;}_nav(v);};})();
 </script>
 </body>
