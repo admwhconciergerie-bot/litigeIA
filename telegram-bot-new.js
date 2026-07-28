@@ -254,31 +254,10 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
       }
     }
 
-    const newLitige = {
-      id: crypto.randomUUID(),
-      platform: 'Telegram',
-      property_id: '',
-      logement: logement || '',
-      guest_name: guest_name,
-      guest_email: '',
-      booking_ref: '',
-      checkin: checkin,
-      checkout: checkout,
-      constat_date: today,
-      description: description || '',
-      notes: 'Signalement Telegram' + (firstMsg.from.username ? ' @' + firstMsg.from.username : '') + (passpassBooking ? ' [PassPass auto-match]' : ''),
-      caution: 0,
-      articles: [],
-      total_ht: 0, total_tva: 0, total_ttc: 0,
-      photos: photos || [],
-      resume: (typeSinistre || 'Constat') + (logement ? ' - ' + logement : ''),
-      gravite: '',
-      lettre: '',
-      status: 'new',
-      created_at: new Date().toISOString()
-    };
-
-    state.litiges.push(newLitige);
+    // Creation litige auto desactivee - photos dans pending_photos uniquement
+    if (!state.pending_photos) state.pending_photos = [];
+    const _sender = firstMsg && firstMsg.from ? (firstMsg.from.first_name || firstMsg.from.username || '') : '';
+    photos.forEach(function(url){ state.pending_photos.push({ url: url, date: today, sender: _sender }); });
     const { error: writeErr } = await supabase.from('app_state').upsert({ id: 'main', data: state, updated_at: new Date().toISOString() });
     if (writeErr) { console.error('Erreur ecriture'); return null; }
     console.log('Litige cree:', newLitige.id, '| logement:', logement, '| guest:', guest_name, '| photos:', photos.length);
