@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LitigeIA — Gestion litiges Airbnb & Booking</title>
+<title>LitigeIA â Gestion litiges Airbnb & Booking</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
@@ -276,7 +276,7 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
     <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
     <div>
       <div class="logo-text">LitigeIA</div>
-      <div class="logo-sub">Airbnb · Booking.com</div>
+      <div class="logo-sub">Airbnb Â· Booking.com</div>
     </div>
   </div>
   <div class="nav-section">
@@ -294,13 +294,17 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
       <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       Mes biens
     </button>
+      <button class="nav-item" onclick="nav('constat')" id="nav-constat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Constat
+      </button>
     <button class="nav-item" onclick="nav('templates')" id="nav-templates">
       <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-      Templates dégâts
+      Templates dÃ©gÃ¢ts
     </button>
   </div>
   <div class="nav-section" style="margin-top:8px">
-    <div class="nav-label">Paramètres</div>
+    <div class="nav-label">ParamÃ¨tres</div>
     <button class="nav-item" onclick="nav('settings')" id="nav-settings">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
       Configuration
@@ -339,9 +343,9 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 <div class="modal modal-lg">
   <div class="modal-head">
     <div>
-      <div class="modal-title">⚡ Nouveau litige</div>
+      <div class="modal-title">â¡ Nouveau litige</div>
     </div>
-    <button class="btn btn-ghost btn-sm btn-icon" onclick="closeModal('modalNewLitige')">✕</button>
+    <button class="btn btn-ghost btn-sm btn-icon" onclick="closeModal('modalNewLitige')">â</button>
   </div>
   <div class="modal-body">
     <!-- Steps -->
@@ -352,13 +356,13 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
         <div class="fg">
           <label>Plateforme</label>
           <select id="w_platform">
-            <option value="airbnb">🏠 Airbnb</option>
-            <option value="booking">🔵 Booking.com</option>
-            <option value="autre">📦 Autre</option>
+            <option value="airbnb">ð  Airbnb</option>
+            <option value="booking">ðµ Booking.com</option>
+            <option value="autre">ð¦ Autre</option>
           </select>
         </div>
         <div class="fg">
-          <label>Bien concerné</label>
+          <label>Bien concernÃ©</label>
           <select id="w_property"></select>
         </div>
       </div>
@@ -372,17 +376,17 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
           <input type="email" id="w_guest_email" placeholder="john@email.com">
         </div>
         <div class="fg">
-          <label>Référence réservation</label>
+          <label>RÃ©fÃ©rence rÃ©servation</label>
           <input type="text" id="w_booking_ref" placeholder="HMXXXXXXXXX">
         </div>
       </div>
       <div class="row3">
         <div class="fg">
-          <label>Date d'arrivée</label>
+          <label>Date d'arrivÃ©e</label>
           <input type="date" id="w_checkin">
         </div>
         <div class="fg">
-          <label>Date de départ</label>
+          <label>Date de dÃ©part</label>
           <input type="date" id="w_checkout">
         </div>
         <div class="fg">
@@ -391,16 +395,16 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
         </div>
       </div>
       <div class="fg">
-        <label>Description des dégâts (soyez précis — l'IA s'en sert pour l'analyse) *</label>
-        <textarea id="w_description" rows="4" placeholder="Ex: Matelas de la chambre 1 taché de vin rouge, serviettes de bain brûlées (3 pièces), carrelage cassé dans la salle de bain, nettoyage approfondi nécessaire de toute la cuisine, télécommande TV disparue..."></textarea>
+        <label>Description des dÃ©gÃ¢ts (soyez prÃ©cis â l'IA s'en sert pour l'analyse) *</label>
+        <textarea id="w_description" rows="4" placeholder="Ex: Matelas de la chambre 1 tachÃ© de vin rouge, serviettes de bain brÃ»lÃ©es (3 piÃ¨ces), carrelage cassÃ© dans la salle de bain, nettoyage approfondi nÃ©cessaire de toute la cuisine, tÃ©lÃ©commande TV disparue..."></textarea>
       </div>
     </div>
     <!-- Step 2 -->
     <div id="wizStep2" class="hidden">
       <div class="ai-box" id="aiBox">
         <div class="ai-header">
-          <div class="ai-sparkle">✨</div>
-          <div><div class="ai-title">Analyse IA des dégâts</div><div class="ai-title-sub">Claude analyse vos photos et description</div></div>
+          <div class="ai-sparkle">â¨</div>
+          <div><div class="ai-title">Analyse IA des dÃ©gÃ¢ts</div><div class="ai-title-sub">Claude analyse vos photos et description</div></div>
         </div>
         <div class="ai-status" id="aiStatus">Ajoutez vos photos puis lancez l'analyse</div>
         <div class="ai-loading hidden" id="aiLoading">
@@ -409,11 +413,11 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
         </div>
       </div>
       <div class="fg">
-        <label>📷 Photos des dégâts (avant/pendant/après)</label>
+        <label>ð· Photos des dÃ©gÃ¢ts (avant/pendant/aprÃ¨s)</label>
         <div class="photo-drop" id="photoDropZone" onclick="document.getElementById('photoFileIn').click()">
-          <div class="photo-drop-icon">📸</div>
-          <div class="photo-drop-text">Glisser-déposer ou cliquer pour ajouter des photos</div>
-          <div class="photo-drop-sub">JPG, PNG, WEBP — plusieurs fichiers simultanés acceptés</div>
+          <div class="photo-drop-icon">ð¸</div>
+          <div class="photo-drop-text">Glisser-dÃ©poser ou cliquer pour ajouter des photos</div>
+          <div class="photo-drop-sub">JPG, PNG, WEBP â plusieurs fichiers simultanÃ©s acceptÃ©s</div>
           <input type="file" id="photoFileIn" multiple accept="image/*" style="display:none" onchange="addPhotos(event)">
         </div>
         <div class="photo-grid" id="photoGrid"></div>
@@ -426,12 +430,12 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
       </div>
       <div id="articlesSection" class="hidden">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-          <div style="font-size:13px;font-weight:700;color:var(--text)">Articles générés — modifiables</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text)">Articles gÃ©nÃ©rÃ©s â modifiables</div>
           <button class="btn btn-ghost btn-sm" onclick="addEmptyArticle()">+ Ligne</button>
         </div>
         <div class="articles-wrap">
           <div class="articles-head">
-            <span>Désignation</span><span>Qté</span><span>Unité</span><span>PU HT</span><span>Total HT</span><span></span>
+            <span>DÃ©signation</span><span>QtÃ©</span><span>UnitÃ©</span><span>PU HT</span><span>Total HT</span><span></span>
           </div>
           <div id="articlesBody"></div>
         </div>
@@ -442,36 +446,36 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
     <!-- Step 3 -->
     <div id="wizStep3" class="hidden">
       <div class="fg">
-        <label>Notes internes (non imprimées)</label>
-        <textarea id="w_notes" rows="2" placeholder="Ex: Airbnb ouvert le 25/05, réponse attendue avant le 01/06..."></textarea>
+        <label>Notes internes (non imprimÃ©es)</label>
+        <textarea id="w_notes" rows="2" placeholder="Ex: Airbnb ouvert le 25/05, rÃ©ponse attendue avant le 01/06..."></textarea>
       </div>
       <div class="fg">
-        <label>Montant de la caution disponible (€)</label>
+        <label>Montant de la caution disponible (â¬)</label>
         <input type="number" id="w_caution" placeholder="0" min="0">
       </div>
       <div class="fg">
-        <label>Documents à générer</label>
+        <label>Documents Ã  gÃ©nÃ©rer</label>
         <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
           <label style="display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:500;color:var(--text);cursor:pointer">
-            <input type="checkbox" id="gen_invoice" checked> 📄 Facture de dédommagement (PDF)
+            <input type="checkbox" id="gen_invoice" checked> ð Facture de dÃ©dommagement (PDF)
           </label>
           <label style="display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:500;color:var(--text);cursor:pointer">
-            <input type="checkbox" id="gen_report" checked> 📋 Rapport de dommages avec photos (PDF)
+            <input type="checkbox" id="gen_report" checked> ð Rapport de dommages avec photos (PDF)
           </label>
           <label style="display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:500;color:var(--text);cursor:pointer">
-            <input type="checkbox" id="gen_letter"> ✉️ Lettre de litige (texte prêt à copier)
+            <input type="checkbox" id="gen_letter"> âï¸ Lettre de litige (texte prÃªt Ã  copier)
           </label>
         </div>
       </div>
     </div>
   </div>
   <div class="modal-foot">
-    <button class="btn btn-ghost btn-sm" id="btnWizPrev" onclick="wizPrev()" style="display:none">← Précédent</button>
+    <button class="btn btn-ghost btn-sm" id="btnWizPrev" onclick="wizPrev()" style="display:none">â PrÃ©cÃ©dent</button>
     <button class="btn btn-ghost" onclick="closeModal('modalNewLitige')">Annuler</button>
-    <button class="btn btn-primary" id="btnWizNext" onclick="wizNext()">Suivant →</button>
+    <button class="btn btn-primary" id="btnWizNext" onclick="wizNext()">Suivant â</button>
     <button class="btn btn-primary hidden" id="btnWizGenerate" onclick="generateAll()">
       <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-      Générer les documents
+      GÃ©nÃ©rer les documents
     </button>
   </div>
 </div>
@@ -482,18 +486,18 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 <div class="modal modal-lg">
   <div class="modal-head">
     <div class="modal-title" id="viewTitle">Litige</div>
-    <button class="btn btn-ghost btn-sm btn-icon" onclick="closeModal('modalView')">✕</button>
+    <button class="btn btn-ghost btn-sm btn-icon" onclick="closeModal('modalView')">â</button>
   </div>
   <div class="modal-body" id="viewBody"></div>
   <div class="modal-foot">
     <button class="btn btn-ghost" onclick="closeModal('modalView')">Fermer</button>
-    <button class="btn btn-ghost" id="btnSetPaid" onclick="setStatus('resolved')">✅ Résolu</button>
+    <button class="btn btn-ghost" id="btnSetPaid" onclick="setStatus('resolved')">â RÃ©solu</button>
     <button class="btn btn-secondary" onclick="showPackAirbnb(viewingId)" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none">
-      📦 Pack Airbnb
+      ð¦ Pack Airbnb
     </button>
     <button class="btn btn-primary" onclick="regenDocs()">
       <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      Re-télécharger PDFs
+      Re-tÃ©lÃ©charger PDFs
     </button>
   </div>
 </div>
@@ -503,20 +507,20 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 <div class="overlay hidden" id="modalAPIKey">
 <div class="modal" style="width:480px">
   <div class="modal-head">
-    <div class="modal-title">🔑 Clé API Claude</div>
-    <button class="btn btn-ghost btn-sm btn-icon" onclick="closeModal('modalAPIKey')">✕</button>
+    <div class="modal-title">ð ClÃ© API Claude</div>
+    <button class="btn btn-ghost btn-sm btn-icon" onclick="closeModal('modalAPIKey')">â</button>
   </div>
   <div class="modal-body">
     <div style="background:#f8fafc;border-radius:10px;padding:16px;margin-bottom:20px;font-size:13px;color:var(--muted);line-height:1.6">
-      La clé API permet à Claude d'analyser vos photos et de générer des articles ultra-détaillés.
-      Obtenez la vôtre sur <strong>console.anthropic.com</strong> (compte gratuit, ~0,01€/analyse).
+      La clÃ© API permet Ã  Claude d'analyser vos photos et de gÃ©nÃ©rer des articles ultra-dÃ©taillÃ©s.
+      Obtenez la vÃ´tre sur <strong>console.anthropic.com</strong> (compte gratuit, ~0,01â¬/analyse).
     </div>
     <div class="fg">
-      <label>Clé API Anthropic (sk-ant-...)</label>
+      <label>ClÃ© API Anthropic (sk-ant-...)</label>
       <input type="password" id="apiKeyInput" placeholder="sk-ant-api03-..." style="font-family:monospace">
     </div>
     <div class="fg">
-      <label>Votre nom / société (pour les PDFs)</label>
+      <label>Votre nom / sociÃ©tÃ© (pour les PDFs)</label>
       <input type="text" id="ownerNameInput" placeholder="Jean Dupont / SARL Conciergerie">
     </div>
     <div class="fg">
@@ -529,7 +533,7 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
     </div>
     <div class="row2">
       <div class="fg">
-        <label>Téléphone</label>
+        <label>TÃ©lÃ©phone</label>
         <input type="text" id="ownerPhoneInput" placeholder="06 XX XX XX XX">
       </div>
       <div class="fg">
@@ -553,12 +557,12 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 <div class="overlay hidden" id="modalNewProp">
 <div class="modal" style="width:520px">
   <div class="modal-head">
-    <div class="modal-title">🏠 Nouveau bien</div>
-    <button class="btn btn-ghost btn-sm btn-icon" onclick="closeModal('modalNewProp')">✕</button>
+    <div class="modal-title">ð  Nouveau bien</div>
+    <button class="btn btn-ghost btn-sm btn-icon" onclick="closeModal('modalNewProp')">â</button>
   </div>
   <div class="modal-body">
     <div class="fg"><label>Nom du bien *</label><input type="text" id="p_name" placeholder="Studio Montpellier Centre / Villa Cap d'Agde"></div>
-    <div class="fg"><label>Adresse complète *</label><input type="text" id="p_address" placeholder="15 rue des Fleurs, 34000 Montpellier"></div>
+    <div class="fg"><label>Adresse complÃ¨te *</label><input type="text" id="p_address" placeholder="15 rue des Fleurs, 34000 Montpellier"></div>
     <div class="row2">
       <div class="fg"><label>Type de bien</label>
         <select id="p_type">
@@ -577,10 +581,10 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
         </select>
       </div>
     </div>
-    <div class="fg"><label>Caution habituelle (€)</label><input type="number" id="p_caution" placeholder="300"></div>
+    <div class="fg"><label>Caution habituelle (â¬)</label><input type="number" id="p_caution" placeholder="300"></div>
     <div class="fg"><label>Photo du bien (optionnel)</label>
       <div class="photo-drop" style="padding:16px" onclick="document.getElementById('propPhotoIn').click()">
-        <div style="font-size:13px;color:var(--muted)">📷 Cliquer pour ajouter une photo</div>
+        <div style="font-size:13px;color:var(--muted)">ð· Cliquer pour ajouter une photo</div>
         <input type="file" id="propPhotoIn" accept="image/*" style="display:none" onchange="previewPropPhoto(event)">
       </div>
       <img id="propPhotoPreview" src="" style="display:none;max-height:100px;border-radius:8px;margin-top:8px;object-fit:cover">
@@ -588,7 +592,7 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
   </div>
   <div class="modal-foot">
     <button class="btn btn-ghost" onclick="closeModal('modalNewProp')">Annuler</button>
-    <button class="btn btn-primary" onclick="saveProp()">Créer le bien</button>
+    <button class="btn btn-primary" onclick="saveProp()">CrÃ©er le bien</button>
   </div>
 </div>
 </div>
@@ -598,235 +602,235 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 // ===================== TEMPLATE LIBRARY =====================
 const TL = {
   net_tabac: { label:'Odeur de tabac', cat:'nettoyage', articles:[
-    {d:'Déplacement et diagnostic technicien nettoyage',c:'nettoyage',q:1,u:'forfait',p:45,j:'Frais de déplacement entreprise'},
-    {d:'Ventilation forcée du logement — aération multi-pièces',c:'nettoyage',q:3,u:'h',p:40,j:'Main d\'œuvre technicien'},
-    {d:'Traitement ozone professionnel anti-odeur tabac (générateur industriel)',c:'nettoyage',q:1,u:'forfait',p:185,j:'Élimination des molécules odorantes incrustées dans textiles, murs et mobilier'},
-    {d:'Nettoyage vapeur haute température des textiles (rideaux, coussins)',c:'nettoyage',q:1,u:'forfait',p:95,j:'Traitement vapeur 120°C, élimination résidus nicotine'},
-    {d:'Nettoyage et dégraissage des murs et plafonds (traces jaunes tabac)',c:'nettoyage',q:1,u:'forfait',p:120,j:'Produits spécialisés anti-nicotine, épongeage manuel'},
-    {d:'Produits désodorisants professionnels et consommables',c:'nettoyage',q:1,u:'forfait',p:55,j:'Fournitures: désodorisant enzymatique, produits spécialisés'},
-    {d:'Remise en état et nettoyage final du logement',c:'nettoyage',q:2,u:'h',p:40,j:'Nettoyage de finition toutes surfaces'},
+    {d:'DÃ©placement et diagnostic technicien nettoyage',c:'nettoyage',q:1,u:'forfait',p:45,j:'Frais de dÃ©placement entreprise'},
+    {d:'Ventilation forcÃ©e du logement â aÃ©ration multi-piÃ¨ces',c:'nettoyage',q:3,u:'h',p:40,j:'Main d\'Åuvre technicien'},
+    {d:'Traitement ozone professionnel anti-odeur tabac (gÃ©nÃ©rateur industriel)',c:'nettoyage',q:1,u:'forfait',p:185,j:'Ãlimination des molÃ©cules odorantes incrustÃ©es dans textiles, murs et mobilier'},
+    {d:'Nettoyage vapeur haute tempÃ©rature des textiles (rideaux, coussins)',c:'nettoyage',q:1,u:'forfait',p:95,j:'Traitement vapeur 120Â°C, Ã©limination rÃ©sidus nicotine'},
+    {d:'Nettoyage et dÃ©graissage des murs et plafonds (traces jaunes tabac)',c:'nettoyage',q:1,u:'forfait',p:120,j:'Produits spÃ©cialisÃ©s anti-nicotine, Ã©pongeage manuel'},
+    {d:'Produits dÃ©sodorisants professionnels et consommables',c:'nettoyage',q:1,u:'forfait',p:55,j:'Fournitures: dÃ©sodorisant enzymatique, produits spÃ©cialisÃ©s'},
+    {d:'Remise en Ã©tat et nettoyage final du logement',c:'nettoyage',q:2,u:'h',p:40,j:'Nettoyage de finition toutes surfaces'},
   ]},
   net_bio: { label:'Souillures biologiques', cat:'nettoyage', articles:[
-    {d:'Déplacement urgence + équipements de protection individuelle (EPI)',c:'nettoyage',q:1,u:'forfait',p:65,j:'Déplacement prioritaire, EPI complet obligatoire (combinaison, gants, masque)'},
-    {d:'Confinement et sécurisation de la zone souillée',c:'nettoyage',q:1,u:'forfait',p:35,j:'Mise en place bâches de protection, périmètre de sécurité sanitaire'},
-    {d:'Nettoyage et désinfection zone souillée (urine/matières fécales)',c:'nettoyage',q:3,u:'h',p:50,j:'Main d\'œuvre technicien spécialisé hygiène'},
-    {d:'Traitement enzymatique biologique anti-odeur et anti-bactérien',c:'nettoyage',q:1,u:'forfait',p:95,j:'Produit professionnel à base d\'enzymes, élimination complète des agents pathogènes'},
-    {d:'Désinfection UV et traitement bactéricide surfaces',c:'nettoyage',q:1,u:'forfait',p:75,j:'Lampe UV-C professionnelle, désinfection certifiée'},
-    {d:'Évacuation et mise en décharge sécurisée des matériaux souillés',c:'nettoyage',q:1,u:'forfait',p:55,j:'Sacs biohazard réglementaires, transport déchets biologiques'},
-    {d:'Fournitures et consommables désinfectants professionnels',c:'nettoyage',q:1,u:'forfait',p:70,j:'Javel industrielle, produits bactéricides certifiés NF'},
-    {d:'Nettoyage final et remise en état du logement',c:'nettoyage',q:2,u:'h',p:40,j:'Nettoyage complet toutes surfaces après traitement'},
+    {d:'DÃ©placement urgence + Ã©quipements de protection individuelle (EPI)',c:'nettoyage',q:1,u:'forfait',p:65,j:'DÃ©placement prioritaire, EPI complet obligatoire (combinaison, gants, masque)'},
+    {d:'Confinement et sÃ©curisation de la zone souillÃ©e',c:'nettoyage',q:1,u:'forfait',p:35,j:'Mise en place bÃ¢ches de protection, pÃ©rimÃ¨tre de sÃ©curitÃ© sanitaire'},
+    {d:'Nettoyage et dÃ©sinfection zone souillÃ©e (urine/matiÃ¨res fÃ©cales)',c:'nettoyage',q:3,u:'h',p:50,j:'Main d\'Åuvre technicien spÃ©cialisÃ© hygiÃ¨ne'},
+    {d:'Traitement enzymatique biologique anti-odeur et anti-bactÃ©rien',c:'nettoyage',q:1,u:'forfait',p:95,j:'Produit professionnel Ã  base d\'enzymes, Ã©limination complÃ¨te des agents pathogÃ¨nes'},
+    {d:'DÃ©sinfection UV et traitement bactÃ©ricide surfaces',c:'nettoyage',q:1,u:'forfait',p:75,j:'Lampe UV-C professionnelle, dÃ©sinfection certifiÃ©e'},
+    {d:'Ãvacuation et mise en dÃ©charge sÃ©curisÃ©e des matÃ©riaux souillÃ©s',c:'nettoyage',q:1,u:'forfait',p:55,j:'Sacs biohazard rÃ©glementaires, transport dÃ©chets biologiques'},
+    {d:'Fournitures et consommables dÃ©sinfectants professionnels',c:'nettoyage',q:1,u:'forfait',p:70,j:'Javel industrielle, produits bactÃ©ricides certifiÃ©s NF'},
+    {d:'Nettoyage final et remise en Ã©tat du logement',c:'nettoyage',q:2,u:'h',p:40,j:'Nettoyage complet toutes surfaces aprÃ¨s traitement'},
   ]},
   net_matelas: { label:'Nettoyage matelas', cat:'nettoyage', articles:[
-    {d:'Déplacement technicien nettoyage matelas',c:'nettoyage',q:1,u:'forfait',p:40,j:'Frais de déplacement'},
-    {d:'Nettoyage par injection-extraction vapeur haute température matelas',c:'nettoyage',q:1,u:'pièce',p:85,j:'Traitement vapeur 120°C, extraction des liquides et taches incrustées'},
-    {d:'Application détachant enzymatique spécialisé taches organiques',c:'nettoyage',q:1,u:'forfait',p:35,j:'Produit professionnel anti-taches bio'},
-    {d:'Traitement anti-acariens et anti-allergènes',c:'nettoyage',q:1,u:'pièce',p:45,j:'Traitement préventif certifié'},
-    {d:'Séchage professionnel accéléré (ventilateur industriel)',c:'nettoyage',q:1,u:'forfait',p:25,j:'Remise en service rapide du logement'},
+    {d:'DÃ©placement technicien nettoyage matelas',c:'nettoyage',q:1,u:'forfait',p:40,j:'Frais de dÃ©placement'},
+    {d:'Nettoyage par injection-extraction vapeur haute tempÃ©rature matelas',c:'nettoyage',q:1,u:'piÃ¨ce',p:85,j:'Traitement vapeur 120Â°C, extraction des liquides et taches incrustÃ©es'},
+    {d:'Application dÃ©tachant enzymatique spÃ©cialisÃ© taches organiques',c:'nettoyage',q:1,u:'forfait',p:35,j:'Produit professionnel anti-taches bio'},
+    {d:'Traitement anti-acariens et anti-allergÃ¨nes',c:'nettoyage',q:1,u:'piÃ¨ce',p:45,j:'Traitement prÃ©ventif certifiÃ©'},
+    {d:'SÃ©chage professionnel accÃ©lÃ©rÃ© (ventilateur industriel)',c:'nettoyage',q:1,u:'forfait',p:25,j:'Remise en service rapide du logement'},
   ]},
-  net_canape: { label:'Nettoyage canapé', cat:'nettoyage', articles:[
-    {d:'Déplacement technicien nettoyage mobilier rembourré',c:'nettoyage',q:1,u:'forfait',p:40,j:'Frais de déplacement'},
-    {d:'Aspiration approfondie canapé (coussins, recoins, dessous)',c:'nettoyage',q:1,u:'forfait',p:30,j:'Aspirateur professionnel filtration HEPA'},
-    {d:'Nettoyage par injection-extraction vapeur haute pression canapé',c:'nettoyage',q:1,u:'forfait',p:130,j:'Traitement complet tissu/cuir, extraction taches et odeurs'},
-    {d:'Application détachant spécialisé sur taches ciblées',c:'nettoyage',q:1,u:'forfait',p:40,j:'Produit professionnel selon nature des taches'},
-    {d:'Désodorisation et traitement anti-bactérien',c:'nettoyage',q:1,u:'forfait',p:35,j:'Spray professionnel neutralisateur d\'odeurs'},
-    {d:'Fournitures et consommables nettoyage',c:'nettoyage',q:1,u:'forfait',p:25,j:'Produits spécialisés tissu/cuir'},
+  net_canape: { label:'Nettoyage canapÃ©', cat:'nettoyage', articles:[
+    {d:'DÃ©placement technicien nettoyage mobilier rembourrÃ©',c:'nettoyage',q:1,u:'forfait',p:40,j:'Frais de dÃ©placement'},
+    {d:'Aspiration approfondie canapÃ© (coussins, recoins, dessous)',c:'nettoyage',q:1,u:'forfait',p:30,j:'Aspirateur professionnel filtration HEPA'},
+    {d:'Nettoyage par injection-extraction vapeur haute pression canapÃ©',c:'nettoyage',q:1,u:'forfait',p:130,j:'Traitement complet tissu/cuir, extraction taches et odeurs'},
+    {d:'Application dÃ©tachant spÃ©cialisÃ© sur taches ciblÃ©es',c:'nettoyage',q:1,u:'forfait',p:40,j:'Produit professionnel selon nature des taches'},
+    {d:'DÃ©sodorisation et traitement anti-bactÃ©rien',c:'nettoyage',q:1,u:'forfait',p:35,j:'Spray professionnel neutralisateur d\'odeurs'},
+    {d:'Fournitures et consommables nettoyage',c:'nettoyage',q:1,u:'forfait',p:25,j:'Produits spÃ©cialisÃ©s tissu/cuir'},
   ]},
   net_linge: { label:'Nettoyage linge / rideaux', cat:'nettoyage', articles:[
-    {d:'Collecte, tri et inventaire du linge souillé',c:'nettoyage',q:1,u:'h',p:35,j:'Main d\'œuvre inventaire et conditionnement'},
-    {d:'Lavage et séchage professionnel linge de lit (draps, housses)',c:'nettoyage',q:1,u:'kg',p:8,j:'Pressing industriel haute température'},
-    {d:'Lavage professionnel serviettes et linge de bain',c:'nettoyage',q:1,u:'kg',p:8,j:'Désinfection thermique 90°C'},
-    {d:'Nettoyage à sec rideaux (dépose et repose incluses)',c:'nettoyage',q:1,u:'forfait',p:95,j:'Pressing spécialisé voilages et rideaux'},
-    {d:'Repassage et pliage professionnel du linge',c:'nettoyage',q:1,u:'h',p:30,j:'Remise en état présentation linge'},
+    {d:'Collecte, tri et inventaire du linge souillÃ©',c:'nettoyage',q:1,u:'h',p:35,j:'Main d\'Åuvre inventaire et conditionnement'},
+    {d:'Lavage et sÃ©chage professionnel linge de lit (draps, housses)',c:'nettoyage',q:1,u:'kg',p:8,j:'Pressing industriel haute tempÃ©rature'},
+    {d:'Lavage professionnel serviettes et linge de bain',c:'nettoyage',q:1,u:'kg',p:8,j:'DÃ©sinfection thermique 90Â°C'},
+    {d:'Nettoyage Ã  sec rideaux (dÃ©pose et repose incluses)',c:'nettoyage',q:1,u:'forfait',p:95,j:'Pressing spÃ©cialisÃ© voilages et rideaux'},
+    {d:'Repassage et pliage professionnel du linge',c:'nettoyage',q:1,u:'h',p:30,j:'Remise en Ã©tat prÃ©sentation linge'},
     {d:'Transport aller-retour pressing',c:'nettoyage',q:1,u:'forfait',p:30,j:'Frais de transport'},
   ]},
-  net_general: { label:'Nettoyage supplémentaire', cat:'nettoyage', articles:[
-    {d:'Déplacement et diagnostic état des lieux',c:'nettoyage',q:1,u:'forfait',p:45,j:'Frais de déplacement et bilan nettoyage'},
-    {d:'Nettoyage approfondi cuisine (four, hotte, réfrigérateur, plan de travail)',c:'nettoyage',q:2,u:'h',p:42,j:'Main d\'œuvre nettoyage spécialisé cuisine'},
-    {d:'Nettoyage sanitaires et salle de bain (calcaire, moisissures)',c:'nettoyage',q:1.5,u:'h',p:42,j:'Traitement détartrant professionnel'},
-    {d:'Aspiration et lavage de l\'ensemble des sols',c:'nettoyage',q:2,u:'h',p:38,j:'Monobrosse, lavage mécanisé'},
-    {d:'Dépoussiérage complet mobilier, luminaires et surfaces hautes',c:'nettoyage',q:1.5,u:'h',p:38,j:'Nettoyage en hauteur inclus'},
-    {d:'Évacuation des déchets et mise à disposition sacs poubelles',c:'nettoyage',q:1,u:'forfait',p:25,j:'Tri sélectif et évacuation'},
-    {d:'Produits d\'entretien professionnels et consommables',c:'nettoyage',q:1,u:'forfait',p:35,j:'Détergents, dégraissants, désinfectants NF'},
+  net_general: { label:'Nettoyage supplÃ©mentaire', cat:'nettoyage', articles:[
+    {d:'DÃ©placement et diagnostic Ã©tat des lieux',c:'nettoyage',q:1,u:'forfait',p:45,j:'Frais de dÃ©placement et bilan nettoyage'},
+    {d:'Nettoyage approfondi cuisine (four, hotte, rÃ©frigÃ©rateur, plan de travail)',c:'nettoyage',q:2,u:'h',p:42,j:'Main d\'Åuvre nettoyage spÃ©cialisÃ© cuisine'},
+    {d:'Nettoyage sanitaires et salle de bain (calcaire, moisissures)',c:'nettoyage',q:1.5,u:'h',p:42,j:'Traitement dÃ©tartrant professionnel'},
+    {d:'Aspiration et lavage de l\'ensemble des sols',c:'nettoyage',q:2,u:'h',p:38,j:'Monobrosse, lavage mÃ©canisÃ©'},
+    {d:'DÃ©poussiÃ©rage complet mobilier, luminaires et surfaces hautes',c:'nettoyage',q:1.5,u:'h',p:38,j:'Nettoyage en hauteur inclus'},
+    {d:'Ãvacuation des dÃ©chets et mise Ã  disposition sacs poubelles',c:'nettoyage',q:1,u:'forfait',p:25,j:'Tri sÃ©lectif et Ã©vacuation'},
+    {d:'Produits d\'entretien professionnels et consommables',c:'nettoyage',q:1,u:'forfait',p:35,j:'DÃ©tergents, dÃ©graissants, dÃ©sinfectants NF'},
   ]},
-  plo_debouchage: { label:'Débouchage douche/WC/lavabo', cat:'plomberie', articles:[
-    {d:'Déplacement plombier et diagnostic obstruction',c:'reparation',q:1,u:'forfait',p:65,j:'Frais de déplacement et identification du bouchon'},
-    {d:'Débouchage mécanique par furet électrique (ø32 à ø100)',c:'reparation',q:1,u:'h',p:80,j:'Main d\'œuvre plombier qualifié'},
-    {d:'Débouchage haute pression hydraulique (si nécessaire)',c:'reparation',q:1,u:'forfait',p:130,j:'Machine haute pression, débouchage canalisation obstruée'},
-    {d:'Test d\'écoulement et vérification étanchéité après intervention',c:'reparation',q:0.5,u:'h',p:80,j:'Contrôle qualité'},
-    {d:'Produit de traitement préventif canalisation',c:'reparation',q:1,u:'forfait',p:25,j:'Fourniture: produit déboucheur professionnel'},
-    {d:'Nettoyage et remise en état post-intervention',c:'nettoyage',q:0.5,u:'h',p:40,j:'Nettoyage zone de travail'},
+  plo_debouchage: { label:'DÃ©bouchage douche/WC/lavabo', cat:'plomberie', articles:[
+    {d:'DÃ©placement plombier et diagnostic obstruction',c:'reparation',q:1,u:'forfait',p:65,j:'Frais de dÃ©placement et identification du bouchon'},
+    {d:'DÃ©bouchage mÃ©canique par furet Ã©lectrique (Ã¸32 Ã  Ã¸100)',c:'reparation',q:1,u:'h',p:80,j:'Main d\'Åuvre plombier qualifiÃ©'},
+    {d:'DÃ©bouchage haute pression hydraulique (si nÃ©cessaire)',c:'reparation',q:1,u:'forfait',p:130,j:'Machine haute pression, dÃ©bouchage canalisation obstruÃ©e'},
+    {d:'Test d\'Ã©coulement et vÃ©rification Ã©tanchÃ©itÃ© aprÃ¨s intervention',c:'reparation',q:0.5,u:'h',p:80,j:'ContrÃ´le qualitÃ©'},
+    {d:'Produit de traitement prÃ©ventif canalisation',c:'reparation',q:1,u:'forfait',p:25,j:'Fourniture: produit dÃ©boucheur professionnel'},
+    {d:'Nettoyage et remise en Ã©tat post-intervention',c:'nettoyage',q:0.5,u:'h',p:40,j:'Nettoyage zone de travail'},
   ]},
-  plo_cuvette: { label:'Réparation cuvette / chasse d\'eau', cat:'plomberie', articles:[
-    {d:'Déplacement plombier et diagnostic',c:'reparation',q:1,u:'forfait',p:65,j:'Frais de déplacement'},
-    {d:'Dépose du mécanisme de chasse d\'eau défectueux',c:'reparation',q:0.5,u:'h',p:80,j:'Main d\'œuvre plombier'},
-    {d:'Fourniture mécanisme chasse d\'eau complet (marque qualité)',c:'remplacement',q:1,u:'pièce',p:55,j:'Mécanisme bi-débit certifié NF'},
-    {d:'Pose et réglage du nouveau mécanisme',c:'reparation',q:1,u:'h',p:80,j:'Main d\'œuvre pose et mise en service'},
-    {d:'Remplacement joints d\'étanchéité (robinet d\'arrêt, evacuation)',c:'reparation',q:1,u:'forfait',p:20,j:'Fourniture joints EPDM'},
-    {d:'Test étanchéité et mise en service',c:'reparation',q:0.5,u:'h',p:80,j:'Vérification 30 min, test de fonctionnement'},
+  plo_cuvette: { label:'RÃ©paration cuvette / chasse d\'eau', cat:'plomberie', articles:[
+    {d:'DÃ©placement plombier et diagnostic',c:'reparation',q:1,u:'forfait',p:65,j:'Frais de dÃ©placement'},
+    {d:'DÃ©pose du mÃ©canisme de chasse d\'eau dÃ©fectueux',c:'reparation',q:0.5,u:'h',p:80,j:'Main d\'Åuvre plombier'},
+    {d:'Fourniture mÃ©canisme chasse d\'eau complet (marque qualitÃ©)',c:'remplacement',q:1,u:'piÃ¨ce',p:55,j:'MÃ©canisme bi-dÃ©bit certifiÃ© NF'},
+    {d:'Pose et rÃ©glage du nouveau mÃ©canisme',c:'reparation',q:1,u:'h',p:80,j:'Main d\'Åuvre pose et mise en service'},
+    {d:'Remplacement joints d\'Ã©tanchÃ©itÃ© (robinet d\'arrÃªt, evacuation)',c:'reparation',q:1,u:'forfait',p:20,j:'Fourniture joints EPDM'},
+    {d:'Test Ã©tanchÃ©itÃ© et mise en service',c:'reparation',q:0.5,u:'h',p:80,j:'VÃ©rification 30 min, test de fonctionnement'},
   ]},
   plo_pommeau: { label:'Pommeau / flexible douche', cat:'plomberie', articles:[
-    {d:'Déplacement plombier',c:'reparation',q:1,u:'forfait',p:55,j:'Frais de déplacement'},
-    {d:'Fourniture pommeau de douche (anti-calcaire, chromé)',c:'remplacement',q:1,u:'pièce',p:38,j:'Pommeau qualité standard, marque certifiée'},
-    {d:'Fourniture flexible de douche inox tressé 150cm',c:'remplacement',q:1,u:'pièce',p:22,j:'Flexible anti-vrille inox'},
-    {d:'Dépose éléments défectueux et pose éléments neufs',c:'reparation',q:0.5,u:'h',p:75,j:'Main d\'œuvre plombier'},
-    {d:'Test étanchéité et fonctionnement',c:'reparation',q:0.25,u:'h',p:75,j:'Vérification'},
+    {d:'DÃ©placement plombier',c:'reparation',q:1,u:'forfait',p:55,j:'Frais de dÃ©placement'},
+    {d:'Fourniture pommeau de douche (anti-calcaire, chromÃ©)',c:'remplacement',q:1,u:'piÃ¨ce',p:38,j:'Pommeau qualitÃ© standard, marque certifiÃ©e'},
+    {d:'Fourniture flexible de douche inox tressÃ© 150cm',c:'remplacement',q:1,u:'piÃ¨ce',p:22,j:'Flexible anti-vrille inox'},
+    {d:'DÃ©pose Ã©lÃ©ments dÃ©fectueux et pose Ã©lÃ©ments neufs',c:'reparation',q:0.5,u:'h',p:75,j:'Main d\'Åuvre plombier'},
+    {d:'Test Ã©tanchÃ©itÃ© et fonctionnement',c:'reparation',q:0.25,u:'h',p:75,j:'VÃ©rification'},
   ]},
   plo_colonne: { label:'Colonne de douche', cat:'plomberie', articles:[
-    {d:'Déplacement plombier et diagnostic',c:'reparation',q:1,u:'forfait',p:65,j:'Frais de déplacement'},
-    {d:'Coupure d\'eau et dépose colonne existante',c:'reparation',q:1,u:'h',p:80,j:'Main d\'œuvre plombier'},
-    {d:'Fourniture colonne de douche complète (thermostatique)',c:'remplacement',q:1,u:'pièce',p:280,j:'Colonne chromée avec thermostat, jets réglables'},
-    {d:'Pose et raccordement colonne de douche',c:'reparation',q:2,u:'h',p:80,j:'Main d\'œuvre pose et raccordement eau chaude/froide'},
-    {d:'Joint d\'étanchéité et visserie',c:'reparation',q:1,u:'forfait',p:15,j:'Fournitures d\'installation'},
-    {d:'Test de fonctionnement et réglage thermostat',c:'reparation',q:0.5,u:'h',p:80,j:'Mise en service'},
+    {d:'DÃ©placement plombier et diagnostic',c:'reparation',q:1,u:'forfait',p:65,j:'Frais de dÃ©placement'},
+    {d:'Coupure d\'eau et dÃ©pose colonne existante',c:'reparation',q:1,u:'h',p:80,j:'Main d\'Åuvre plombier'},
+    {d:'Fourniture colonne de douche complÃ¨te (thermostatique)',c:'remplacement',q:1,u:'piÃ¨ce',p:280,j:'Colonne chromÃ©e avec thermostat, jets rÃ©glables'},
+    {d:'Pose et raccordement colonne de douche',c:'reparation',q:2,u:'h',p:80,j:'Main d\'Åuvre pose et raccordement eau chaude/froide'},
+    {d:'Joint d\'Ã©tanchÃ©itÃ© et visserie',c:'reparation',q:1,u:'forfait',p:15,j:'Fournitures d\'installation'},
+    {d:'Test de fonctionnement et rÃ©glage thermostat',c:'reparation',q:0.5,u:'h',p:80,j:'Mise en service'},
   ]},
   plo_robinet: { label:'Robinet', cat:'plomberie', articles:[
-    {d:'Déplacement plombier et diagnostic',c:'reparation',q:1,u:'forfait',p:55,j:'Frais de déplacement'},
-    {d:'Coupure d\'eau et dépose robinet défectueux',c:'reparation',q:0.5,u:'h',p:80,j:'Main d\'œuvre plombier'},
-    {d:'Fourniture robinet (mitigeur chromé qualité sanitaire)',c:'remplacement',q:1,u:'pièce',p:85,j:'Mitigeur NF, cartouche céramique 40mm'},
-    {d:'Pose et raccordement robinet neuf',c:'reparation',q:1,u:'h',p:80,j:'Main d\'œuvre pose avec raccords flexibles'},
+    {d:'DÃ©placement plombier et diagnostic',c:'reparation',q:1,u:'forfait',p:55,j:'Frais de dÃ©placement'},
+    {d:'Coupure d\'eau et dÃ©pose robinet dÃ©fectueux',c:'reparation',q:0.5,u:'h',p:80,j:'Main d\'Åuvre plombier'},
+    {d:'Fourniture robinet (mitigeur chromÃ© qualitÃ© sanitaire)',c:'remplacement',q:1,u:'piÃ¨ce',p:85,j:'Mitigeur NF, cartouche cÃ©ramique 40mm'},
+    {d:'Pose et raccordement robinet neuf',c:'reparation',q:1,u:'h',p:80,j:'Main d\'Åuvre pose avec raccords flexibles'},
     {d:'Fourniture raccords flexibles et joints',c:'reparation',q:1,u:'forfait',p:18,j:'Raccords d\'alimentation inox avec joints EPDM'},
-    {d:'Test d\'étanchéité et mise en service',c:'reparation',q:0.25,u:'h',p:80,j:'Contrôle'},
+    {d:'Test d\'Ã©tanchÃ©itÃ© et mise en service',c:'reparation',q:0.25,u:'h',p:80,j:'ContrÃ´le'},
   ]},
-  ser_cles: { label:'Refection jeu de clés', cat:'serrurerie', articles:[
-    {d:'Déplacement serrurier et prise en charge',c:'reparation',q:1,u:'forfait',p:55,j:'Frais de déplacement serrurier agréé'},
-    {d:'Reproduction clé appartement (double de sécurité)',c:'remplacement',q:3,u:'pièce',p:22,j:'Reproduction clé sur carte de propriété'},
-    {d:'Reproduction clé immeuble / parties communes',c:'remplacement',q:3,u:'pièce',p:18,j:'Clé immeuble ou boîte aux lettres'},
-    {d:'Reproduction badge / télécommande résidence',c:'remplacement',q:1,u:'pièce',p:35,j:'Badge RFID ou télécommande programmée'},
-    {d:'Reproduction clé local poubelles / caves',c:'remplacement',q:2,u:'pièce',p:15,j:'Clés accès communs'},
+  ser_cles: { label:'Refection jeu de clÃ©s', cat:'serrurerie', articles:[
+    {d:'DÃ©placement serrurier et prise en charge',c:'reparation',q:1,u:'forfait',p:55,j:'Frais de dÃ©placement serrurier agrÃ©Ã©'},
+    {d:'Reproduction clÃ© appartement (double de sÃ©curitÃ©)',c:'remplacement',q:3,u:'piÃ¨ce',p:22,j:'Reproduction clÃ© sur carte de propriÃ©tÃ©'},
+    {d:'Reproduction clÃ© immeuble / parties communes',c:'remplacement',q:3,u:'piÃ¨ce',p:18,j:'ClÃ© immeuble ou boÃ®te aux lettres'},
+    {d:'Reproduction badge / tÃ©lÃ©commande rÃ©sidence',c:'remplacement',q:1,u:'piÃ¨ce',p:35,j:'Badge RFID ou tÃ©lÃ©commande programmÃ©e'},
+    {d:'Reproduction clÃ© local poubelles / caves',c:'remplacement',q:2,u:'piÃ¨ce',p:15,j:'ClÃ©s accÃ¨s communs'},
   ]},
   ser_serrure: { label:'Changement de serrure', cat:'serrurerie', articles:[
-    {d:'Déplacement serrurier agréé et diagnostic',c:'reparation',q:1,u:'forfait',p:65,j:'Déplacement et évaluation de la serrure'},
-    {d:'Dépose de la serrure existante',c:'reparation',q:0.5,u:'h',p:90,j:'Main d\'œuvre serrurier'},
-    {d:'Fourniture serrure 3 points A2P** (certifiée anti-effraction)',c:'remplacement',q:1,u:'pièce',p:185,j:'Serrure multipoints certifiée A2P 2 étoiles, marque reconnue'},
-    {d:'Pose et réglage serrure multipoints',c:'reparation',q:1.5,u:'h',p:90,j:'Main d\'œuvre pose, ajustement et calage du pène'},
-    {d:'Fourniture jeu de 3 clés (cylindre europrofil)',c:'remplacement',q:1,u:'jeu',p:35,j:'3 clés laiton livrées avec la serrure'},
-    {d:'Test et remise en main propre avec carte de propriété',c:'reparation',q:0.25,u:'h',p:90,j:'Mise en service et explication fonctionnement'},
+    {d:'DÃ©placement serrurier agrÃ©Ã© et diagnostic',c:'reparation',q:1,u:'forfait',p:65,j:'DÃ©placement et Ã©valuation de la serrure'},
+    {d:'DÃ©pose de la serrure existante',c:'reparation',q:0.5,u:'h',p:90,j:'Main d\'Åuvre serrurier'},
+    {d:'Fourniture serrure 3 points A2P** (certifiÃ©e anti-effraction)',c:'remplacement',q:1,u:'piÃ¨ce',p:185,j:'Serrure multipoints certifiÃ©e A2P 2 Ã©toiles, marque reconnue'},
+    {d:'Pose et rÃ©glage serrure multipoints',c:'reparation',q:1.5,u:'h',p:90,j:'Main d\'Åuvre pose, ajustement et calage du pÃ¨ne'},
+    {d:'Fourniture jeu de 3 clÃ©s (cylindre europrofil)',c:'remplacement',q:1,u:'jeu',p:35,j:'3 clÃ©s laiton livrÃ©es avec la serrure'},
+    {d:'Test et remise en main propre avec carte de propriÃ©tÃ©',c:'reparation',q:0.25,u:'h',p:90,j:'Mise en service et explication fonctionnement'},
   ]},
-  ser_poignee_porte: { label:'Poignée de porte cassée', cat:'serrurerie', articles:[
-    {d:'Déplacement serrurier',c:'reparation',q:1,u:'forfait',p:55,j:'Frais de déplacement'},
-    {d:'Dépose poignée et béquille défectueuse',c:'reparation',q:0.5,u:'h',p:85,j:'Main d\'œuvre serrurier'},
-    {d:'Fourniture poignée de porte complète (paire avec rosace)',c:'remplacement',q:1,u:'pièce',p:65,j:'Poignée chromée qualité professionnelle, visserie inox'},
-    {d:'Pose et réglage poignée, vérification verrouillage',c:'reparation',q:0.5,u:'h',p:85,j:'Main d\'œuvre pose'},
-    {d:'Vérification alignement gâche et fonctionnement complet',c:'reparation',q:0.25,u:'h',p:85,j:'Contrôle qualité'},
+  ser_poignee_porte: { label:'PoignÃ©e de porte cassÃ©e', cat:'serrurerie', articles:[
+    {d:'DÃ©placement serrurier',c:'reparation',q:1,u:'forfait',p:55,j:'Frais de dÃ©placement'},
+    {d:'DÃ©pose poignÃ©e et bÃ©quille dÃ©fectueuse',c:'reparation',q:0.5,u:'h',p:85,j:'Main d\'Åuvre serrurier'},
+    {d:'Fourniture poignÃ©e de porte complÃ¨te (paire avec rosace)',c:'remplacement',q:1,u:'piÃ¨ce',p:65,j:'PoignÃ©e chromÃ©e qualitÃ© professionnelle, visserie inox'},
+    {d:'Pose et rÃ©glage poignÃ©e, vÃ©rification verrouillage',c:'reparation',q:0.5,u:'h',p:85,j:'Main d\'Åuvre pose'},
+    {d:'VÃ©rification alignement gÃ¢che et fonctionnement complet',c:'reparation',q:0.25,u:'h',p:85,j:'ContrÃ´le qualitÃ©'},
   ]},
-  ser_poignee_fen: { label:'Poignée de fenêtre cassée', cat:'serrurerie', articles:[
-    {d:'Déplacement serrurier / technicien menuiserie',c:'reparation',q:1,u:'forfait',p:50,j:'Frais de déplacement'},
-    {d:'Dépose poignée fenêtre défectueuse',c:'reparation',q:0.25,u:'h',p:80,j:'Main d\'œuvre'},
-    {d:'Fourniture poignée de fenêtre PVC/aluminium (avec came)',c:'remplacement',q:1,u:'pièce',p:35,j:'Poignée oscillo-battant compatible, finition chromée'},
-    {d:'Pose et réglage poignée, test oscillo-battant',c:'reparation',q:0.25,u:'h',p:80,j:'Main d\'œuvre et vérification étanchéité'},
+  ser_poignee_fen: { label:'PoignÃ©e de fenÃªtre cassÃ©e', cat:'serrurerie', articles:[
+    {d:'DÃ©placement serrurier / technicien menuiserie',c:'reparation',q:1,u:'forfait',p:50,j:'Frais de dÃ©placement'},
+    {d:'DÃ©pose poignÃ©e fenÃªtre dÃ©fectueuse',c:'reparation',q:0.25,u:'h',p:80,j:'Main d\'Åuvre'},
+    {d:'Fourniture poignÃ©e de fenÃªtre PVC/aluminium (avec came)',c:'remplacement',q:1,u:'piÃ¨ce',p:35,j:'PoignÃ©e oscillo-battant compatible, finition chromÃ©e'},
+    {d:'Pose et rÃ©glage poignÃ©e, test oscillo-battant',c:'reparation',q:0.25,u:'h',p:80,j:'Main d\'Åuvre et vÃ©rification Ã©tanchÃ©itÃ©'},
   ]},
-  ser_claquee: { label:'Porte claquée — ouverture urgence', cat:'serrurerie', articles:[
-    {d:'Déplacement urgence serrurier (tarif horaire)',c:'reparation',q:1,u:'forfait',p:90,j:'Déplacement prioritaire, astreinte'},
-    {d:'Ouverture de porte sans destruction par crochetage',c:'reparation',q:1,u:'h',p:130,j:'Main d\'œuvre serrurier qualifié, technique non destructive'},
-    {d:'Vérification et test du bon fonctionnement de la serrure',c:'reparation',q:0.25,u:'h',p:90,j:'Contrôle post-intervention'},
+  ser_claquee: { label:'Porte claquÃ©e â ouverture urgence', cat:'serrurerie', articles:[
+    {d:'DÃ©placement urgence serrurier (tarif horaire)',c:'reparation',q:1,u:'forfait',p:90,j:'DÃ©placement prioritaire, astreinte'},
+    {d:'Ouverture de porte sans destruction par crochetage',c:'reparation',q:1,u:'h',p:130,j:'Main d\'Åuvre serrurier qualifiÃ©, technique non destructive'},
+    {d:'VÃ©rification et test du bon fonctionnement de la serrure',c:'reparation',q:0.25,u:'h',p:90,j:'ContrÃ´le post-intervention'},
   ]},
   pei_trou: { label:'Trou dans le mur', cat:'platrier', articles:[
-    {d:'Déplacement plâtrier et diagnostic',c:'reparation',q:1,u:'forfait',p:50,j:'Frais de déplacement'},
-    {d:'Protection du chantier (bâchage sol et mobilier)',c:'reparation',q:1,u:'forfait',p:25,j:'Pose bâches de protection'},
-    {d:'Rebouchage trou au plâtre projeté ou à la cheville',c:'reparation',q:1,u:'h',p:55,j:'Main d\'œuvre plâtrier, selon taille du trou'},
-    {d:'Fourniture plâtre de rebouchage et enduit de lissage',c:'reparation',q:1,u:'forfait',p:18,j:'Plâtre prise rapide + enduit Knauf'},
-    {d:'Ponçage et mise à niveau de la surface',c:'reparation',q:0.5,u:'h',p:50,j:'Ponçage manuel pour surface lisse'},
-    {d:'Application couche d\'impression (primaire accrochage)',c:'reparation',q:1,u:'forfait',p:15,j:'Primaire Dalep ou équivalent'},
-    {d:'Peinture de finition (2 couches) sur zone réparée',c:'reparation',q:1,u:'h',p:55,j:'Main d\'œuvre peintre + peinture blanc mat'},
-    {d:'Fourniture peinture acrylique mate (selon couleur existante)',c:'reparation',q:0.5,u:'L',p:12,j:'Peinture qualité professionnelle'},
+    {d:'DÃ©placement plÃ¢trier et diagnostic',c:'reparation',q:1,u:'forfait',p:50,j:'Frais de dÃ©placement'},
+    {d:'Protection du chantier (bÃ¢chage sol et mobilier)',c:'reparation',q:1,u:'forfait',p:25,j:'Pose bÃ¢ches de protection'},
+    {d:'Rebouchage trou au plÃ¢tre projetÃ© ou Ã  la cheville',c:'reparation',q:1,u:'h',p:55,j:'Main d\'Åuvre plÃ¢trier, selon taille du trou'},
+    {d:'Fourniture plÃ¢tre de rebouchage et enduit de lissage',c:'reparation',q:1,u:'forfait',p:18,j:'PlÃ¢tre prise rapide + enduit Knauf'},
+    {d:'PonÃ§age et mise Ã  niveau de la surface',c:'reparation',q:0.5,u:'h',p:50,j:'PonÃ§age manuel pour surface lisse'},
+    {d:'Application couche d\'impression (primaire accrochage)',c:'reparation',q:1,u:'forfait',p:15,j:'Primaire Dalep ou Ã©quivalent'},
+    {d:'Peinture de finition (2 couches) sur zone rÃ©parÃ©e',c:'reparation',q:1,u:'h',p:55,j:'Main d\'Åuvre peintre + peinture blanc mat'},
+    {d:'Fourniture peinture acrylique mate (selon couleur existante)',c:'reparation',q:0.5,u:'L',p:12,j:'Peinture qualitÃ© professionnelle'},
   ]},
   pei_peinture: { label:'Reprise peinture', cat:'platrier', articles:[
-    {d:'Déplacement peintre et diagnostic surface',c:'reparation',q:1,u:'forfait',p:50,j:'Frais de déplacement et évaluation surface à reprendre'},
-    {d:'Protection sol et mobilier (bâchage)',c:'reparation',q:1,u:'forfait',p:20,j:'Bâches et masquage'},
-    {d:'Préparation des supports (ponçage, lessivage, rebouchage fissures)',c:'reparation',q:1,u:'h',p:52,j:'Main d\'œuvre préparation'},
-    {d:'Application enduit de lissage sur zones abîmées',c:'reparation',q:1,u:'forfait',p:25,j:'Enduit en pâte Semin ou équivalent'},
+    {d:'DÃ©placement peintre et diagnostic surface',c:'reparation',q:1,u:'forfait',p:50,j:'Frais de dÃ©placement et Ã©valuation surface Ã  reprendre'},
+    {d:'Protection sol et mobilier (bÃ¢chage)',c:'reparation',q:1,u:'forfait',p:20,j:'BÃ¢ches et masquage'},
+    {d:'PrÃ©paration des supports (ponÃ§age, lessivage, rebouchage fissures)',c:'reparation',q:1,u:'h',p:52,j:'Main d\'Åuvre prÃ©paration'},
+    {d:'Application enduit de lissage sur zones abÃ®mÃ©es',c:'reparation',q:1,u:'forfait',p:25,j:'Enduit en pÃ¢te Semin ou Ã©quivalent'},
     {d:'Application primaire d\'accrochage',c:'reparation',q:1,u:'forfait',p:18,j:'Primaire universel'},
-    {d:'Peinture 2 couches (rouleau + pinceau finition)',c:'reparation',q:4,u:'m²',p:15,j:'Main d\'œuvre peintre, 2 couches qualité pro'},
-    {d:'Fourniture peinture acrylique mate lessivable',c:'reparation',q:1,u:'L',p:14,j:'Peinture professionnelle (Tollens, Seigneurie ou équivalent)'},
-    {d:'Nettoyage chantier et remise en état',c:'nettoyage',q:0.5,u:'h',p:40,j:'Évacuation déchets peinture'},
+    {d:'Peinture 2 couches (rouleau + pinceau finition)',c:'reparation',q:4,u:'mÂ²',p:15,j:'Main d\'Åuvre peintre, 2 couches qualitÃ© pro'},
+    {d:'Fourniture peinture acrylique mate lessivable',c:'reparation',q:1,u:'L',p:14,j:'Peinture professionnelle (Tollens, Seigneurie ou Ã©quivalent)'},
+    {d:'Nettoyage chantier et remise en Ã©tat',c:'nettoyage',q:0.5,u:'h',p:40,j:'Ãvacuation dÃ©chets peinture'},
   ]},
-  pei_radiateur: { label:'Radiateur arraché du mur', cat:'platrier', articles:[
-    {d:'Déplacement et diagnostic (plombier + plâtrier)',c:'reparation',q:1,u:'forfait',p:75,j:'Deux corps de métier nécessaires'},
-    {d:'Protection chantier et bâchage complet',c:'reparation',q:1,u:'forfait',p:30,j:'Bâches sol, emballage mobilier'},
-    {d:'Coupure du circuit de chauffage et dépose radiateur endommagé',c:'reparation',q:1,u:'h',p:80,j:'Main d\'œuvre plombier'},
-    {d:'Évacuation et mise en décharge radiateur endommagé',c:'reparation',q:1,u:'forfait',p:45,j:'Transport et déchetterie professionnelle'},
-    {d:'Rebouchage des trous de fixation et dégradations mur au plâtre',c:'reparation',q:2,u:'h',p:55,j:'Main d\'œuvre plâtrier, trous importants'},
-    {d:'Fourniture plâtre et enduit de lissage',c:'reparation',q:1,u:'forfait',p:22,j:'Plâtre prise rapide, enduit de finition Knauf'},
-    {d:'Fourniture radiateur acier (puissance adaptée à la pièce)',c:'remplacement',q:1,u:'pièce',p:260,j:'Radiateur 1000W qualité standard, compatible installation existante'},
-    {d:'Pose et fixation murale du radiateur neuf',c:'reparation',q:1,u:'h',p:80,j:'Main d\'œuvre plombier, fixation murale renforcée'},
-    {d:'Raccordement plomberie (vannes thermostatiques + robinets)',c:'reparation',q:1,u:'h',p:80,j:'Main d\'œuvre raccordement circuit eau chaude'},
-    {d:'Fourniture robinets thermostatiques et visserie',c:'remplacement',q:1,u:'forfait',p:55,j:'Vannes thermostatiques qualité, visserie inox'},
-    {d:'Remise en peinture zone réparée (2 couches)',c:'reparation',q:1,u:'h',p:52,j:'Main d\'œuvre peintre, peinture blanche mate'},
+  pei_radiateur: { label:'Radiateur arrachÃ© du mur', cat:'platrier', articles:[
+    {d:'DÃ©placement et diagnostic (plombier + plÃ¢trier)',c:'reparation',q:1,u:'forfait',p:75,j:'Deux corps de mÃ©tier nÃ©cessaires'},
+    {d:'Protection chantier et bÃ¢chage complet',c:'reparation',q:1,u:'forfait',p:30,j:'BÃ¢ches sol, emballage mobilier'},
+    {d:'Coupure du circuit de chauffage et dÃ©pose radiateur endommagÃ©',c:'reparation',q:1,u:'h',p:80,j:'Main d\'Åuvre plombier'},
+    {d:'Ãvacuation et mise en dÃ©charge radiateur endommagÃ©',c:'reparation',q:1,u:'forfait',p:45,j:'Transport et dÃ©chetterie professionnelle'},
+    {d:'Rebouchage des trous de fixation et dÃ©gradations mur au plÃ¢tre',c:'reparation',q:2,u:'h',p:55,j:'Main d\'Åuvre plÃ¢trier, trous importants'},
+    {d:'Fourniture plÃ¢tre et enduit de lissage',c:'reparation',q:1,u:'forfait',p:22,j:'PlÃ¢tre prise rapide, enduit de finition Knauf'},
+    {d:'Fourniture radiateur acier (puissance adaptÃ©e Ã  la piÃ¨ce)',c:'remplacement',q:1,u:'piÃ¨ce',p:260,j:'Radiateur 1000W qualitÃ© standard, compatible installation existante'},
+    {d:'Pose et fixation murale du radiateur neuf',c:'reparation',q:1,u:'h',p:80,j:'Main d\'Åuvre plombier, fixation murale renforcÃ©e'},
+    {d:'Raccordement plomberie (vannes thermostatiques + robinets)',c:'reparation',q:1,u:'h',p:80,j:'Main d\'Åuvre raccordement circuit eau chaude'},
+    {d:'Fourniture robinets thermostatiques et visserie',c:'remplacement',q:1,u:'forfait',p:55,j:'Vannes thermostatiques qualitÃ©, visserie inox'},
+    {d:'Remise en peinture zone rÃ©parÃ©e (2 couches)',c:'reparation',q:1,u:'h',p:52,j:'Main d\'Åuvre peintre, peinture blanche mate'},
     {d:'Fourniture peinture et primaire d\'accrochage',c:'reparation',q:1,u:'forfait',p:20,j:'Peinture acrylique professionnelle'},
     {d:'Purge du circuit et mise en service',c:'reparation',q:0.5,u:'h',p:80,j:'Test de fonctionnement chauffage'},
-    {d:'Nettoyage chantier et évacuation déchets',c:'nettoyage',q:0.5,u:'h',p:40,j:'Remise en état logement'},
+    {d:'Nettoyage chantier et Ã©vacuation dÃ©chets',c:'nettoyage',q:0.5,u:'h',p:40,j:'Remise en Ã©tat logement'},
   ]},
-  pei_tringle: { label:'Tringle rideau arrachée', cat:'platrier', articles:[
-    {d:'Déplacement artisan',c:'reparation',q:1,u:'forfait',p:45,j:'Frais de déplacement'},
-    {d:'Protection sol et mobilier',c:'reparation',q:1,u:'forfait',p:15,j:'Bâchage zone de travail'},
-    {d:'Dépose de la tringle et des fixations arrachées',c:'reparation',q:0.5,u:'h',p:52,j:'Main d\'œuvre'},
-    {d:'Rebouchage trous de fixation au mur (plâtre + enduit)',c:'reparation',q:1,u:'h',p:52,j:'Main d\'œuvre plâtrier'},
-    {d:'Fourniture plâtre de rebouchage et enduit lissage',c:'reparation',q:1,u:'forfait',p:12,j:'Produits plâtrerie'},
-    {d:'Fourniture tringle rideau (selon dimensions existantes)',c:'remplacement',q:1,u:'pièce',p:45,j:'Tringle extensible ou fixe selon fenêtre'},
-    {d:'Repose tringle avec fixations renforcées (chevilles spéciales plâtre)',c:'reparation',q:0.5,u:'h',p:52,j:'Main d\'œuvre avec chevilles Molly ou similaires'},
-    {d:'Retouche peinture sur zone réparée',c:'reparation',q:0.5,u:'h',p:52,j:'Peinture de finition sur rebouchage'},
+  pei_tringle: { label:'Tringle rideau arrachÃ©e', cat:'platrier', articles:[
+    {d:'DÃ©placement artisan',c:'reparation',q:1,u:'forfait',p:45,j:'Frais de dÃ©placement'},
+    {d:'Protection sol et mobilier',c:'reparation',q:1,u:'forfait',p:15,j:'BÃ¢chage zone de travail'},
+    {d:'DÃ©pose de la tringle et des fixations arrachÃ©es',c:'reparation',q:0.5,u:'h',p:52,j:'Main d\'Åuvre'},
+    {d:'Rebouchage trous de fixation au mur (plÃ¢tre + enduit)',c:'reparation',q:1,u:'h',p:52,j:'Main d\'Åuvre plÃ¢trier'},
+    {d:'Fourniture plÃ¢tre de rebouchage et enduit lissage',c:'reparation',q:1,u:'forfait',p:12,j:'Produits plÃ¢trerie'},
+    {d:'Fourniture tringle rideau (selon dimensions existantes)',c:'remplacement',q:1,u:'piÃ¨ce',p:45,j:'Tringle extensible ou fixe selon fenÃªtre'},
+    {d:'Repose tringle avec fixations renforcÃ©es (chevilles spÃ©ciales plÃ¢tre)',c:'reparation',q:0.5,u:'h',p:52,j:'Main d\'Åuvre avec chevilles Molly ou similaires'},
+    {d:'Retouche peinture sur zone rÃ©parÃ©e',c:'reparation',q:0.5,u:'h',p:52,j:'Peinture de finition sur rebouchage'},
   ]},
   mob_table: { label:'Remplacement table', cat:'mobilier', articles:[
-    {d:'Dépose et évacuation table endommagée',c:'remplacement',q:1,u:'forfait',p:55,j:'Démontage et transport déchetterie'},
-    {d:'Fourniture table (dimensions selon logement)',c:'remplacement',q:1,u:'pièce',p:220,j:'Table mélaminé ou bois qualité hôtelière, dimensions équivalentes'},
-    {d:'Livraison et montage table',c:'remplacement',q:1,u:'h',p:55,j:'Main d\'œuvre livraison et assemblage'},
+    {d:'DÃ©pose et Ã©vacuation table endommagÃ©e',c:'remplacement',q:1,u:'forfait',p:55,j:'DÃ©montage et transport dÃ©chetterie'},
+    {d:'Fourniture table (dimensions selon logement)',c:'remplacement',q:1,u:'piÃ¨ce',p:220,j:'Table mÃ©laminÃ© ou bois qualitÃ© hÃ´teliÃ¨re, dimensions Ã©quivalentes'},
+    {d:'Livraison et montage table',c:'remplacement',q:1,u:'h',p:55,j:'Main d\'Åuvre livraison et assemblage'},
   ]},
   mob_chaises: { label:'Remplacement chaises', cat:'mobilier', articles:[
-    {d:'Évacuation chaises endommagées',c:'remplacement',q:1,u:'forfait',p:35,j:'Transport déchetterie'},
-    {d:'Fourniture chaises (par unité)',c:'remplacement',q:4,u:'pièce',p:75,j:'Chaise qualité professionnelle (hôtellerie), assise rembourrée'},
-    {d:'Livraison et mise en place',c:'remplacement',q:1,u:'forfait',p:35,j:'Main d\'œuvre livraison'},
+    {d:'Ãvacuation chaises endommagÃ©es',c:'remplacement',q:1,u:'forfait',p:35,j:'Transport dÃ©chetterie'},
+    {d:'Fourniture chaises (par unitÃ©)',c:'remplacement',q:4,u:'piÃ¨ce',p:75,j:'Chaise qualitÃ© professionnelle (hÃ´tellerie), assise rembourrÃ©e'},
+    {d:'Livraison et mise en place',c:'remplacement',q:1,u:'forfait',p:35,j:'Main d\'Åuvre livraison'},
   ]},
-  mob_canape: { label:'Remplacement canapé', cat:'mobilier', articles:[
-    {d:'Dépose, démontage et évacuation canapé endommagé',c:'remplacement',q:1,u:'forfait',p:80,j:'Démontage, transport et déchetterie (encombrant)'},
-    {d:'Fourniture canapé 3 places (tissu qualité hôtelière)',c:'remplacement',q:1,u:'pièce',p:580,j:'Canapé convertible ou fixe, tissu lavable, qualité hôtelière'},
-    {d:'Livraison, montage et mise en place',c:'remplacement',q:2,u:'h',p:55,j:'Main d\'œuvre livraison et installation'},
+  mob_canape: { label:'Remplacement canapÃ©', cat:'mobilier', articles:[
+    {d:'DÃ©pose, dÃ©montage et Ã©vacuation canapÃ© endommagÃ©',c:'remplacement',q:1,u:'forfait',p:80,j:'DÃ©montage, transport et dÃ©chetterie (encombrant)'},
+    {d:'Fourniture canapÃ© 3 places (tissu qualitÃ© hÃ´teliÃ¨re)',c:'remplacement',q:1,u:'piÃ¨ce',p:580,j:'CanapÃ© convertible ou fixe, tissu lavable, qualitÃ© hÃ´teliÃ¨re'},
+    {d:'Livraison, montage et mise en place',c:'remplacement',q:2,u:'h',p:55,j:'Main d\'Åuvre livraison et installation'},
   ]},
   mob_lit: { label:'Remplacement lit / sommier', cat:'mobilier', articles:[
-    {d:'Dépose et évacuation lit et sommier endommagés',c:'remplacement',q:1,u:'forfait',p:70,j:'Démontage, transport déchetterie (encombrant)'},
-    {d:'Fourniture cadre de lit (140x190 ou 160x200)',c:'remplacement',q:1,u:'pièce',p:280,j:'Structure bois/métal qualité hôtelière, solide'},
-    {d:'Fourniture sommier à lattes (adapté au cadre)',c:'remplacement',q:1,u:'pièce',p:150,j:'Sommier lattes bois, adaptable'},
-    {d:'Livraison, montage et mise en place',c:'remplacement',q:2,u:'h',p:55,j:'Main d\'œuvre assemblage'},
+    {d:'DÃ©pose et Ã©vacuation lit et sommier endommagÃ©s',c:'remplacement',q:1,u:'forfait',p:70,j:'DÃ©montage, transport dÃ©chetterie (encombrant)'},
+    {d:'Fourniture cadre de lit (140x190 ou 160x200)',c:'remplacement',q:1,u:'piÃ¨ce',p:280,j:'Structure bois/mÃ©tal qualitÃ© hÃ´teliÃ¨re, solide'},
+    {d:'Fourniture sommier Ã  lattes (adaptÃ© au cadre)',c:'remplacement',q:1,u:'piÃ¨ce',p:150,j:'Sommier lattes bois, adaptable'},
+    {d:'Livraison, montage et mise en place',c:'remplacement',q:2,u:'h',p:55,j:'Main d\'Åuvre assemblage'},
   ]},
   mob_porte_cuisine: { label:'Porte de cuisine', cat:'mobilier', articles:[
-    {d:'Dépose porte de meuble cuisine endommagée',c:'remplacement',q:0.5,u:'h',p:50,j:'Main d\'œuvre dépose et mesures'},
-    {d:'Fourniture porte de meuble cuisine (selon dimensions et finition)',c:'remplacement',q:1,u:'pièce',p:85,j:'Porte sur mesure ou standard, finition identique à l\'existant'},
-    {d:'Fourniture charnières et visserie',c:'remplacement',q:1,u:'forfait',p:12,j:'Charnières réglables 3D qualité'},
-    {d:'Pose et réglage de la porte (alignement, débattement)',c:'replacement',q:0.5,u:'h',p:50,j:'Main d\'œuvre pose et ajustement'},
+    {d:'DÃ©pose porte de meuble cuisine endommagÃ©e',c:'remplacement',q:0.5,u:'h',p:50,j:'Main d\'Åuvre dÃ©pose et mesures'},
+    {d:'Fourniture porte de meuble cuisine (selon dimensions et finition)',c:'remplacement',q:1,u:'piÃ¨ce',p:85,j:'Porte sur mesure ou standard, finition identique Ã  l\'existant'},
+    {d:'Fourniture charniÃ¨res et visserie',c:'remplacement',q:1,u:'forfait',p:12,j:'CharniÃ¨res rÃ©glables 3D qualitÃ©'},
+    {d:'Pose et rÃ©glage de la porte (alignement, dÃ©battement)',c:'replacement',q:0.5,u:'h',p:50,j:'Main d\'Åuvre pose et ajustement'},
   ]},
   mob_armoire: { label:'Remplacement armoire', cat:'mobilier', articles:[
-    {d:'Vidage, démontage et évacuation armoire endommagée',c:'remplacement',q:2,u:'h',p:50,j:'Main d\'œuvre démontage et transport'},
-    {d:'Fourniture armoire (selon dimensions logement)',c:'remplacement',q:1,u:'pièce',p:420,j:'Armoire 2 ou 3 portes, penderie + étagères, qualité hôtelière'},
-    {d:'Livraison, montage et fixation murale',c:'remplacement',q:2,u:'h',p:55,j:'Main d\'œuvre assemblage et sécurisation anti-basculement'},
+    {d:'Vidage, dÃ©montage et Ã©vacuation armoire endommagÃ©e',c:'remplacement',q:2,u:'h',p:50,j:'Main d\'Åuvre dÃ©montage et transport'},
+    {d:'Fourniture armoire (selon dimensions logement)',c:'remplacement',q:1,u:'piÃ¨ce',p:420,j:'Armoire 2 ou 3 portes, penderie + Ã©tagÃ¨res, qualitÃ© hÃ´teliÃ¨re'},
+    {d:'Livraison, montage et fixation murale',c:'remplacement',q:2,u:'h',p:55,j:'Main d\'Åuvre assemblage et sÃ©curisation anti-basculement'},
   ]},
   mob_commode: { label:'Commode / tiroir', cat:'mobilier', articles:[
-    {d:'Dépose et évacuation commode endommagée',c:'remplacement',q:1,u:'forfait',p:45,j:'Transport déchetterie'},
-    {d:'Fourniture commode (5 tiroirs, qualité standard)',c:'remplacement',q:1,u:'pièce',p:195,j:'Commode bois mélaminé, qualité hôtelière'},
-    {d:'Livraison, montage et mise en place',c:'remplacement',q:1.5,u:'h',p:50,j:'Main d\'œuvre assemblage'},
+    {d:'DÃ©pose et Ã©vacuation commode endommagÃ©e',c:'remplacement',q:1,u:'forfait',p:45,j:'Transport dÃ©chetterie'},
+    {d:'Fourniture commode (5 tiroirs, qualitÃ© standard)',c:'remplacement',q:1,u:'piÃ¨ce',p:195,j:'Commode bois mÃ©laminÃ©, qualitÃ© hÃ´teliÃ¨re'},
+    {d:'Livraison, montage et mise en place',c:'remplacement',q:1.5,u:'h',p:50,j:'Main d\'Åuvre assemblage'},
   ]},
   des_cafards: { label:'Traitement cafards', cat:'desinsectisation', articles:[
-    {d:'Déplacement et inspection complète du logement (recherche nids)',c:'reparation',q:1,u:'forfait',p:75,j:'Diagnostic par technicien certifié 3D'},
-    {d:'Traitement par gel appât (points stratégiques: cuisine, salle de bain)',c:'reparation',q:1,u:'forfait',p:135,j:'Gel insecticide professionnel à base d\'imidaclopride — zones d\'activité'},
-    {d:'Traitement complémentaire par insecticide résiduel (spray)',c:'reparation',q:1,u:'forfait',p:80,j:'Insecticide longue durée sur plinthes, recoins, canalisations'},
-    {d:'Fourniture et pose pièges de contrôle post-traitement',c:'reparation',q:6,u:'pièce',p:8,j:'Pièges à phéromones pour suivi d\'efficacité'},
-    {d:'Rapport d\'intervention et préconisations',c:'reparation',q:1,u:'document',p:35,j:'Document officiel certifié technicien'},
-    {d:'Visite de contrôle (J+30)',c:'reparation',q:1,u:'visite',p:65,j:'Vérification efficacité traitement'},
+    {d:'DÃ©placement et inspection complÃ¨te du logement (recherche nids)',c:'reparation',q:1,u:'forfait',p:75,j:'Diagnostic par technicien certifiÃ© 3D'},
+    {d:'Traitement par gel appÃ¢t (points stratÃ©giques: cuisine, salle de bain)',c:'reparation',q:1,u:'forfait',p:135,j:'Gel insecticide professionnel Ã  base d\'imidaclopride â zones d\'activitÃ©'},
+    {d:'Traitement complÃ©mentaire par insecticide rÃ©siduel (spray)',c:'reparation',q:1,u:'forfait',p:80,j:'Insecticide longue durÃ©e sur plinthes, recoins, canalisations'},
+    {d:'Fourniture et pose piÃ¨ges de contrÃ´le post-traitement',c:'reparation',q:6,u:'piÃ¨ce',p:8,j:'PiÃ¨ges Ã  phÃ©romones pour suivi d\'efficacitÃ©'},
+    {d:'Rapport d\'intervention et prÃ©conisations',c:'reparation',q:1,u:'document',p:35,j:'Document officiel certifiÃ© technicien'},
+    {d:'Visite de contrÃ´le (J+30)',c:'reparation',q:1,u:'visite',p:65,j:'VÃ©rification efficacitÃ© traitement'},
   ]},
   des_punaises: { label:'Traitement punaises de lit', cat:'desinsectisation', articles:[
-    {d:'Déplacement et inspection certifiée (canin ou visuelle)',c:'reparation',q:1,u:'forfait',p:90,j:'Détection punaises par technicien certifié'},
-    {d:'Traitement thermique ou chimique chambre principale',c:'reparation',q:1,u:'chambre',p:280,j:'Traitement professionnel: chaleur 56°C ou insecticide rémanent'},
-    {d:'Traitement chambre secondaire / canapé convertible',c:'reparation',q:1,u:'pièce',p:180,j:'Extension du traitement zones annexes'},
-    {d:'Démontage et traitement matelas, sommier, cadre de lit',c:'reparation',q:1,u:'forfait',p:95,j:'Traitement intégral literie — retrait housses, traitement recoins'},
-    {d:'Fourniture housses anti-punaises matelas et oreillers',c:'remplacement',q:2,u:'pièce',p:35,j:'Housses anti-acariens/punaises certifiées'},
-    {d:'Rapport d\'inspection officiel (requis assurance)',c:'reparation',q:1,u:'document',p:45,j:'Rapport certifié avec photos, obligatoire pour dossier'},
-    {d:'Visite de contrôle J+14 et J+30',c:'reparation',q:2,u:'visite',p:70,j:'Deux visites de suivi incluses dans le protocole'},
+    {d:'DÃ©placement et inspection certifiÃ©e (canin ou visuelle)',c:'reparation',q:1,u:'forfait',p:90,j:'DÃ©tection punaises par technicien certifiÃ©'},
+    {d:'Traitement thermique ou chimique chambre principale',c:'reparation',q:1,u:'chambre',p:280,j:'Traitement professionnel: chaleur 56Â°C ou insecticide rÃ©manent'},
+    {d:'Traitement chambre secondaire / canapÃ© convertible',c:'reparation',q:1,u:'piÃ¨ce',p:180,j:'Extension du traitement zones annexes'},
+    {d:'DÃ©montage et traitement matelas, sommier, cadre de lit',c:'reparation',q:1,u:'forfait',p:95,j:'Traitement intÃ©gral literie â retrait housses, traitement recoins'},
+    {d:'Fourniture housses anti-punaises matelas et oreillers',c:'remplacement',q:2,u:'piÃ¨ce',p:35,j:'Housses anti-acariens/punaises certifiÃ©es'},
+    {d:'Rapport d\'inspection officiel (requis assurance)',c:'reparation',q:1,u:'document',p:45,j:'Rapport certifiÃ© avec photos, obligatoire pour dossier'},
+    {d:'Visite de contrÃ´le J+14 et J+30',c:'reparation',q:2,u:'visite',p:70,j:'Deux visites de suivi incluses dans le protocole'},
   ]},
-  des_souris: { label:'Dératisation souris', cat:'desinsectisation', articles:[
-    {d:'Déplacement et inspection complète (recherche points d\'entrée)',c:'reparation',q:1,u:'forfait',p:70,j:'Diagnostic et identification des voies d\'accès'},
-    {d:'Pose de pièges et appâts rodenticides (premier passage)',c:'reparation',q:1,u:'forfait',p:120,j:'Pièges mécaniques + stations d\'appâtage sécurisées'},
-    {d:'Rebouchage des points d\'entrée (laine de verre, mousse expansive)',c:'reparation',q:1,u:'forfait',p:65,j:'Obturation des passages identifiés'},
-    {d:'Fourniture consommables (appâts, pièges, produits)',c:'reparation',q:1,u:'forfait',p:45,j:'Matériaux et appâts professionnels certifiés'},
-    {d:'Visite de contrôle et ramassage J+10',c:'reparation',q:1,u:'visite',p:65,j:'Vérification efficacité et renouvellement si nécessaire'},
-    {d:'Rapport d\'intervention',c:'reparation',q:1,u:'document',p:30,j:'Document de traçabilité'},
+  des_souris: { label:'DÃ©ratisation souris', cat:'desinsectisation', articles:[
+    {d:'DÃ©placement et inspection complÃ¨te (recherche points d\'entrÃ©e)',c:'reparation',q:1,u:'forfait',p:70,j:'Diagnostic et identification des voies d\'accÃ¨s'},
+    {d:'Pose de piÃ¨ges et appÃ¢ts rodenticides (premier passage)',c:'reparation',q:1,u:'forfait',p:120,j:'PiÃ¨ges mÃ©caniques + stations d\'appÃ¢tage sÃ©curisÃ©es'},
+    {d:'Rebouchage des points d\'entrÃ©e (laine de verre, mousse expansive)',c:'reparation',q:1,u:'forfait',p:65,j:'Obturation des passages identifiÃ©s'},
+    {d:'Fourniture consommables (appÃ¢ts, piÃ¨ges, produits)',c:'reparation',q:1,u:'forfait',p:45,j:'MatÃ©riaux et appÃ¢ts professionnels certifiÃ©s'},
+    {d:'Visite de contrÃ´le et ramassage J+10',c:'reparation',q:1,u:'visite',p:65,j:'VÃ©rification efficacitÃ© et renouvellement si nÃ©cessaire'},
+    {d:'Rapport d\'intervention',c:'reparation',q:1,u:'document',p:30,j:'Document de traÃ§abilitÃ©'},
   ]},
 };
 
@@ -848,7 +852,7 @@ function getTemplateArticles(key) {
     const maj = document.getElementById('w_majoration')?.value || 'standard';
     const coeff = { standard:1, soir:1.5, nuit:2, weekend:1.75 }[maj] || 1;
     if (coeff > 1) {
-      const label = { soir:'Majoration soirée 18h-22h (+50%)', nuit:'Majoration nuit 22h-8h (+100%)', weekend:'Majoration week-end/férié (+75%)' }[maj];
+      const label = { soir:'Majoration soirÃ©e 18h-22h (+50%)', nuit:'Majoration nuit 22h-8h (+100%)', weekend:'Majoration week-end/fÃ©riÃ© (+75%)' }[maj];
       arts = arts.map(a => a.categorie === 'reparation' ? {...a, designation: a.designation, prix_ht: Math.round(a.prix_ht * coeff * 100)/100} : a);
       arts.push({ designation: label, categorie:'reparation', quantite:1, unite:'forfait', prix_ht: 0, justification:'Majoration horaire contractuelle' });
     }
@@ -874,12 +878,12 @@ function toggleTemplate(id, key, checked) {
 
 function renderTemplates() {
   const cats = [
-    { key:'net', label:'🧹 Nettoyage', color:'#10b981', keys:['net_tabac','net_bio','net_matelas','net_canape','net_linge','net_general'] },
-    { key:'plo', label:'🔧 Plomberie', color:'#3b82f6', keys:['plo_debouchage','plo_cuvette','plo_pommeau','plo_colonne','plo_robinet'] },
-    { key:'ser', label:'🔑 Serrurerie', color:'#f59e0b', keys:['ser_cles','ser_serrure','ser_poignee_porte','ser_poignee_fen','ser_claquee'] },
-    { key:'pei', label:'🏗️ Plâtrier-Peintre', color:'#8b5cf6', keys:['pei_trou','pei_peinture','pei_radiateur','pei_tringle'] },
-    { key:'mob', label:'🛋️ Mobilier', color:'#ef4444', keys:['mob_table','mob_chaises','mob_canape','mob_lit','mob_porte_cuisine','mob_armoire','mob_commode'] },
-    { key:'des', label:'🪲 Désinsectisation', color:'#6366f1', keys:['des_cafards','des_punaises','des_souris'] },
+    { key:'net', label:'ð§¹ Nettoyage', color:'#10b981', keys:['net_tabac','net_bio','net_matelas','net_canape','net_linge','net_general'] },
+    { key:'plo', label:'ð§ Plomberie', color:'#3b82f6', keys:['plo_debouchage','plo_cuvette','plo_pommeau','plo_colonne','plo_robinet'] },
+    { key:'ser', label:'ð Serrurerie', color:'#f59e0b', keys:['ser_cles','ser_serrure','ser_poignee_porte','ser_poignee_fen','ser_claquee'] },
+    { key:'pei', label:'ðï¸ PlÃ¢trier-Peintre', color:'#8b5cf6', keys:['pei_trou','pei_peinture','pei_radiateur','pei_tringle'] },
+    { key:'mob', label:'ðï¸ Mobilier', color:'#ef4444', keys:['mob_table','mob_chaises','mob_canape','mob_lit','mob_porte_cuisine','mob_armoire','mob_commode'] },
+    { key:'des', label:'ðª² DÃ©sinsectisation', color:'#6366f1', keys:['des_cafards','des_punaises','des_souris'] },
   ];
   let html = '';
   cats.forEach(cat => {
@@ -895,17 +899,17 @@ function renderTemplates() {
           return `<div style="background:var(--card);border-radius:12px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow);transition:all .2s" onmouseover="this.style.borderColor='${cat.color}'" onmouseout="this.style.borderColor='var(--border)'">
             <div style="background:${cat.color}18;padding:14px 16px;border-bottom:1px solid ${cat.color}22;display:flex;align-items:center;justify-content:space-between">
               <div style="font-weight:700;font-size:14px">${t.label}</div>
-              <div style="font-size:12px;font-weight:700;color:${cat.color}">~${Math.round(total)} € HT</div>
+              <div style="font-size:12px;font-weight:700;color:${cat.color}">~${Math.round(total)} â¬ HT</div>
             </div>
             <div style="padding:12px 16px">
               ${t.articles.slice(0,4).map(a=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:12px">
                 <span style="color:var(--muted);flex:1;padding-right:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.d}</span>
-                <span style="font-weight:600;color:var(--text);white-space:nowrap">${a.q} ${a.u} × ${a.p}€</span>
+                <span style="font-weight:600;color:var(--text);white-space:nowrap">${a.q} ${a.u} Ã ${a.p}â¬</span>
               </div>`).join('')}
               ${t.articles.length>4?`<div style="font-size:11px;color:var(--subtle);padding-top:6px">+${t.articles.length-4} autre(s) ligne(s)...</div>`:''}
               <div style="margin-top:12px;display:flex;gap:8px">
                 <button class="btn btn-primary btn-sm" style="flex:1" onclick="openNewLitgeFromTemplate('${k}')">
-                  ⚡ Nouveau litige
+                  â¡ Nouveau litige
                 </button>
               </div>
             </div>
@@ -960,13 +964,13 @@ async function load() {
   try { const r = await fetch('/api/state'); const d = await r.json(); Object.assign(DB, d); } catch(e){}
 }
 function uid() { return Date.now().toString(36)+Math.random().toString(36).substr(2,5); }
-function fmt(n) { return Number(n||0).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €'; }
+function fmt(n) { return Number(n||0).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' â¬'; }
 
 // ===================== API STATUS =====================
 function updateAPIStatus() {
   const dot = document.getElementById('apiDot');
   const lbl = document.getElementById('apiLabel');
-  dot.className='api-dot ok'; lbl.textContent='Claude IA connecté';
+  dot.className='api-dot ok'; lbl.textContent='Claude IA connectÃ©';
 }
 
 function saveAPIKey() {
@@ -978,7 +982,7 @@ function saveAPIKey() {
   DB.config.email = document.getElementById('ownerEmailInput').value.trim();
   DB.config.iban = document.getElementById('ownerIbanInput').value.trim();
   save(); updateAPIStatus(); closeModal('modalAPIKey');
-  toast('Configuration enregistrée', 'ok');
+  toast('Configuration enregistrÃ©e', 'ok');
 }
 
 // ===================== NAVIGATION =====================
@@ -987,8 +991,8 @@ function nav(v) {
   currentNav = v;
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('nav-'+v)?.classList.add('active');
-  const titles = { dashboard:'Tableau de bord', litiges:'Litiges', properties:'Mes biens', templates:'Templates dégâts', settings:'Configuration' };
-  const subs = { dashboard:'Vue d\'ensemble de vos litiges actifs', litiges:'Tous vos litiges par statut', properties:'Gérez vos biens en location', templates:'Bibliothèque de modèles de factures par type de dégât', settings:'API, société, préférences' };
+  const titles = { dashboard:'Tableau de bord', litiges:'Litiges', properties:'Mes biens', templates:'Templates dÃ©gÃ¢ts', settings:'Configuration' };
+  const subs = { dashboard:'Vue d\'ensemble de vos litiges actifs', litiges:'Tous vos litiges par statut', properties:'GÃ©rez vos biens en location', templates:'BibliothÃ¨que de modÃ¨les de factures par type de dÃ©gÃ¢t', settings:'API, sociÃ©tÃ©, prÃ©fÃ©rences' };
   document.getElementById('topbarTitle').textContent = titles[v]||v;
   document.getElementById('topbarSub').textContent = subs[v]||'';
   updateBadge();
@@ -1016,8 +1020,8 @@ function renderDashboard() {
   const statuses = [
     { key:'new', label:'Nouveau', color:'#6366f1', dot:'#818cf8' },
     { key:'pending', label:'En cours', color:'#f59e0b', dot:'#fbbf24' },
-    { key:'sent', label:'Envoyé', color:'#8b5cf6', dot:'#a78bfa' },
-    { key:'resolved', label:'Résolu', color:'#10b981', dot:'#34d399' },
+    { key:'sent', label:'EnvoyÃ©', color:'#8b5cf6', dot:'#a78bfa' },
+    { key:'resolved', label:'RÃ©solu', color:'#10b981', dot:'#34d399' },
   ];
 
   document.getElementById('content').innerHTML = `
@@ -1028,19 +1032,19 @@ function renderDashboard() {
         <div class="stat-sub">${all.length} au total</div>
       </div>
       <div class="stat s-orange">
-        <div class="stat-label">Réclamé TTC</div>
-        <div class="stat-val">${totalTTC>=1000?(totalTTC/1000).toFixed(1)+'k':Math.round(totalTTC)} €</div>
+        <div class="stat-label">RÃ©clamÃ© TTC</div>
+        <div class="stat-val">${totalTTC>=1000?(totalTTC/1000).toFixed(1)+'k':Math.round(totalTTC)} â¬</div>
         <div class="stat-sub">${fmt(totalHT)} HT</div>
       </div>
       <div class="stat s-green">
-        <div class="stat-label">Encaissé</div>
-        <div class="stat-val">${encaisse>=1000?(encaisse/1000).toFixed(1)+'k':Math.round(encaisse)} €</div>
-        <div class="stat-sub">${resolved.length} litige(s) résolu(s)</div>
+        <div class="stat-label">EncaissÃ©</div>
+        <div class="stat-val">${encaisse>=1000?(encaisse/1000).toFixed(1)+'k':Math.round(encaisse)} â¬</div>
+        <div class="stat-sub">${resolved.length} litige(s) rÃ©solu(s)</div>
       </div>
       <div class="stat s-red">
-        <div class="stat-label">Taux succès</div>
+        <div class="stat-label">Taux succÃ¨s</div>
         <div class="stat-val">${all.length?Math.round(resolved.length/all.length*100):0}%</div>
-        <div class="stat-sub">résolution favorable</div>
+        <div class="stat-sub">rÃ©solution favorable</div>
       </div>
     </div>
     <div class="pipeline">
@@ -1072,12 +1076,12 @@ function litCardHTML(l) {
     <button class="litige-card-del" onclick="event.stopPropagation();deleteLitige('${l.id}')" title="Supprimer">&times;</button>
     <button class="litige-card-merge" onclick="event.stopPropagation();startMerge('${l.id}')" title="Fusionner avec un autre">&#8644;</button>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-      <span class="litige-card-platform ${platClass}">${l.constat_date ? new Date(l.constat_date).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '—'}</span>
+      <span class="litige-card-platform ${platClass}">${l.constat_date ? new Date(l.constat_date).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'2-digit'}) : 'â'}</span>
     </div>
-    <div class="litige-card-guest">📍 ${prop?.name||(l.logement?l.logement:'Bien inconnu')}</div>
-    <div class="litige-card-sinistre">💣 ${(l.description||(l.resume?l.resume.split(' - ')[0]:'')||'').substring(0,55)||'—'}</div>
+    <div class="litige-card-guest">ð ${prop?.name||(l.logement?l.logement:'Bien inconnu')}</div>
+    <div class="litige-card-sinistre">ð£ ${(l.description||(l.resume?l.resume.split(' - ')[0]:'')||'').substring(0,55)||'â'}</div>
     <div class="litige-card-amount">${fmt(l.total_ttc)}</div>
-    <div class="litige-card-date">${l.guest_name||'—'}</div>
+    <div class="litige-card-date">${l.guest_name||'â'}</div>
   </div>`;
 }
 
@@ -1086,9 +1090,9 @@ function renderLitiges() {
   const statusGroups = [
     { key:'new', label:'Nouveaux', badge:'badge-new' },
     { key:'pending', label:'En cours', badge:'badge-pending' },
-    { key:'sent', label:'Envoyés', badge:'badge-sent' },
-    { key:'resolved', label:'Résolus', badge:'badge-resolved' },
-    { key:'refused', label:'Refusés', badge:'badge-refused' },
+    { key:'sent', label:'EnvoyÃ©s', badge:'badge-sent' },
+    { key:'resolved', label:'RÃ©solus', badge:'badge-resolved' },
+    { key:'refused', label:'RefusÃ©s', badge:'badge-refused' },
   ];
   let html = '';
   statusGroups.forEach(sg => {
@@ -1105,24 +1109,24 @@ function renderLitiges() {
     </div>`;
   });
   if (!html) html = `<div style="text-align:center;padding:80px 0;color:var(--muted)">
-    <div style="font-size:48px;margin-bottom:16px">📋</div>
+    <div style="font-size:48px;margin-bottom:16px">ð</div>
     <div style="font-size:16px;font-weight:600;margin-bottom:6px">Aucun litige</div>
-    <div style="font-size:13px">Créez votre premier litige avec le bouton + Nouveau litige</div>
+    <div style="font-size:13px">CrÃ©ez votre premier litige avec le bouton + Nouveau litige</div>
   </div>`;
   document.getElementById('content').innerHTML = html;
 }
 
 function litRowHTML(l) {
   const prop = DB.properties.find(p=>p.id===l.property_id);
-  const statLabels = { new:'Nouveau', pending:'En cours', sent:'Envoyé', resolved:'Résolu', refused:'Refusé' };
+  const statLabels = { new:'Nouveau', pending:'En cours', sent:'EnvoyÃ©', resolved:'RÃ©solu', refused:'RefusÃ©' };
   const statBadges = { new:'badge-new', pending:'badge-pending', sent:'badge-sent', resolved:'badge-resolved', refused:'badge-refused' };
   return `<div style="display:grid;grid-template-columns:48px 1fr 160px 120px 100px 90px;align-items:center;gap:16px;padding:14px 18px;background:var(--card);border-radius:10px;border:1px solid var(--border);cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'" onclick="viewLitige('${l.id}')">
     <div style="width:42px;height:42px;border-radius:8px;overflow:hidden;background:var(--bg);flex-shrink:0">
-      ${l.photos&&l.photos[0]?`<img src="${l.photos[0]}" style="width:100%;height:100%;object-fit:cover">`:'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px">📸</div>'}
+      ${l.photos&&l.photos[0]?`<img src="${l.photos[0]}" style="width:100%;height:100%;object-fit:cover">`:'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px">ð¸</div>'}
     </div>
     <div>
       <div style="font-weight:600;font-size:14px">${l.guest_name}</div>
-      <div style="font-size:12px;color:var(--muted)">${prop?.name||''} · Réf: ${l.booking_ref||'—'}</div>
+      <div style="font-size:12px;color:var(--muted)">${prop?.name||''} Â· RÃ©f: ${l.booking_ref||'â'}</div>
     </div>
     <div style="font-size:12px;color:var(--muted)">${l.constat_date?new Date(l.constat_date).toLocaleDateString('fr-FR'):''}</div>
     <div><span class="badge ${statBadges[l.status||'new']}">${statLabels[l.status||'new']}</span></div>
@@ -1146,13 +1150,13 @@ function renderProperties() {
     </div>
     <div class="props-grid">${DB.properties.map(p => `
       <div class="prop-card">
-        <div class="prop-img">${p.photo?`<img src="${p.photo}">`:'🏠'}</div>
+        <div class="prop-img">${p.photo?`<img src="${p.photo}">`:'ð '}</div>
         <div class="prop-body">
           <div class="prop-name">${p.name}</div>
-          <div class="prop-address">📍 ${p.address||'Adresse non renseignée'}</div>
+          <div class="prop-address">ð ${p.address||'Adresse non renseignÃ©e'}</div>
           <div class="prop-stats">
             <span><strong>${DB.litiges.filter(l=>l.property_id===p.id).length}</strong> litiges</span>
-            <span><strong>${p.caution||0} €</strong> caution</span>
+            <span><strong>${p.caution||0} â¬</strong> caution</span>
             <span>${p.platform}</span>
           </div>
           <div style="display:flex;gap:8px;margin-top:12px">
@@ -1162,7 +1166,7 @@ function renderProperties() {
       </div>`).join('')}
       <div style="background:var(--card);border-radius:var(--radius-lg);border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;min-height:200px;cursor:pointer;transition:border-color .2s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'" onclick="openModal('modalNewProp')">
         <div style="text-align:center;color:var(--muted)">
-          <div style="font-size:28px;margin-bottom:8px">➕</div>
+          <div style="font-size:28px;margin-bottom:8px">â</div>
           <div style="font-size:13px;font-weight:600">Ajouter un bien</div>
         </div>
       </div>
@@ -1175,22 +1179,22 @@ function renderSettings() {
   document.getElementById('content').innerHTML = `
     <div style="max-width:560px">
       <div style="margin-bottom:28px">
-        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:16px">IA — Claude API</div>
+        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:16px">IA â Claude API</div>
         <div style="background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:var(--radius-lg);padding:16px 20px;border:1px solid var(--border);color:white">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-            <span style="font-size:18px">✅</span>
-            <span style="font-weight:700;font-size:14px">Clé API gérée côté serveur (Render)</span>
+            <span style="font-size:18px">â</span>
+            <span style="font-weight:700;font-size:14px">ClÃ© API gÃ©rÃ©e cÃ´tÃ© serveur (Render)</span>
           </div>
-          <div style="font-size:12.5px;color:rgba(255,255,255,.65);line-height:1.6">La clé API Anthropic est stockée en variable d'environnement sur Render.<br>Elle n'est jamais exposée dans le navigateur.</div>
+          <div style="font-size:12.5px;color:rgba(255,255,255,.65);line-height:1.6">La clÃ© API Anthropic est stockÃ©e en variable d'environnement sur Render.<br>Elle n'est jamais exposÃ©e dans le navigateur.</div>
         </div>
       </div>
       <div>
-        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:16px">Votre identité (apparaît sur les PDFs)</div>
+        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:16px">Votre identitÃ© (apparaÃ®t sur les PDFs)</div>
         <div style="background:var(--card);border-radius:var(--radius-lg);padding:20px;border:1px solid var(--border)">
-          <div class="fg"><label>Nom / Société</label><input type="text" id="s_owner" value="${c.ownerName||''}"></div>
+          <div class="fg"><label>Nom / SociÃ©tÃ©</label><input type="text" id="s_owner" value="${c.ownerName||''}"></div>
           <div class="row2">
             <div class="fg"><label>SIRET</label><input type="text" id="s_siret" value="${c.siret||''}"></div>
-            <div class="fg"><label>Téléphone</label><input type="text" id="s_phone" value="${c.phone||''}"></div>
+            <div class="fg"><label>TÃ©lÃ©phone</label><input type="text" id="s_phone" value="${c.phone||''}"></div>
           </div>
           <div class="fg"><label>Adresse</label><input type="text" id="s_address" value="${c.address||''}"></div>
           <div class="row2">
@@ -1213,7 +1217,7 @@ function saveSettings() {
   DB.config.address = document.getElementById('s_address').value.trim();
   DB.config.email = document.getElementById('s_email').value.trim();
   DB.config.iban = document.getElementById('s_iban').value.trim();
-  save(); updateAPIStatus(); toast('Paramètres enregistrés', 'ok');
+  save(); updateAPIStatus(); toast('ParamÃ¨tres enregistrÃ©s', 'ok');
 }
 
 // ===================== PROPERTY MGMT =====================
@@ -1235,7 +1239,7 @@ function saveProp() {
   const imgEl = document.getElementById('propPhotoPreview');
   DB.properties.push({ id:uid(), name, address:document.getElementById('p_address').value.trim(), type:document.getElementById('p_type').value, platform:document.getElementById('p_platform').value, caution:parseFloat(document.getElementById('p_caution').value)||300, photo:imgEl.style.display!=='none'?imgEl.src:null });
   save(); renderPropertySelect(); closeModal('modalNewProp');
-  toast('Bien créé !', 'ok'); nav('properties');
+  toast('Bien crÃ©Ã© !', 'ok'); nav('properties');
 }
 function deleteProp(id) {
   if (!confirm('Supprimer ce bien ?')) return;
@@ -1258,13 +1262,13 @@ function openNewLitige() {
 }
 
 function renderWizSteps() {
-  const labels = ['Infos voyage', 'Dégâts & IA', 'Génération'];
+  const labels = ['Infos voyage', 'DÃ©gÃ¢ts & IA', 'GÃ©nÃ©ration'];
   document.getElementById('stepsBar').innerHTML = labels.map((l,i) => {
     const n = i+1;
     const cls = n<wiz.step?'done':n===wiz.step?'active':'idle';
     return `${i>0?`<div class="step-line ${n<=wiz.step?'done':''}"></div>`:''}
     <div class="step-item ${cls}">
-      <div class="step-num">${n<wiz.step?'✓':n}</div>
+      <div class="step-num">${n<wiz.step?'â':n}</div>
       <span class="step-lbl">${l}</span>
     </div>`;
   }).join('');
@@ -1279,7 +1283,7 @@ function renderWizSteps() {
       wiz.articles = getTemplateArticles(tk);
       renderArticles();
       document.getElementById('articlesSection').classList.remove('hidden');
-      document.getElementById('aiStatus').textContent = `✅ Template "${TL[tk].label}" — ${wiz.articles.length} articles chargés. Ajoutez vos photos et cliquez Analyser pour que l'IA les affine.`;
+      document.getElementById('aiStatus').textContent = `â Template "${TL[tk].label}" â ${wiz.articles.length} articles chargÃ©s. Ajoutez vos photos et cliquez Analyser pour que l'IA les affine.`;
     } else if (!tk) {
       document.getElementById('aiStatus').textContent = 'Ajoutez vos photos et lancez l\'analyse IA';
     }
@@ -1292,7 +1296,7 @@ function wizNext() {
     if (!document.getElementById('w_guest').value.trim()) { toast('Nom du voyageur requis', 'err'); return; }
     if (!document.getElementById('w_description').value.trim()) { toast('Description requise', 'err'); return; }
   }
-  if (wiz.step===2 && !wiz.articles.length) { toast('Sélectionnez un template ou lancez l\'analyse IA', 'err'); return; }
+  if (wiz.step===2 && !wiz.articles.length) { toast('SÃ©lectionnez un template ou lancez l\'analyse IA', 'err'); return; }
   wiz.step++; renderWizSteps();
 }
 
@@ -1309,7 +1313,7 @@ function renderPhotoGrid() {
   document.getElementById('photoGrid').innerHTML = wiz.photos.map((p,i) => `
     <div class="photo-item">
       <img src="${p}" alt="Photo ${i+1}">
-      <button class="rm" onclick="wiz.photos.splice(${i},1);renderPhotoGrid()">×</button>
+      <button class="rm" onclick="wiz.photos.splice(${i},1);renderPhotoGrid()">Ã</button>
     </div>`).join('');
 }
 
@@ -1331,26 +1335,26 @@ async function runAIAnalysis() {
   const templateArts = getTemplateArticles(templateKey);
   const templateName = templateKey && TL[templateKey] ? TL[templateKey].label : '';
   const templateContext = templateArts.length > 0
-    ? `\n\nTEMPLATE SÉLECTIONNÉ: "${templateName}"\nBase d'articles à enrichir selon les photos:\n${templateArts.map(a=>`- ${a.designation} (${a.quantite} ${a.unite} × ${a.prix_ht}€)`).join('\n')}`
+    ? `\n\nTEMPLATE SÃLECTIONNÃ: "${templateName}"\nBase d'articles Ã  enrichir selon les photos:\n${templateArts.map(a=>`- ${a.designation} (${a.quantite} ${a.unite} Ã ${a.prix_ht}â¬)`).join('\n')}`
     : '';
 
-  const systemPrompt = `Tu es un expert en devis de réparation immobilière et gestion de litiges Airbnb/Booking.com en France. Tu génères des devis ULTRA-DÉTAILLÉS niveau dossier assurance.
+  const systemPrompt = `Tu es un expert en devis de rÃ©paration immobiliÃ¨re et gestion de litiges Airbnb/Booking.com en France. Tu gÃ©nÃ¨res des devis ULTRA-DÃTAILLÃS niveau dossier assurance.
 
-RÈGLES ABSOLUES:
-1. SÉPARER main d'œuvre et fournitures en lignes DISTINCTES
-2. JUSTIFIER chaque ligne avec explication technique précise
+RÃGLES ABSOLUES:
+1. SÃPARER main d'Åuvre et fournitures en lignes DISTINCTES
+2. JUSTIFIER chaque ligne avec explication technique prÃ©cise
 3. Citer normes/certifications (NF, A2P, etc.) quand pertinent
-4. Unités professionnelles: h, m², pièce, forfait, kg, ml
-5. Prix marché français 2025: MO spécialisé 45-90€/h selon métier
-6. TOUJOURS inclure déplacement/diagnostic, protection chantier, nettoyage fin
-7. Être EXHAUSTIF: chaque dommage visible = plusieurs lignes séparées${templateContext}
+4. UnitÃ©s professionnelles: h, mÂ², piÃ¨ce, forfait, kg, ml
+5. Prix marchÃ© franÃ§ais 2025: MO spÃ©cialisÃ© 45-90â¬/h selon mÃ©tier
+6. TOUJOURS inclure dÃ©placement/diagnostic, protection chantier, nettoyage fin
+7. Ãtre EXHAUSTIF: chaque dommage visible = plusieurs lignes sÃ©parÃ©es${templateContext}
 
-Analyse les photos + description. Si template fourni, utilise-le comme base ET enrichis/ajuste selon les photos réelles.
+Analyse les photos + description. Si template fourni, utilise-le comme base ET enrichis/ajuste selon les photos rÃ©elles.
 
 JSON strict attendu:
-{"articles":[{"designation":"...","categorie":"nettoyage|reparation|remplacement|perte","quantite":0,"unite":"h|m²|pièce|forfait","prix_ht":0,"justification":"..."}],"resume_dommages":"2-3 phrases professionnelles","niveau_gravite":"leger|modere|grave|critique","lettre_litige":"~200 mots pour Airbnb/Booking"}
+{"articles":[{"designation":"...","categorie":"nettoyage|reparation|remplacement|perte","quantite":0,"unite":"h|mÂ²|piÃ¨ce|forfait","prix_ht":0,"justification":"..."}],"resume_dommages":"2-3 phrases professionnelles","niveau_gravite":"leger|modere|grave|critique","lettre_litige":"~200 mots pour Airbnb/Booking"}
 
-Réponds UNIQUEMENT avec le JSON brut sans markdown.`;
+RÃ©ponds UNIQUEMENT avec le JSON brut sans markdown.`;
 
   const userContent = [];
   // Add photos (max 5 to avoid token overflow)
@@ -1359,7 +1363,7 @@ Réponds UNIQUEMENT avec le JSON brut sans markdown.`;
     const b64 = p.replace(/^data:image\/\w+;base64,/,'');
     userContent.push({ type:'image', source:{ type:'base64', media_type:mt, data:b64 } });
   });
-  userContent.push({ type:'text', text:`Bien: ${prop?.name||'appartement'} (${prop?.type||'appartement'})\nPlateforme: ${document.getElementById('w_platform').value}\nVoyageur: ${document.getElementById('w_guest').value}\nDates: du ${document.getElementById('w_checkin').value} au ${document.getElementById('w_checkout').value}\n\nDescription des dégâts constatés:\n${desc}` });
+  userContent.push({ type:'text', text:`Bien: ${prop?.name||'appartement'} (${prop?.type||'appartement'})\nPlateforme: ${document.getElementById('w_platform').value}\nVoyageur: ${document.getElementById('w_guest').value}\nDates: du ${document.getElementById('w_checkin').value} au ${document.getElementById('w_checkout').value}\n\nDescription des dÃ©gÃ¢ts constatÃ©s:\n${desc}` });
 
   try {
     const res = await fetch('/api/analyze', {
@@ -1380,14 +1384,14 @@ Réponds UNIQUEMENT avec le JSON brut sans markdown.`;
     wiz.gravite = parsed.niveau_gravite || 'modere';
     wiz.lettre = parsed.lettre_litige || '';
 
-    document.getElementById('aiStatus').textContent = `✅ ${wiz.articles.length} article(s) identifié(s) — Gravité: ${wiz.gravite}`;
+    document.getElementById('aiStatus').textContent = `â ${wiz.articles.length} article(s) identifiÃ©(s) â GravitÃ©: ${wiz.gravite}`;
     document.getElementById('aiLoading').classList.add('hidden');
     renderArticles();
     document.getElementById('articlesSection').classList.remove('hidden');
-    document.getElementById('aiResume').innerHTML = `<strong>Résumé IA:</strong> ${wiz.resume}`;
-    toast(`Analyse terminée — ${wiz.articles.length} articles`, 'ok');
+    document.getElementById('aiResume').innerHTML = `<strong>RÃ©sumÃ© IA:</strong> ${wiz.resume}`;
+    toast(`Analyse terminÃ©e â ${wiz.articles.length} articles`, 'ok');
   } catch(e) {
-    document.getElementById('aiStatus').textContent = '❌ Erreur: ' + (e.message||e);
+    document.getElementById('aiStatus').textContent = 'â Erreur: ' + (e.message||e);
     document.getElementById('aiLoading').classList.add('hidden');
     toast('Erreur IA: ' + (e.message||'').substr(0,60), 'err');
   }
@@ -1408,9 +1412,9 @@ function buildArticleRow(a,i) {
   const catColors = { nettoyage:'cat-nettoyage', reparation:'cat-reparation', remplacement:'cat-remplacement', perte:'cat-perte' };
   tr.innerHTML = `
     <div style="padding:4px 4px 4px 8px">
-      <input type="text" value="${a.designation||''}" placeholder="Désignation" oninput="updateArticle(${i},'designation',this.value)">
+      <input type="text" value="${a.designation||''}" placeholder="DÃ©signation" oninput="updateArticle(${i},'designation',this.value)">
       <div style="padding:0 4px 6px;display:flex;align-items:center;gap:6px">
-        <span class="article-cat ${catColors[a.categorie]||'cat-reparation'}">${a.categorie||'réparation'}</span>
+        <span class="article-cat ${catColors[a.categorie]||'cat-reparation'}">${a.categorie||'rÃ©paration'}</span>
         <span style="font-size:11px;color:var(--subtle);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.justification||''}</span>
       </div>
     </div>
@@ -1418,7 +1422,7 @@ function buildArticleRow(a,i) {
     <div><input type="text" value="${a.unite||'forfait'}" oninput="updateArticle(${i},'unite',this.value)"></div>
     <div><input type="number" value="${a.prix_ht||0}" min="0" step="0.01" oninput="updateArticle(${i},'prix_ht',parseFloat(this.value)||0);calcTotals()"></div>
     <div class="art-total" id="artTot${i}">${fmt((a.quantite||1)*(a.prix_ht||0))}</div>
-    <button class="art-del" onclick="wiz.articles.splice(${i},1);renderArticles()">×</button>`;
+    <button class="art-del" onclick="wiz.articles.splice(${i},1);renderArticles()">Ã</button>`;
   return tr;
 }
 
@@ -1492,7 +1496,7 @@ function generateAll() {
   if (document.getElementById('gen_letter').checked && litige.lettre) showLetter(litige);
 
   closeModal('modalNewLitige');
-  toast(`Litige créé — ${litige.articles.length} articles — ${fmt(ttc)}`, 'ok');
+  toast(`Litige crÃ©Ã© â ${litige.articles.length} articles â ${fmt(ttc)}`, 'ok');
   updateBadge(); nav('dashboard');
 }
 
@@ -1519,7 +1523,7 @@ function buildInvoicePDF(l, num) {
   // Owner
   doc.setTextColor(255,255,255);
   doc.setFontSize(16); doc.setFont('helvetica','bold');
-  doc.text(c.ownerName||'Nom non configuré', M, 17);
+  doc.text(c.ownerName||'Nom non configurÃ©', M, 17);
   doc.setFontSize(8); doc.setFont('helvetica','normal');
   const ownerLine = [c.address, c.phone, c.email].filter(Boolean).join('  |  ');
   if (ownerLine) doc.text(ownerLine, M, 24);
@@ -1527,7 +1531,7 @@ function buildInvoicePDF(l, num) {
 
   // Platform badge top-right
   doc.setFontSize(9); doc.setFont('helvetica','bold');
-  doc.text(isAirbnb ? '🏠 AIRBNB' : '🔵 BOOKING.COM', W-M, 14, {align:'right'});
+  doc.text(isAirbnb ? 'ð  AIRBNB' : 'ðµ BOOKING.COM', W-M, 14, {align:'right'});
   doc.setFontSize(22); doc.setFont('helvetica','bold');
   doc.text('FACTURE', W-M, 28, {align:'right'});
   doc.setFontSize(11); doc.setFont('helvetica','normal');
@@ -1545,14 +1549,14 @@ function buildInvoicePDF(l, num) {
   doc.text(l.guest_name, M+4, 70);
   doc.setFont('helvetica','normal'); doc.setFontSize(9);
   if (l.guest_email) doc.text(l.guest_email, M+4, 77);
-  if (l.booking_ref) doc.text('Réf: '+l.booking_ref, M+4, 83);
-  const dateRange = [l.checkin&&'Entrée: '+new Date(l.checkin).toLocaleDateString('fr-FR'), l.checkout&&'Sortie: '+new Date(l.checkout).toLocaleDateString('fr-FR')].filter(Boolean).join('  ');
+  if (l.booking_ref) doc.text('RÃ©f: '+l.booking_ref, M+4, 83);
+  const dateRange = [l.checkin&&'EntrÃ©e: '+new Date(l.checkin).toLocaleDateString('fr-FR'), l.checkout&&'Sortie: '+new Date(l.checkout).toLocaleDateString('fr-FR')].filter(Boolean).join('  ');
   if (dateRange) doc.text(dateRange, M+4, 89);
 
   // Property box
   doc.setFillColor(248,250,252); doc.roundedRect(W-M-88,54,88,42,3,3,'F');
   doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(100,100,100);
-  doc.text('BIEN CONCERNÉ', W-M-84, 61);
+  doc.text('BIEN CONCERNÃ', W-M-84, 61);
   doc.setTextColor(20,20,20); doc.setFont('helvetica','bold'); doc.setFontSize(11);
   doc.text(prop?.name||'', W-M-84, 70);
   doc.setFont('helvetica','normal'); doc.setFontSize(9);
@@ -1560,13 +1564,13 @@ function buildInvoicePDF(l, num) {
   doc.text(addr, W-M-84, 77);
   doc.text('Constat: '+new Date(l.constat_date||l.created_at).toLocaleDateString('fr-FR'), W-M-84, 89);
 
-  // Gravité badge
+  // GravitÃ© badge
   const gravColors = { leger:[16,185,129], modere:[245,158,11], grave:[239,68,68], critique:[127,29,29] };
   const gc = gravColors[l.gravite||'modere'];
   doc.setFillColor(...gc);
   doc.roundedRect(W-M-88, 100, 88, 12, 2, 2, 'F');
   doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(9);
-  doc.text('Gravité des dommages: '+((l.gravite||'modéré').toUpperCase()), W-M-44, 108, {align:'center'});
+  doc.text('GravitÃ© des dommages: '+((l.gravite||'modÃ©rÃ©').toUpperCase()), W-M-44, 108, {align:'center'});
 
   // Resume
   doc.setTextColor(60,60,60); doc.setFont('helvetica','italic'); doc.setFontSize(8.5);
@@ -1580,13 +1584,13 @@ function buildInvoicePDF(l, num) {
     a.designation + (a.justification?'\n'+a.justification:''),
     a.categorie,
     String(a.quantite)+' '+a.unite,
-    a.prix_ht.toFixed(2)+' €',
-    ((a.quantite||0)*(a.prix_ht||0)).toFixed(2)+' €'
+    a.prix_ht.toFixed(2)+' â¬',
+    ((a.quantite||0)*(a.prix_ht||0)).toFixed(2)+' â¬'
   ]);
 
   doc.autoTable({
     startY: 116, margin:{left:M,right:M},
-    head:[['DÉSIGNATION / JUSTIFICATION','CATÉGORIE','QTÉ','PU HT','TOTAL HT']],
+    head:[['DÃSIGNATION / JUSTIFICATION','CATÃGORIE','QTÃ','PU HT','TOTAL HT']],
     body: tableData,
     headStyles:{fillColor:[...brandColor],textColor:255,fontSize:8.5,fontStyle:'bold'},
     bodyStyles:{fontSize:8,textColor:[30,30,30],valign:'top'},
@@ -1603,18 +1607,18 @@ function buildInvoicePDF(l, num) {
   doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.setTextColor(...brandColor);
   doc.text('TOTAL TTC:', W-M-75, fy+27);
   doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(30,30,30);
-  doc.text(l.total_ht.toFixed(2)+' €', W-M-2, fy+9, {align:'right'});
-  doc.text(l.total_tva.toFixed(2)+' €', W-M-2, fy+17, {align:'right'});
+  doc.text(l.total_ht.toFixed(2)+' â¬', W-M-2, fy+9, {align:'right'});
+  doc.text(l.total_tva.toFixed(2)+' â¬', W-M-2, fy+17, {align:'right'});
   doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(...brandColor);
-  doc.text(l.total_ttc.toFixed(2)+' €', W-M-2, fy+27, {align:'right'});
+  doc.text(l.total_ttc.toFixed(2)+' â¬', W-M-2, fy+27, {align:'right'});
 
   // Caution
   if (l.caution>0) {
     doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(60,60,60);
     const reste = Math.max(0, l.total_ttc - l.caution);
-    doc.text(`Caution disponible: -${l.caution.toFixed(2)} €`, M, fy+15);
+    doc.text(`Caution disponible: -${l.caution.toFixed(2)} â¬`, M, fy+15);
     doc.setFont('helvetica','bold'); doc.setTextColor(...brandColor);
-    doc.text(`Solde restant dû: ${reste.toFixed(2)} €`, M, fy+24);
+    doc.text(`Solde restant dÃ»: ${reste.toFixed(2)} â¬`, M, fy+24);
   }
 
   // IBAN
@@ -1624,7 +1628,7 @@ function buildInvoicePDF(l, num) {
   doc.setFillColor(...brandColor);
   doc.rect(0,285,W,12,'F');
   doc.setTextColor(255,255,255); doc.setFontSize(7.5); doc.setFont('helvetica','normal');
-  const footTxt = (c.ownerName||'') + (c.address?' — '+c.address:'') + (c.siret?' — SIRET '+c.siret:'');
+  const footTxt = (c.ownerName||'') + (c.address?' â '+c.address:'') + (c.siret?' â SIRET '+c.siret:'');
   doc.text(footTxt, W/2, 293, {align:'center'});
 
   doc.save(`Facture_${num||l.invoice_num||l.id}.pdf`);
@@ -1646,10 +1650,10 @@ function buildReportPDF(l, num) {
   doc.setTextColor(255,255,255); doc.setFontSize(18); doc.setFont('helvetica','bold');
   doc.text("RAPPORT DE DOMMAGES", W/2, 16, {align:'center'});
   doc.setFontSize(10); doc.setFont('helvetica','normal');
-  doc.text((prop?.name||'Bien') + '  ·  ' + l.guest_name + '  ·  ' + new Date(l.constat_date||l.created_at).toLocaleDateString('fr-FR'), W/2, 25, {align:'center'});
-  doc.text((c.ownerName||'') + (c.siret?' — SIRET '+c.siret:''), W/2, 32, {align:'center'});
+  doc.text((prop?.name||'Bien') + '  Â·  ' + l.guest_name + '  Â·  ' + new Date(l.constat_date||l.created_at).toLocaleDateString('fr-FR'), W/2, 25, {align:'center'});
+  doc.text((c.ownerName||'') + (c.siret?' â SIRET '+c.siret:''), W/2, 32, {align:'center'});
   doc.setFontSize(9); doc.setFont('helvetica','bold');
-  doc.text('GRAVITÉ: '+(l.gravite||'modéré').toUpperCase(), W/2, 40, {align:'center'});
+  doc.text('GRAVITÃ: '+(l.gravite||'modÃ©rÃ©').toUpperCase(), W/2, 40, {align:'center'});
 
   let y = 52;
 
@@ -1659,11 +1663,11 @@ function buildReportPDF(l, num) {
   doc.text('INFORMATIONS CONSTAT', M, y); doc.line(M,y+2,W-M,y+2); y+=8;
 
   const infoItems = [
-    ['Établi par:', c.ownerName||'—'], ['Bien:', prop?.name||'—'],
-    ['Adresse:', prop?.address||'—'], ['Plateforme:', l.platform],
-    ['Voyageur:', l.guest_name], ['Email:', l.guest_email||'—'],
-    ['Réf. réservation:', l.booking_ref||'—'],
-    ['Dates séjour:', (l.checkin?new Date(l.checkin).toLocaleDateString('fr-FR'):'—')+' → '+(l.checkout?new Date(l.checkout).toLocaleDateString('fr-FR'):'—')],
+    ['Ãtabli par:', c.ownerName||'â'], ['Bien:', prop?.name||'â'],
+    ['Adresse:', prop?.address||'â'], ['Plateforme:', l.platform],
+    ['Voyageur:', l.guest_name], ['Email:', l.guest_email||'â'],
+    ['RÃ©f. rÃ©servation:', l.booking_ref||'â'],
+    ['Dates sÃ©jour:', (l.checkin?new Date(l.checkin).toLocaleDateString('fr-FR'):'â')+' â '+(l.checkout?new Date(l.checkout).toLocaleDateString('fr-FR'):'â')],
     ['Date constat:', new Date(l.constat_date||l.created_at).toLocaleDateString('fr-FR')],
   ];
   doc.setTextColor(30,30,30); doc.setFont('helvetica','normal'); doc.setFontSize(8.5);
@@ -1687,7 +1691,7 @@ function buildReportPDF(l, num) {
   if (l.resume) {
     doc.setFillColor(240,240,255); doc.roundedRect(M,y,W-M*2,14,2,2,'F');
     doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(99,102,241);
-    doc.text('✨ Analyse IA:', M+4, y+5);
+    doc.text('â¨ Analyse IA:', M+4, y+5);
     doc.setFont('helvetica','normal'); doc.setTextColor(30,30,30);
     const aLines = doc.splitTextToSize(l.resume, W-M*2-28);
     doc.text(aLines, M+32, y+5);
@@ -1697,8 +1701,8 @@ function buildReportPDF(l, num) {
   // Articles table
   doc.autoTable({
     startY: y, margin:{left:M,right:M},
-    head:[['DÉSIGNATION','CATÉGORIE','QTÉ','PU HT','TOTAL HT']],
-    body: l.articles.map(a=>[a.designation+(a.justification?'\n('+a.justification+')':''), a.categorie, a.quantite+' '+a.unite, a.prix_ht.toFixed(2)+' €', ((a.quantite||0)*(a.prix_ht||0)).toFixed(2)+' €']),
+    head:[['DÃSIGNATION','CATÃGORIE','QTÃ','PU HT','TOTAL HT']],
+    body: l.articles.map(a=>[a.designation+(a.justification?'\n('+a.justification+')':''), a.categorie, a.quantite+' '+a.unite, a.prix_ht.toFixed(2)+' â¬', ((a.quantite||0)*(a.prix_ht||0)).toFixed(2)+' â¬']),
     headStyles:{fillColor:[...gc],textColor:255,fontSize:8,fontStyle:'bold'},
     bodyStyles:{fontSize:7.5,valign:'top'},
     alternateRowStyles:{fillColor:[250,250,250]},
@@ -1709,10 +1713,10 @@ function buildReportPDF(l, num) {
   // Total
   doc.setFillColor(250,250,250); doc.rect(W-M-70,y,70,22,'F');
   doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(80,80,80);
-  doc.text('Total HT:', W-M-66,y+6); doc.text(l.total_ht.toFixed(2)+' €',W-M-2,y+6,{align:'right'});
-  doc.text('TVA (20%):', W-M-66,y+12); doc.text(l.total_tva.toFixed(2)+' €',W-M-2,y+12,{align:'right'});
+  doc.text('Total HT:', W-M-66,y+6); doc.text(l.total_ht.toFixed(2)+' â¬',W-M-2,y+6,{align:'right'});
+  doc.text('TVA (20%):', W-M-66,y+12); doc.text(l.total_tva.toFixed(2)+' â¬',W-M-2,y+12,{align:'right'});
   doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(...gc);
-  doc.text('TOTAL TTC:', W-M-66,y+20); doc.text(l.total_ttc.toFixed(2)+' €',W-M-2,y+20,{align:'right'});
+  doc.text('TOTAL TTC:', W-M-66,y+20); doc.text(l.total_ttc.toFixed(2)+' â¬',W-M-2,y+20,{align:'right'});
   y += 26;
 
   // Photos
@@ -1744,9 +1748,9 @@ function buildReportPDF(l, num) {
   doc.setDrawColor(180,180,180);
   doc.rect(M,y,86,28); doc.rect(W-M-86,y,86,28);
   doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(100,100,100);
-  doc.text('Constaté par (propriétaire/gestionnaire)', M+4, y+5);
+  doc.text('ConstatÃ© par (propriÃ©taire/gestionnaire)', M+4, y+5);
   doc.text('Signature + date', M+4, y+10);
-  doc.text('Voyageur (si présent)', W-M-82, y+5);
+  doc.text('Voyageur (si prÃ©sent)', W-M-82, y+5);
   doc.text('Signature + date', W-M-82, y+10);
   if (c.ownerName) doc.text(c.ownerName, M+4, y+20);
 
@@ -1754,12 +1758,12 @@ function buildReportPDF(l, num) {
   doc.setFillColor(...gc);
   doc.rect(0,285,W,12,'F');
   doc.setTextColor(255,255,255); doc.setFontSize(7.5);
-  doc.text((c.ownerName||'')+(c.address?' — '+c.address:'')+(c.siret?' — SIRET '+c.siret:''), W/2, 293, {align:'center'});
+  doc.text((c.ownerName||'')+(c.address?' â '+c.address:'')+(c.siret?' â SIRET '+c.siret:''), W/2, 293, {align:'center'});
 
   doc.save(`Rapport_${num||l.invoice_num||l.id}.pdf`);
 }
 
-// ===================== PACK AIRBNB — DEVIS CONCURRENT =====================
+// ===================== PACK AIRBNB â DEVIS CONCURRENT =====================
 function buildDevisConcurrentPDF(l) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
@@ -1780,36 +1784,36 @@ function buildDevisConcurrentPDF(l) {
   doc.text(compName, M, 13);
   doc.setFont('helvetica','normal'); doc.setFontSize(8.5);
   doc.text(compAddr, M, 20);
-  doc.text('Tél: ' + compTel, M, 26);
+  doc.text('TÃ©l: ' + compTel, M, 26);
   doc.text('SIRET: ' + compSiret, M, 32);
 
   const num = 'DEV-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random()*900+100));
   const today = new Date();
   const validity = new Date(today); validity.setDate(validity.getDate() + 30);
   doc.setFontSize(9);
-  doc.text('N° ' + num, W-M, 24, {align:'right'});
+  doc.text('NÂ° ' + num, W-M, 24, {align:'right'});
   doc.text('Date: ' + today.toLocaleDateString('fr-FR'), W-M, 30, {align:'right'});
-  doc.text('Validité: ' + validity.toLocaleDateString('fr-FR'), W-M, 36, {align:'right'});
+  doc.text('ValiditÃ©: ' + validity.toLocaleDateString('fr-FR'), W-M, 36, {align:'right'});
 
   doc.setTextColor(30,30,30); doc.setFillColor(241,245,249);
   doc.rect(W-M-75, 42, 75, 28, 'F');
   doc.setFont('helvetica','bold'); doc.setFontSize(8.5);
-  doc.text('ADRESSÉ À:', W-M-72, 49);
+  doc.text('ADRESSÃ Ã:', W-M-72, 49);
   doc.setFont('helvetica','normal');
-  doc.text(c.ownerName || 'Propriétaire', W-M-72, 55);
+  doc.text(c.ownerName || 'PropriÃ©taire', W-M-72, 55);
   if (c.address) doc.text(c.address.substring(0,35), W-M-72, 61);
 
   doc.setFont('helvetica','bold'); doc.setFontSize(9.5);
-  doc.text('Objet: Estimation de travaux / remise en état logement', M, 54);
+  doc.text('Objet: Estimation de travaux / remise en Ã©tat logement', M, 54);
   doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(80,80,80);
-  doc.text('Suite à constat du ' + (l.constat_date ? new Date(l.constat_date).toLocaleDateString('fr-FR') : today.toLocaleDateString('fr-FR')), M, 61);
-  if (l.guest_name) doc.text('Référence sinistre: ' + l.guest_name, M, 66);
+  doc.text('Suite Ã  constat du ' + (l.constat_date ? new Date(l.constat_date).toLocaleDateString('fr-FR') : today.toLocaleDateString('fr-FR')), M, 61);
+  if (l.guest_name) doc.text('RÃ©fÃ©rence sinistre: ' + l.guest_name, M, 66);
 
   let y = 78;
   doc.setFillColor(...gc); doc.rect(M,y,W-2*M,7,'F');
   doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(8);
-  doc.text('Désignation', M+2, y+5);
-  doc.text('Qté', 138, y+5, {align:'right'});
+  doc.text('DÃ©signation', M+2, y+5);
+  doc.text('QtÃ©', 138, y+5, {align:'right'});
   doc.text('U', 150, y+5, {align:'right'});
   doc.text('P.U. HT', 168, y+5, {align:'right'});
   doc.text('Total HT', W-M-2, y+5, {align:'right'});
@@ -1827,8 +1831,8 @@ function buildDevisConcurrentPDF(l) {
     doc.text((a.designation||'').substring(0, 70), M+2, y+1);
     doc.text(String(a.quantite||1), 138, y+1, {align:'right'});
     doc.text(a.unite||'forfait', 150, y+1, {align:'right'});
-    doc.text(adjPrice.toFixed(2)+' €', 168, y+1, {align:'right'});
-    doc.text(lineTotal.toFixed(2)+' €', W-M-2, y+1, {align:'right'});
+    doc.text(adjPrice.toFixed(2)+' â¬', 168, y+1, {align:'right'});
+    doc.text(lineTotal.toFixed(2)+' â¬', W-M-2, y+1, {align:'right'});
     y += 7;
   });
 
@@ -1836,7 +1840,7 @@ function buildDevisConcurrentPDF(l) {
   const tva = Math.round(totalHT * 0.2 * 100) / 100;
   const ttc = Math.round((totalHT + tva) * 100) / 100;
 
-  [[241,245,249,'Total HT:',totalHT.toFixed(2)+' €',false],[241,245,249,'TVA 20%:',tva.toFixed(2)+' €',false],[...gc,'TOTAL TTC:',ttc.toFixed(2)+' €',true]].forEach(([r,g,b,label,val,bold]) => {
+  [[241,245,249,'Total HT:',totalHT.toFixed(2)+' â¬',false],[241,245,249,'TVA 20%:',tva.toFixed(2)+' â¬',false],[...gc,'TOTAL TTC:',ttc.toFixed(2)+' â¬',true]].forEach(([r,g,b,label,val,bold]) => {
     doc.setFillColor(r,g,b); doc.rect(W-M-65,y,65,bold?10:8,'F');
     doc.setTextColor(bold?255:80,bold?255:80,bold?255:80); doc.setFont('helvetica',bold?'bold':'normal'); doc.setFontSize(bold?10:8.5);
     doc.text(label, W-M-62, y+(bold?7:5.5));
@@ -1845,16 +1849,16 @@ function buildDevisConcurrentPDF(l) {
   });
 
   doc.setTextColor(100,100,100); doc.setFont('helvetica','italic'); doc.setFontSize(7.5);
-  doc.text('Devis valable 30 jours. TVA non récupérable. Paiement à réception de facture.', M, y);
-  doc.text("Garantie main d'œuvre: 1 an. Matériaux selon garantie fabricant.", M, y+5);
+  doc.text('Devis valable 30 jours. TVA non rÃ©cupÃ©rable. Paiement Ã  rÃ©ception de facture.', M, y);
+  doc.text("Garantie main d'Åuvre: 1 an. MatÃ©riaux selon garantie fabricant.", M, y+5);
 
   doc.setFillColor(...gc); doc.rect(0,285,W,12,'F');
   doc.setTextColor(255,255,255); doc.setFontSize(7.5); doc.setFont('helvetica','normal');
-  doc.text(compName + ' — ' + compAddr + ' — SIRET ' + compSiret, W/2, 293, {align:'center'});
+  doc.text(compName + ' â ' + compAddr + ' â SIRET ' + compSiret, W/2, 293, {align:'center'});
   doc.save('Devis_Concurrent_' + (l.invoice_num||l.id) + '.pdf');
 }
 
-// ===================== PACK AIRBNB — ESTIMATION MARCHÉ =====================
+// ===================== PACK AIRBNB â ESTIMATION MARCHÃ =====================
 function buildEstimationMarchePDF(l) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
@@ -1864,34 +1868,34 @@ function buildEstimationMarchePDF(l) {
   doc.setFillColor(...gc); doc.rect(0,0,W,38,'F');
   doc.setTextColor(255,255,255);
   doc.setFont('helvetica','bold'); doc.setFontSize(17);
-  doc.text('ESTIMATION PRIX DE MARCHÉ', W/2, 15, {align:'center'});
+  doc.text('ESTIMATION PRIX DE MARCHÃ', W/2, 15, {align:'center'});
   doc.setFontSize(9); doc.setFont('helvetica','normal');
-  doc.text('Tarifs pratiqués en France — Marché 2025', W/2, 23, {align:'center'});
-  doc.text("Document d'appui à la déclaration de litige", W/2, 30, {align:'center'});
+  doc.text('Tarifs pratiquÃ©s en France â MarchÃ© 2025', W/2, 23, {align:'center'});
+  doc.text("Document d'appui Ã  la dÃ©claration de litige", W/2, 30, {align:'center'});
 
   let y = 47;
   doc.setTextColor(30,30,30); doc.setFillColor(238,242,255);
   doc.rect(M, y, W-2*M, 18, 'F');
   doc.setFont('helvetica','bold'); doc.setFontSize(8.5);
-  doc.text('Bien concerné:', M+4, y+6); doc.text('Voyageur:', M+4, y+13);
-  doc.text('Date du constat:', W/2, y+6); doc.text('Montant réclamé:', W/2, y+13);
+  doc.text('Bien concernÃ©:', M+4, y+6); doc.text('Voyageur:', M+4, y+13);
+  doc.text('Date du constat:', W/2, y+6); doc.text('Montant rÃ©clamÃ©:', W/2, y+13);
   doc.setFont('helvetica','normal');
-  doc.text(DB.properties.find(p=>p.id===l.property_id)?.name||'—', M+34, y+6);
-  doc.text(l.guest_name||'—', M+20, y+13);
-  doc.text(l.constat_date ? new Date(l.constat_date).toLocaleDateString('fr-FR') : '—', W/2+30, y+6);
+  doc.text(DB.properties.find(p=>p.id===l.property_id)?.name||'â', M+34, y+6);
+  doc.text(l.guest_name||'â', M+20, y+13);
+  doc.text(l.constat_date ? new Date(l.constat_date).toLocaleDateString('fr-FR') : 'â', W/2+30, y+6);
   doc.text(fmt(l.total_ttc) + ' TTC', W/2+32, y+13);
   y += 26;
 
   doc.setFont('helvetica','italic'); doc.setFontSize(8); doc.setTextColor(80,80,80);
-  const intro = "Les tarifs ci-dessous sont issus des barèmes professionnels (CAPEB, Confédération Artisanale, fédérations de métiers) et des relevés de prix pratiqués sur le marché français en 2025. Ces prix s'entendent HT, hors frais de déplacement.";
+  const intro = "Les tarifs ci-dessous sont issus des barÃ¨mes professionnels (CAPEB, ConfÃ©dÃ©ration Artisanale, fÃ©dÃ©rations de mÃ©tiers) et des relevÃ©s de prix pratiquÃ©s sur le marchÃ© franÃ§ais en 2025. Ces prix s'entendent HT, hors frais de dÃ©placement.";
   doc.text(doc.splitTextToSize(intro, W-2*M), M, y); y += 12;
 
   doc.setFillColor(...gc); doc.rect(M,y,W-2*M,8,'F');
   doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(7.5);
   doc.text('Prestation', M+2, y+5.5);
-  doc.text('Prix facturé HT', 115, y+5.5, {align:'center'});
-  doc.text('Fourchette marché', 152, y+5.5, {align:'center'});
-  doc.text('Appréciation', W-M-2, y+5.5, {align:'right'});
+  doc.text('Prix facturÃ© HT', 115, y+5.5, {align:'center'});
+  doc.text('Fourchette marchÃ©', 152, y+5.5, {align:'center'});
+  doc.text('ApprÃ©ciation', W-M-2, y+5.5, {align:'right'});
   y += 10;
 
   doc.setTextColor(30,30,30); doc.setFont('helvetica','normal'); doc.setFontSize(7.5);
@@ -1902,10 +1906,10 @@ function buildEstimationMarchePDF(l) {
     const maxM = Math.round(lineTotal * 1.15 * 100) / 100;
     if (i % 2 === 0) { doc.setFillColor(248,249,255); doc.rect(M,y-2,W-2*M,8,'F'); }
     doc.text((a.designation||'').substring(0,60), M+2, y+2);
-    doc.text(lineTotal.toFixed(2)+' €', 115, y+2, {align:'center'});
-    doc.text(minM.toFixed(0)+' – '+maxM.toFixed(0)+' €', 152, y+2, {align:'center'});
+    doc.text(lineTotal.toFixed(2)+' â¬', 115, y+2, {align:'center'});
+    doc.text(minM.toFixed(0)+' â '+maxM.toFixed(0)+' â¬', 152, y+2, {align:'center'});
     doc.setTextColor(34,197,94); doc.setFont('helvetica','bold');
-    doc.text('✓ Conforme', W-M-2, y+2, {align:'right'});
+    doc.text('â Conforme', W-M-2, y+2, {align:'right'});
     doc.setTextColor(30,30,30); doc.setFont('helvetica','normal');
     y += 8;
   });
@@ -1913,28 +1917,28 @@ function buildEstimationMarchePDF(l) {
   y += 6;
   doc.setFillColor(...gc); doc.rect(M,y,W-2*M,10,'F');
   doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(9);
-  doc.text('Montant total TTC réclamé: ' + fmt(l.total_ttc) + ' — Conforme aux prix du marché français 2025', W/2, y+7, {align:'center'});
+  doc.text('Montant total TTC rÃ©clamÃ©: ' + fmt(l.total_ttc) + ' â Conforme aux prix du marchÃ© franÃ§ais 2025', W/2, y+7, {align:'center'});
   y += 18;
 
   doc.setTextColor(30,30,30); doc.setFont('helvetica','bold'); doc.setFontSize(9);
   doc.text('Conclusion', M, y); y += 6;
   doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(60,60,60);
-  const conc = "L'ensemble des prestations facturées dans ce dossier de litige sont cohérentes avec les tarifs pratiqués sur le marché français en 2025. Les prix correspondent aux interventions d'entreprises artisanales qualifiées (RGE, certifications professionnelles). Aucune prestation ne présente un écart anormal par rapport aux références de marché.";
+  const conc = "L'ensemble des prestations facturÃ©es dans ce dossier de litige sont cohÃ©rentes avec les tarifs pratiquÃ©s sur le marchÃ© franÃ§ais en 2025. Les prix correspondent aux interventions d'entreprises artisanales qualifiÃ©es (RGE, certifications professionnelles). Aucune prestation ne prÃ©sente un Ã©cart anormal par rapport aux rÃ©fÃ©rences de marchÃ©.";
   doc.text(doc.splitTextToSize(conc, W-2*M), M, y); y += 22;
 
   doc.setDrawColor(180,180,180); doc.rect(M, y, 80, 22);
   doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(100,100,100);
-  doc.text('Établi par (propriétaire/gestionnaire)', M+4, y+6);
+  doc.text('Ãtabli par (propriÃ©taire/gestionnaire)', M+4, y+6);
   doc.text('Signature:', M+4, y+13);
   if (DB.config.ownerName) doc.text(DB.config.ownerName, M+4, y+19);
 
   doc.setFillColor(...gc); doc.rect(0,285,W,12,'F');
   doc.setTextColor(255,255,255); doc.setFontSize(7.5); doc.setFont('helvetica','normal');
-  doc.text("Document établi sur la base des référentiels de prix professionnels français 2025", W/2, 293, {align:'center'});
+  doc.text("Document Ã©tabli sur la base des rÃ©fÃ©rentiels de prix professionnels franÃ§ais 2025", W/2, 293, {align:'center'});
   doc.save('Estimation_Marche_' + (l.invoice_num||l.id) + '.pdf');
 }
 
-// ===================== PACK AIRBNB — RELEVÉ BANCAIRE =====================
+// ===================== PACK AIRBNB â RELEVÃ BANCAIRE =====================
 function buildReleveBancairePDF(l) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
@@ -1945,17 +1949,17 @@ function buildReleveBancairePDF(l) {
   doc.setFillColor(...gc); doc.rect(0,0,W,30,'F');
   doc.setTextColor(255,255,255);
   doc.setFont('helvetica','bold'); doc.setFontSize(16);
-  doc.text('RELEVÉ DE COMPTE', W/2, 13, {align:'center'});
+  doc.text('RELEVÃ DE COMPTE', W/2, 13, {align:'center'});
   doc.setFontSize(9); doc.setFont('helvetica','normal');
-  doc.text('Extrait de compte courant — Document officiel', W/2, 22, {align:'center'});
+  doc.text('Extrait de compte courant â Document officiel', W/2, 22, {align:'center'});
 
   let y = 38;
   doc.setFillColor(239,246,255); doc.rect(M,y,W-2*M,22,'F');
   doc.setTextColor(30,30,30); doc.setFont('helvetica','bold'); doc.setFontSize(8.5);
-  doc.text('Titulaire:', M+4, y+7); doc.text('N° de compte:', M+4, y+14);
-  doc.text('Période:', W/2+4, y+7); doc.text('IBAN:', W/2+4, y+14);
+  doc.text('Titulaire:', M+4, y+7); doc.text('NÂ° de compte:', M+4, y+14);
+  doc.text('PÃ©riode:', W/2+4, y+7); doc.text('IBAN:', W/2+4, y+14);
   doc.setFont('helvetica','normal');
-  doc.text(c.ownerName||'Propriétaire', M+22, y+7);
+  doc.text(c.ownerName||'PropriÃ©taire', M+22, y+7);
   doc.text('**** **** ' + String(Math.floor(Math.random()*9000+1000)), M+34, y+14);
   const constatDate = l.constat_date ? new Date(l.constat_date) : new Date();
   const startP = new Date(constatDate); startP.setDate(1);
@@ -1967,17 +1971,17 @@ function buildReleveBancairePDF(l) {
   doc.setFillColor(...gc); doc.rect(M,y,W-2*M,8,'F');
   doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(8);
   doc.text('Date', M+2, y+5.5);
-  doc.text('Libellé opération', M+22, y+5.5);
-  doc.text('Débit', 158, y+5.5, {align:'right'});
-  doc.text('Crédit', 177, y+5.5, {align:'right'});
+  doc.text('LibellÃ© opÃ©ration', M+22, y+5.5);
+  doc.text('DÃ©bit', 158, y+5.5, {align:'right'});
+  doc.text('CrÃ©dit', 177, y+5.5, {align:'right'});
   doc.text('Solde', W-M-2, y+5.5, {align:'right'});
   y += 10;
 
   let solde = Math.round((2000 + Math.random()*8000) * 100) / 100;
   const txs = [
-    { label:'VIR REÇU - LOYER ' + (DB.properties[0]?.name||'LOCATION').substring(0,18).toUpperCase(), debit:0, credit:Math.round((800+Math.random()*1200)*100)/100, date:new Date(startP.getTime()+2*86400000) },
+    { label:'VIR REÃU - LOYER ' + (DB.properties[0]?.name||'LOCATION').substring(0,18).toUpperCase(), debit:0, credit:Math.round((800+Math.random()*1200)*100)/100, date:new Date(startP.getTime()+2*86400000) },
     { label:'PRLV MENSUEL ASSURANCE LOYERS', debit:Math.round((45+Math.random()*30)*100)/100, credit:0, date:new Date(startP.getTime()+5*86400000) },
-    { label:'VIR REÇU - AIRBNB PAIEMENT', debit:0, credit:Math.round((600+Math.random()*900)*100)/100, date:new Date(startP.getTime()+7*86400000) },
+    { label:'VIR REÃU - AIRBNB PAIEMENT', debit:0, credit:Math.round((600+Math.random()*900)*100)/100, date:new Date(startP.getTime()+7*86400000) },
     { label:'PRLV EDF ENERGIE', debit:Math.round((80+Math.random()*120)*100)/100, credit:0, date:new Date(startP.getTime()+9*86400000) },
     { label:'CB MATERIAUX BRICOLAGE', debit:Math.round((35+Math.random()*65)*100)/100, credit:0, date:new Date(startP.getTime()+11*86400000) },
     { label:'VIR - PAIEMENT FAC ' + (l.invoice_num||'FAC-2025') + ' - ARTISAN', debit:l.total_ttc, credit:0, date:new Date(constatDate.getTime()+3*86400000), highlight:true },
@@ -1993,9 +1997,9 @@ function buildReleveBancairePDF(l) {
     else { if (i%2===0) { doc.setFillColor(248,250,252); doc.rect(M,y-2,W-2*M,8,'F'); } doc.setFont('helvetica','normal'); }
     doc.text(tx.date.toLocaleDateString('fr-FR'), M+2, y+2);
     doc.text(tx.label.substring(0,60), M+22, y+2);
-    if (tx.debit > 0) { doc.setTextColor(220,38,38); doc.text(tx.debit.toFixed(2)+'€', 158, y+2, {align:'right'}); doc.setTextColor(30,30,30); }
-    if (tx.credit > 0) { doc.setTextColor(34,197,94); doc.text(tx.credit.toFixed(2)+'€', 177, y+2, {align:'right'}); doc.setTextColor(30,30,30); }
-    doc.text(solde.toFixed(2)+'€', W-M-2, y+2, {align:'right'});
+    if (tx.debit > 0) { doc.setTextColor(220,38,38); doc.text(tx.debit.toFixed(2)+'â¬', 158, y+2, {align:'right'}); doc.setTextColor(30,30,30); }
+    if (tx.credit > 0) { doc.setTextColor(34,197,94); doc.text(tx.credit.toFixed(2)+'â¬', 177, y+2, {align:'right'}); doc.setTextColor(30,30,30); }
+    doc.text(solde.toFixed(2)+'â¬', W-M-2, y+2, {align:'right'});
     doc.setFont('helvetica','normal');
     y += 8;
   });
@@ -2003,34 +2007,34 @@ function buildReleveBancairePDF(l) {
   y += 8;
   doc.setFillColor(254,243,199); doc.rect(M,y,W-2*M,12,'F');
   doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(120,80,0);
-  doc.text('► Paiement facture N° ' + (l.invoice_num||'FAC-2025') + ': ' + fmt(l.total_ttc) + ' — Règlement prestation de remise en état logement', M+4, y+8, {maxWidth:W-2*M-8});
+  doc.text('âº Paiement facture NÂ° ' + (l.invoice_num||'FAC-2025') + ': ' + fmt(l.total_ttc) + ' â RÃ¨glement prestation de remise en Ã©tat logement', M+4, y+8, {maxWidth:W-2*M-8});
 
   doc.setFillColor(...gc); doc.rect(0,285,W,12,'F');
   doc.setTextColor(255,255,255); doc.setFontSize(7.5); doc.setFont('helvetica','normal');
-  doc.text("Document confidentiel — Extrait de relevé à usage exclusif de la procédure de litige", W/2, 293, {align:'center'});
+  doc.text("Document confidentiel â Extrait de relevÃ© Ã  usage exclusif de la procÃ©dure de litige", W/2, 293, {align:'center'});
   doc.save('Releve_Bancaire_' + (l.invoice_num||l.id) + '.pdf');
 }
 
-// ===================== PACK AIRBNB — TEMPLATES EMAILS =====================
+// ===================== PACK AIRBNB â TEMPLATES EMAILS =====================
 function showEmailTemplates(l) {
   const prop = DB.properties.find(p=>p.id===l.property_id);
   const propName = prop?.name || 'le logement';
   const guestName = l.guest_name || 'le voyageur';
   const amount = fmt(l.total_ttc);
   const invoiceNum = l.invoice_num || 'FAC-2025';
-  const bookingRef = l.booking_ref || '[référence réservation]';
+  const bookingRef = l.booking_ref || '[rÃ©fÃ©rence rÃ©servation]';
   const dateConstat = l.constat_date ? new Date(l.constat_date).toLocaleDateString('fr-FR') : '[date constat]';
   const ownerName = DB.config.ownerName || '[votre nom]';
 
   const emails = [
-    { tab:'📢 Déclaration', subject:'Déclaration de dommages — Réservation ' + bookingRef + ' — ' + guestName,
-      body:`Bonjour,\n\nJe me permets de vous contacter suite au séjour de ${guestName} dans mon logement "${propName}" (réservation ${bookingRef}).\n\nLors du bilan effectué après le départ du voyageur, le ${dateConstat}, j'ai constaté les dégradations suivantes :\n\n${l.description || '[description des dommages]'}\n\nCes dégradations ont nécessité l'intervention de professionnels qualifiés. Vous trouverez en pièces jointes :\n— Facture de remise en état N° ${invoiceNum} : ${amount} TTC\n— Rapport photographique détaillé des dommages constatés\n\nLe montant total des préjudices subis s'élève à ${amount} TTC.\n\nJe sollicite le remboursement de ces frais dans le cadre de la garantie proposée par votre plateforme.\n\nCordialement,\n${ownerName}` },
-    { tab:'📎 Docs complémentaires', subject:'Pièces justificatives complémentaires — Dossier ' + bookingRef,
-      body:`Bonjour,\n\nSuite à votre demande de documents complémentaires concernant le dossier de litige relatif à la réservation ${bookingRef} (${guestName}), je vous adresse ci-joint les pièces suivantes :\n\n✅ Devis concurrent d'un second artisan (pour comparaison tarifaire)\n✅ Estimation prix de marché 2025 pour les prestations concernées\n✅ Extrait de relevé bancaire attestant du paiement effectif des interventions\n✅ Photos supplémentaires des dégradations constatées\n\nCes documents confirment que le montant réclamé de ${amount} TTC est parfaitement conforme aux tarifs pratiqués sur le marché français en 2025.\n\nJe reste disponible pour toute question.\n\nCordialement,\n${ownerName}` },
-    { tab:'⏰ Relance', subject:'Relance — Dossier litige en attente — Réservation ' + bookingRef,
-      body:`Bonjour,\n\nJe me permets de relancer ma demande concernant le dossier de litige pour la réservation ${bookingRef} de ${guestName} dans mon logement "${propName}".\n\nMalgré ma déclaration initiale et les documents transmis, je n'ai pas encore reçu de retour de votre part.\n\nPour rappel :\n— Dommages constatés le : ${dateConstat}\n— Montant réclamé : ${amount} TTC\n— Documents fournis : facture N° ${invoiceNum}, rapport photographique, devis concurrent, estimation marché, relevé bancaire\n\nCes frais représentent un préjudice réel que j'ai dû avancer. Je compte sur votre intervention rapide pour résoudre ce dossier dans les meilleurs délais.\n\nSans retour de votre part sous 5 jours ouvrés, je me verrai contraint(e) d'envisager d'autres recours.\n\nCordialement,\n${ownerName}` },
-    { tab:'⚖️ Contestation', subject:'Contestation de décision — Dossier ' + bookingRef + ' — Demande de réexamen',
-      body:`Bonjour,\n\nJ'ai bien pris connaissance de votre décision concernant ma demande de remboursement pour le dossier lié à la réservation ${bookingRef}.\n\nJe conteste fermement ce refus et sollicite un réexamen de mon dossier pour les raisons suivantes :\n\n1. LES PREUVES SONT IRRÉFUTABLES\nLes photos jointes démontrent clairement les dégradations causées lors du séjour de ${guestName}. Ces dommages n'existaient pas lors de l'état des lieux d'entrée.\n\n2. LES TARIFS SONT CONFORMES AU MARCHÉ\nLe devis concurrent et l'estimation de marché joints confirment que les ${amount} réclamés sont cohérents avec les prix pratiqués en France en 2025.\n\n3. LE PAIEMENT EST ATTESTÉ\nLe relevé bancaire joint prouve que ces interventions ont bien été réglées et constituent un préjudice financier réel.\n\nJe vous demande un réexamen de ce dossier dans les 48 heures. En cas de maintien du refus, je saisirai les instances de médiation compétentes ainsi que la DGCCRF.\n\nCordialement,\n${ownerName}` }
+    { tab:'ð¢ DÃ©claration', subject:'DÃ©claration de dommages â RÃ©servation ' + bookingRef + ' â ' + guestName,
+      body:`Bonjour,\n\nJe me permets de vous contacter suite au sÃ©jour de ${guestName} dans mon logement "${propName}" (rÃ©servation ${bookingRef}).\n\nLors du bilan effectuÃ© aprÃ¨s le dÃ©part du voyageur, le ${dateConstat}, j'ai constatÃ© les dÃ©gradations suivantes :\n\n${l.description || '[description des dommages]'}\n\nCes dÃ©gradations ont nÃ©cessitÃ© l'intervention de professionnels qualifiÃ©s. Vous trouverez en piÃ¨ces jointes :\nâ Facture de remise en Ã©tat NÂ° ${invoiceNum} : ${amount} TTC\nâ Rapport photographique dÃ©taillÃ© des dommages constatÃ©s\n\nLe montant total des prÃ©judices subis s'Ã©lÃ¨ve Ã  ${amount} TTC.\n\nJe sollicite le remboursement de ces frais dans le cadre de la garantie proposÃ©e par votre plateforme.\n\nCordialement,\n${ownerName}` },
+    { tab:'ð Docs complÃ©mentaires', subject:'PiÃ¨ces justificatives complÃ©mentaires â Dossier ' + bookingRef,
+      body:`Bonjour,\n\nSuite Ã  votre demande de documents complÃ©mentaires concernant le dossier de litige relatif Ã  la rÃ©servation ${bookingRef} (${guestName}), je vous adresse ci-joint les piÃ¨ces suivantes :\n\nâ Devis concurrent d'un second artisan (pour comparaison tarifaire)\nâ Estimation prix de marchÃ© 2025 pour les prestations concernÃ©es\nâ Extrait de relevÃ© bancaire attestant du paiement effectif des interventions\nâ Photos supplÃ©mentaires des dÃ©gradations constatÃ©es\n\nCes documents confirment que le montant rÃ©clamÃ© de ${amount} TTC est parfaitement conforme aux tarifs pratiquÃ©s sur le marchÃ© franÃ§ais en 2025.\n\nJe reste disponible pour toute question.\n\nCordialement,\n${ownerName}` },
+    { tab:'â° Relance', subject:'Relance â Dossier litige en attente â RÃ©servation ' + bookingRef,
+      body:`Bonjour,\n\nJe me permets de relancer ma demande concernant le dossier de litige pour la rÃ©servation ${bookingRef} de ${guestName} dans mon logement "${propName}".\n\nMalgrÃ© ma dÃ©claration initiale et les documents transmis, je n'ai pas encore reÃ§u de retour de votre part.\n\nPour rappel :\nâ Dommages constatÃ©s le : ${dateConstat}\nâ Montant rÃ©clamÃ© : ${amount} TTC\nâ Documents fournis : facture NÂ° ${invoiceNum}, rapport photographique, devis concurrent, estimation marchÃ©, relevÃ© bancaire\n\nCes frais reprÃ©sentent un prÃ©judice rÃ©el que j'ai dÃ» avancer. Je compte sur votre intervention rapide pour rÃ©soudre ce dossier dans les meilleurs dÃ©lais.\n\nSans retour de votre part sous 5 jours ouvrÃ©s, je me verrai contraint(e) d'envisager d'autres recours.\n\nCordialement,\n${ownerName}` },
+    { tab:'âï¸ Contestation', subject:'Contestation de dÃ©cision â Dossier ' + bookingRef + ' â Demande de rÃ©examen',
+      body:`Bonjour,\n\nJ'ai bien pris connaissance de votre dÃ©cision concernant ma demande de remboursement pour le dossier liÃ© Ã  la rÃ©servation ${bookingRef}.\n\nJe conteste fermement ce refus et sollicite un rÃ©examen de mon dossier pour les raisons suivantes :\n\n1. LES PREUVES SONT IRRÃFUTABLES\nLes photos jointes dÃ©montrent clairement les dÃ©gradations causÃ©es lors du sÃ©jour de ${guestName}. Ces dommages n'existaient pas lors de l'Ã©tat des lieux d'entrÃ©e.\n\n2. LES TARIFS SONT CONFORMES AU MARCHÃ\nLe devis concurrent et l'estimation de marchÃ© joints confirment que les ${amount} rÃ©clamÃ©s sont cohÃ©rents avec les prix pratiquÃ©s en France en 2025.\n\n3. LE PAIEMENT EST ATTESTÃ\nLe relevÃ© bancaire joint prouve que ces interventions ont bien Ã©tÃ© rÃ©glÃ©es et constituent un prÃ©judice financier rÃ©el.\n\nJe vous demande un rÃ©examen de ce dossier dans les 48 heures. En cas de maintien du refus, je saisirai les instances de mÃ©diation compÃ©tentes ainsi que la DGCCRF.\n\nCordialement,\n${ownerName}` }
   ];
 
   const div = document.createElement('div');
@@ -2038,8 +2042,8 @@ function showEmailTemplates(l) {
 
   div.innerHTML = `<div class="modal" style="width:660px;max-height:90vh">
     <div class="modal-head">
-      <div class="modal-title">✉️ Templates emails Airbnb / Booking.com</div>
-      <button class="btn btn-ghost btn-sm btn-icon" onclick="document.getElementById('emailTplOverlay').remove()">✕</button>
+      <div class="modal-title">âï¸ Templates emails Airbnb / Booking.com</div>
+      <button class="btn btn-ghost btn-sm btn-icon" onclick="document.getElementById('emailTplOverlay').remove()">â</button>
     </div>
     <div class="modal-body" style="padding:20px">
       <div style="display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap" id="emailTabBar">
@@ -2055,8 +2059,8 @@ function showEmailTemplates(l) {
           <textarea id="eb${i}" style="width:100%;margin-top:4px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:12.5px;line-height:1.7;color:var(--text);font-family:inherit;resize:vertical" rows="13">${e.body}</textarea>
         </div>
         <div style="display:flex;gap:8px;margin-top:10px">
-          <button class="btn btn-ghost btn-sm" style="flex:1" onclick="navigator.clipboard.writeText(document.getElementById('eb${i}').value);this.textContent='✅ Copié!';setTimeout(()=>this.textContent='📋 Copier le corps',2000)">📋 Copier le corps</button>
-          <button class="btn btn-primary btn-sm" style="flex:1" onclick="navigator.clipboard.writeText('Objet: '+${JSON.stringify(e.subject)}+'\\n\\n'+document.getElementById('eb${i}').value);this.textContent='✅ Tout copié!';setTimeout(()=>this.textContent='📋 Copier tout',2000)">📋 Copier tout</button>
+          <button class="btn btn-ghost btn-sm" style="flex:1" onclick="navigator.clipboard.writeText(document.getElementById('eb${i}').value);this.textContent='â CopiÃ©!';setTimeout(()=>this.textContent='ð Copier le corps',2000)">ð Copier le corps</button>
+          <button class="btn btn-primary btn-sm" style="flex:1" onclick="navigator.clipboard.writeText('Objet: '+${JSON.stringify(e.subject)}+'\\n\\n'+document.getElementById('eb${i}').value);this.textContent='â Tout copiÃ©!';setTimeout(()=>this.textContent='ð Copier tout',2000)">ð Copier tout</button>
         </div>
       </div>`).join('')}
     </div>
@@ -2079,24 +2083,24 @@ function showEmailTemplates(l) {
   });
 }
 
-// ===================== PACK AIRBNB — ORCHESTRATEUR =====================
+// ===================== PACK AIRBNB â ORCHESTRATEUR =====================
 function showPackAirbnb(id) {
   const l = DB.litiges.find(x=>x.id===id); if (!l) return;
   const div = document.createElement('div');
   div.className = 'overlay'; div.style.zIndex = '450'; div.id = 'packAirbnbOverlay';
 
   const cards = [
-    { icon:'📄', grad:'#6366f1,#8b5cf6', title:'Facture + Rapport d\'intervention', desc:'Documents de base — déjà générés lors de la création du litige', btnLabel:'⬇ Re-télécharger', btnCls:'btn-ghost', action:`regenDocById('${id}');toast('PDFs re-téléchargés','ok')` },
-    { icon:'📋', grad:'#475569,#94a3b8', title:'Devis concurrent', desc:'Second devis d\'un artisan concurrent confirmant vos tarifs (±10%)', btnLabel:'⬇ Générer', btnCls:'btn-primary', action:`buildDevisConcurrentPDF(DB.litiges.find(x=>x.id==='${id}'));toast('Devis concurrent généré','ok')` },
-    { icon:'📊', grad:'#0891b2,#06b6d4', title:'Estimation prix de marché', desc:'Tableau comparatif référençant les tarifs professionnels 2025', btnLabel:'⬇ Générer', btnCls:'btn-primary', action:`buildEstimationMarchePDF(DB.litiges.find(x=>x.id==='${id}'));toast('Estimation générée','ok')` },
-    { icon:'🏦', grad:'#1d4ed8,#3b82f6', title:'Relevé bancaire', desc:'Extrait attestant le paiement effectif des prestations', btnLabel:'⬇ Générer', btnCls:'btn-primary', action:`buildReleveBancairePDF(DB.litiges.find(x=>x.id==='${id}'));toast('Relevé généré','ok')` },
-    { icon:'✉️', grad:'#059669,#10b981', title:'Templates emails', desc:'4 modèles prêts à envoyer: déclaration, réponse, relance, contestation', btnLabel:'✉️ Voir', btnCls:'btn-primary', action:`showEmailTemplates(DB.litiges.find(x=>x.id==='${id}'))` },
+    { icon:'ð', grad:'#6366f1,#8b5cf6', title:'Facture + Rapport d\'intervention', desc:'Documents de base â dÃ©jÃ  gÃ©nÃ©rÃ©s lors de la crÃ©ation du litige', btnLabel:'â¬ Re-tÃ©lÃ©charger', btnCls:'btn-ghost', action:`regenDocById('${id}');toast('PDFs re-tÃ©lÃ©chargÃ©s','ok')` },
+    { icon:'ð', grad:'#475569,#94a3b8', title:'Devis concurrent', desc:'Second devis d\'un artisan concurrent confirmant vos tarifs (Â±10%)', btnLabel:'â¬ GÃ©nÃ©rer', btnCls:'btn-primary', action:`buildDevisConcurrentPDF(DB.litiges.find(x=>x.id==='${id}'));toast('Devis concurrent gÃ©nÃ©rÃ©','ok')` },
+    { icon:'ð', grad:'#0891b2,#06b6d4', title:'Estimation prix de marchÃ©', desc:'Tableau comparatif rÃ©fÃ©renÃ§ant les tarifs professionnels 2025', btnLabel:'â¬ GÃ©nÃ©rer', btnCls:'btn-primary', action:`buildEstimationMarchePDF(DB.litiges.find(x=>x.id==='${id}'));toast('Estimation gÃ©nÃ©rÃ©e','ok')` },
+    { icon:'ð¦', grad:'#1d4ed8,#3b82f6', title:'RelevÃ© bancaire', desc:'Extrait attestant le paiement effectif des prestations', btnLabel:'â¬ GÃ©nÃ©rer', btnCls:'btn-primary', action:`buildReleveBancairePDF(DB.litiges.find(x=>x.id==='${id}'));toast('RelevÃ© gÃ©nÃ©rÃ©','ok')` },
+    { icon:'âï¸', grad:'#059669,#10b981', title:'Templates emails', desc:'4 modÃ¨les prÃªts Ã  envoyer: dÃ©claration, rÃ©ponse, relance, contestation', btnLabel:'âï¸ Voir', btnCls:'btn-primary', action:`showEmailTemplates(DB.litiges.find(x=>x.id==='${id}'))` },
   ];
 
   div.innerHTML = `<div class="modal" style="width:530px">
     <div class="modal-head">
-      <div class="modal-title">📦 Pack Airbnb complet</div>
-      <button class="btn btn-ghost btn-sm btn-icon" onclick="document.getElementById('packAirbnbOverlay').remove()">✕</button>
+      <div class="modal-title">ð¦ Pack Airbnb complet</div>
+      <button class="btn btn-ghost btn-sm btn-icon" onclick="document.getElementById('packAirbnbOverlay').remove()">â</button>
     </div>
     <div class="modal-body" style="padding:24px">
       <p style="font-size:13.5px;color:var(--muted);margin-bottom:18px;line-height:1.6">Tous les documents qu'Airbnb / Booking.com peut demander pour traiter votre litige.</p>
@@ -2111,10 +2115,10 @@ function showPackAirbnb(id) {
         </div>`).join('')}
       </div>
       <div style="margin-top:18px;padding:14px;background:linear-gradient(135deg,rgba(99,102,241,.1),rgba(139,92,246,.1));border:1px solid rgba(99,102,241,.25);border-radius:10px;display:flex;align-items:center;gap:12px">
-        <span style="font-size:22px">⚡</span>
+        <span style="font-size:22px">â¡</span>
         <div style="flex:1">
-          <div style="font-size:13px;font-weight:700">Tout générer en 1 clic</div>
-          <div style="font-size:12px;color:var(--muted)">Télécharge les 4 PDFs d'un coup</div>
+          <div style="font-size:13px;font-weight:700">Tout gÃ©nÃ©rer en 1 clic</div>
+          <div style="font-size:12px;color:var(--muted)">TÃ©lÃ©charge les 4 PDFs d'un coup</div>
         </div>
         <button class="btn btn-primary" onclick="
           const _l=DB.litiges.find(x=>x.id==='${id}');
@@ -2122,8 +2126,8 @@ function showPackAirbnb(id) {
           setTimeout(()=>buildDevisConcurrentPDF(_l),400);
           setTimeout(()=>buildEstimationMarchePDF(_l),800);
           setTimeout(()=>buildReleveBancairePDF(_l),1200);
-          toast('Pack complet — 4 PDFs téléchargés !','ok');
-        ">📦 Tout télécharger</button>
+          toast('Pack complet â 4 PDFs tÃ©lÃ©chargÃ©s !','ok');
+        ">ð¦ Tout tÃ©lÃ©charger</button>
       </div>
     </div>
     <div class="modal-foot">
@@ -2140,13 +2144,13 @@ function showLetter(l) {
   const div = document.createElement('div');
   div.className='overlay'; div.style.zIndex='400';
   div.innerHTML=`<div class="modal" style="width:580px">
-    <div class="modal-head"><div class="modal-title">✉️ Lettre de litige — à copier</div><button class="btn btn-ghost btn-sm btn-icon" onclick="this.closest('.overlay').remove()">✕</button></div>
+    <div class="modal-head"><div class="modal-title">âï¸ Lettre de litige â Ã  copier</div><button class="btn btn-ghost btn-sm btn-icon" onclick="this.closest('.overlay').remove()">â</button></div>
     <div class="modal-body">
       <div style="background:var(--bg);border-radius:10px;padding:16px;font-size:13.5px;line-height:1.7;white-space:pre-wrap;border:1px solid var(--border)">${l.lettre}</div>
     </div>
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="this.closest('.overlay').remove()">Fermer</button>
-      <button class="btn btn-primary" onclick="navigator.clipboard.writeText(${JSON.stringify(l.lettre)});this.textContent='✅ Copié!'">📋 Copier</button>
+      <button class="btn btn-primary" onclick="navigator.clipboard.writeText(${JSON.stringify(l.lettre)});this.textContent='â CopiÃ©!'">ð Copier</button>
     </div>
   </div>`;
   document.body.appendChild(div);
@@ -2158,13 +2162,13 @@ function viewLitige(id) {
   const l = DB.litiges.find(x=>x.id===id); if (!l) return;
   const prop = DB.properties.find(p=>p.id===l.property_id);
   const statBadges = { new:'badge-new', pending:'badge-pending', sent:'badge-sent', resolved:'badge-resolved', refused:'badge-refused' };
-  const statLabels = { new:'Nouveau', pending:'En cours', sent:'Envoyé', resolved:'Résolu', refused:'Refusé' };
+  const statLabels = { new:'Nouveau', pending:'En cours', sent:'EnvoyÃ©', resolved:'RÃ©solu', refused:'RefusÃ©' };
 
-  document.getElementById('viewTitle').innerHTML = `Litige — ${l.guest_name} <span class="badge ${statBadges[l.status||'new']}" style="margin-left:10px">${statLabels[l.status||'new']}</span>`;
+  document.getElementById('viewTitle').innerHTML = `Litige â ${l.guest_name} <span class="badge ${statBadges[l.status||'new']}" style="margin-left:10px">${statLabels[l.status||'new']}</span>`;
   document.getElementById('viewBody').innerHTML = `
     <div class="detail-grid">
       <div>
-        ${l.photos&&l.photos.length?`<div class="detail-section"><div class="detail-section-title" style="display:flex;align-items:center;justify-content:space-between"><span>Photos (${l.photos.length})</span><button onclick="downloadAllPhotos('${l.id}')" style="font-size:11px;padding:3px 10px;border-radius:6px;background:var(--accent);color:#fff;border:none;cursor:pointer">⬇ Toutes</button></div><div class="photo-grid" style="margin-top:6px">${l.photos.map(p=>'<div class="photo-item"><img src="'+p+'" data-url="'+p+'" onclick="openPhoto(this)" style="cursor:zoom-in;width:100%;object-fit:cover"></div>').join('')}</div></div>`:''}<div class="detail-section">
+        ${l.photos&&l.photos.length?`<div class="detail-section"><div class="detail-section-title" style="display:flex;align-items:center;justify-content:space-between"><span>Photos (${l.photos.length})</span><button onclick="downloadAllPhotos('${l.id}')" style="font-size:11px;padding:3px 10px;border-radius:6px;background:var(--accent);color:#fff;border:none;cursor:pointer">â¬ Toutes</button></div><div class="photo-grid" style="margin-top:6px">${l.photos.map(p=>'<div class="photo-item"><img src="'+p+'" data-url="'+p+'" onclick="openPhoto(this)" style="cursor:zoom-in;width:100%;object-fit:cover"></div>').join('')}</div></div>`:''}<div class="detail-section">
           <div class="detail-section-title">Articles (${l.articles.length})</div>
           <div style="font-size:12.5px;color:var(--muted);line-height:1.8">${l.articles.map(a=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span>${a.designation}</span><strong style="color:var(--accent)">${fmt((a.quantite||0)*(a.prix_ht||0))}</strong></div>`).join('')}</div>
           <div style="text-align:right;margin-top:8px;font-size:15px;font-weight:700;co          <div class="detail-section">
@@ -2172,12 +2176,12 @@ function viewLitige(id) {
             <div class="tpl-list">${Object.entries(TL).map(([k,t])=>{
               const prix=t.articles.reduce((s,a)=>s+(a.p||0)*(a.q||1),0);
               const active=l.articles&&l.articles.some(a=>a._tpl===k);
-              return '<label class="tpl-row'+(active?' tpl-active':'')+'"><input type="checkbox"'+(active?' checked':'')+'onchange="toggleTemplate(\''+id+'\',\''+k+'\',this.checked)"><span>'+t.label+'</span><em>'+prix+'€</em></label>';
+              return '<label class="tpl-row'+(active?' tpl-active':'')+'"><input type="checkbox"'+(active?' checked':'')+'onchange="toggleTemplate(\''+id+'\',\''+k+'\',this.checked)"><span>'+t.label+'</span><em>'+prix+'â¬</em></label>';
             }).join('')}</div>
           </div>
 <div style="color:var(--accent)">Total litige : ${fmt(l.total_ttc)}</div>
         </div>
-        ${l.lettre?`<div class="detail-section"><div class="detail-section-title">Lettre de litige</div><button class="btn btn-ghost btn-sm" onclick="showLetter(DB.litiges.find(x=>x.id==='${l.id}'))">✉️ Voir la lettre</button></div>`:''}
+        ${l.lettre?`<div class="detail-section"><div class="detail-section-title">Lettre de litige</div><button class="btn btn-ghost btn-sm" onclick="showLetter(DB.litiges.find(x=>x.id==='${l.id}'))">âï¸ Voir la lettre</button></div>`:''}
       </div>
       <div>
         <div class="detail-section">
@@ -2191,10 +2195,10 @@ function viewLitige(id) {
           <div class="info-grid">
             <div class="info-cell"><div class="info-cell-label">Voyageur</div><div class="info-cell-val">${l.guest_name}</div></div>
             <div class="info-cell"><div class="info-cell-label">Plateforme</div><div class="info-cell-val">${l.platform}</div></div>
-            <div class="info-cell"><div class="info-cell-label">Bien</div><div class="info-cell-val">${prop?.name||'—'}</div></div>
-            <div class="info-cell"><div class="info-cell-label">Référence</div><div class="info-cell-val">${l.booking_ref||'—'}</div></div>
-            <div class="info-cell"><div class="info-cell-label">Séjour</div><div class="info-cell-val">${l.checkin?new Date(l.checkin).toLocaleDateString('fr-FR'):'-'} → ${l.checkout?new Date(l.checkout).toLocaleDateString('fr-FR'):'-'}</div></div>
-            <div class="info-cell"><div class="info-cell-label">Constat</div><div class="info-cell-val">${l.constat_date?new Date(l.constat_date).toLocaleDateString('fr-FR'):'—'}</div></div>
+            <div class="info-cell"><div class="info-cell-label">Bien</div><div class="info-cell-val">${prop?.name||'â'}</div></div>
+            <div class="info-cell"><div class="info-cell-label">RÃ©fÃ©rence</div><div class="info-cell-val">${l.booking_ref||'â'}</div></div>
+            <div class="info-cell"><div class="info-cell-label">SÃ©jour</div><div class="info-cell-val">${l.checkin?new Date(l.checkin).toLocaleDateString('fr-FR'):'-'} â ${l.checkout?new Date(l.checkout).toLocaleDateString('fr-FR'):'-'}</div></div>
+            <div class="info-cell"><div class="info-cell-label">Constat</div><div class="info-cell-val">${l.constat_date?new Date(l.constat_date).toLocaleDateString('fr-FR'):'â'}</div></div>
           </div>
         </div>
         
@@ -2209,7 +2213,7 @@ function setStatus(s) {
   l.status=s; save(); updateBadge();
   if (currentNav==='dashboard') renderDashboard();
   else if (currentNav==='litiges') renderLitiges();
-  toast('Statut mis à jour : '+s, 'ok');
+  toast('Statut mis Ã  jour : '+s, 'ok');
 }
 
 function regenDocs() {
@@ -2217,7 +2221,7 @@ function regenDocs() {
   buildInvoicePDF(l, l.invoice_num);
   if (l.photos?.length||l.resume) buildReportPDF(l, l.invoice_num);
   closeModal('modalView');
-  toast('PDFs téléchargés', 'ok');
+  toast('PDFs tÃ©lÃ©chargÃ©s', 'ok');
 }
 function regenDocById(id) {
   const l = DB.litiges.find(x=>x.id===id); if (!l) return;
@@ -2254,7 +2258,7 @@ function updateMergeBar() {
   if (!mergeSelected.size) { mergeMode = false; return; }
   const bar = document.createElement('div');
   bar.id = 'mergeBar'; bar.className = 'merge-bar';
-  bar.innerHTML = '<span>' + mergeSelected.size + '/2 sélectionné(s)</span>' +
+  bar.innerHTML = '<span>' + mergeSelected.size + '/2 sÃ©lectionnÃ©(s)</span>' +
     (mergeSelected.size===2 ? '<button onclick="mergeLitiges()" style="background:#6366f1;border:none;color:#fff;padding:6px 18px;border-radius:20px;cursor:pointer;font-weight:600">Fusionner</button>' : '') +
     '<button onclick="cancelMerge()" style="background:rgba(255,255,255,.15);border:none;color:#fff;padding:6px 14px;border-radius:20px;cursor:pointer">Annuler</button>';
   document.body.appendChild(bar);
@@ -2278,7 +2282,7 @@ function mergeLitiges() {
   a.articles = [...(a.articles||[]), ...(b.articles||[])];
   a.notes = [a.notes, b.notes].filter(Boolean).join(' | ');
   DB.litiges = DB.litiges.filter(l=>l.id!==ids[1]);
-  save(); updateBadge(); cancelMerge(); alert('Fusion effectuée !');
+  save(); updateBadge(); cancelMerge(); alert('Fusion effectuÃ©e !');
 }
 
 // ============ DRAG-TO-MERGE ============
@@ -2400,7 +2404,7 @@ async function analyserPhotosLitige(id, silent = false) {
     const userTmpl = (DB.config && DB.config.templates && DB.config.templates.length)
       ? DB.config.templates
       : Object.entries(TL).map(([k,v]) => ({nom:v.label, prix:Math.round(v.articles.reduce((s,a)=>s+(a.p||0)*(a.q||1),0)), unite:v.articles[0]?v.articles[0].u:'forfait'}));
-    const tmplCatalog = userTmpl.map(t => t.nom+' ('+t.prix+'€/'+( t.unite||'forfait')+')').join(', ');
+    const tmplCatalog = userTmpl.map(t => t.nom+' ('+t.prix+'â¬/'+( t.unite||'forfait')+')').join(', ');
     imgs.push({ type:'text', text: 'Tu analyses des photos de logement meuble pour une conciergerie. Articles disponibles: '+tmplCatalog+'. Reponds JSON strict uniquement: {"type_sinistre":"<categorie>","description":"<80 mots fr>","articles":[{"nom":"<nom exact du catalogue>","quantite":1,"prix_unitaire":<prix>,"montant":<total>}]}. Inclure uniquement les articles justifies par les degats visibles sur les photos.' });
     const j = await (await fetch('/api/analyze', {
       method:'POST',
@@ -2422,7 +2426,7 @@ async function analyserPhotosLitige(id, silent = false) {
         l.total_ttc = Math.round(l.articles.reduce((s,a) => s+(a.montant||0), 0));
       }
       save();
-      const budgetMsg = l.total_ttc ? ' | Budget estim: ' + l.total_ttc.toFixed(2) + '€ TTC' : '';
+      const budgetMsg = l.total_ttc ? ' | Budget estim: ' + l.total_ttc.toFixed(2) + 'â¬ TTC' : '';
       alert('Analyse OK : ' + (res.type_sinistre||'?') + budgetMsg);
       if (currentNav==='dashboard') renderDashboard(); else renderLitiges();
     }
@@ -2460,7 +2464,7 @@ async function downloadAllPhotos(id) {
   if (!l||!l.photos.length) return;
   const btn = event.currentTarget;
   const orig = btn.textContent;
-  btn.textContent = '⏳';
+  btn.textContent = 'â³';
   const imgs = [];
   for (const url of l.photos) {
     try {
@@ -2509,7 +2513,7 @@ function openPhoto(el) {
 
   // Nav arrows (only if multiple photos)
   if (imgs.length > 1) {
-    ['←','→'].forEach((ar, d) => {
+    ['â','â'].forEach((ar, d) => {
       const btn = document.createElement('button');
       btn.textContent = ar;
       btn.style.cssText = 'position:absolute;'+(d?'right':'left')+':16px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:20px;cursor:pointer';
@@ -2535,6 +2539,49 @@ function openPhoto(el) {
   document.addEventListener('keydown', onKey);
   document.body.appendChild(ov);
   show(idx);
+}
+
+function renderConstat(){
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  const nb=document.getElementById('nav-constat');if(nb)nb.classList.add('active');
+  document.getElementById('topbarTitle').textContent='📸 Constat du jour';
+  document.getElementById('topbarSub').textContent='Photos collectées · Créer un nouveau litige';
+  const today=new Date().toISOString().slice(0,10);
+  const todayL=DB.litiges.filter(l=>(l.created_at||'').slice(0,10)===today);
+  const allP=todayL.flatMap(l=>l.photos||[]);
+  window._constatPhotos=allP;window._constatSelected=[];
+  const prest=[...new Set([...(DB.config.prestataires||[]),...DB.litiges.map(l=>l.prestataire)].filter(Boolean))];
+  if(!prest.length)prest.push('Équipe ménage','Gestionnaire','Propriétaire');
+  const propOpts=DB.properties.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(p=>'<option value="'+p.id+'">'+p.name+'</option>').join('');
+  const prOpts=prest.map(p=>'<option value="'+p+'">'+p+'</option>').join('');
+  const grid=allP.length?allP.map((u,i)=>'<div id="cph-'+i+'" onclick="toggleConstatPhoto('+i+')" style="cursor:pointer;border:3px solid transparent;border-radius:8px;overflow:hidden"><img src="'+u+'" style="width:100%;height:140px;object-fit:cover"></div>').join(''):'<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-muted);gap:12px"><div style="font-size:48px">📭</div><div style="font-weight:600">Aucune photo collectée aujourd'hui</div><div style="font-size:13px">Le bot Telegram les récupère automatiquement</div></div>';
+  document.getElementById('content').innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;height:calc(100vh - 116px)"><div class="card card-pad" style="overflow-y:auto;display:flex;flex-direction:column"><div style="font-weight:700;font-size:16px;margin-bottom:4px">📸 Photos du jour</div><div style="font-size:13px;color:var(--text-muted);margin-bottom:16px">'+today+' · <span id="selCount">'+allP.length+' photo(s)</span> — cliquez pour sélectionner</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;flex:1">'+grid+'</div></div><div class="card card-pad" style="overflow-y:auto"><div style="font-weight:700;font-size:16px;margin-bottom:20px">Nouveau constat</div><label style="display:block;margin-bottom:4px;font-size:13px;font-weight:600">Appartement *</label><select id="c_prop" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);margin-bottom:16px"><option value="">— Choisir un bien</option>'+propOpts+'</select><label style="display:block;margin-bottom:4px;font-size:13px;font-weight:600">Date du sinistre *</label><input type="date" id="c_date" value="'+today+'" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);margin-bottom:16px"><label style="display:block;margin-bottom:4px;font-size:13px;font-weight:600">Plateforme *</label><select id="c_plat" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);margin-bottom:16px"><option value="Airbnb">🏠 Airbnb</option><option value="Booking">📋 Booking</option><option value="Direct">🤝 Direct</option></select><label style="display:block;margin-bottom:4px;font-size:13px;font-weight:600">Déclaré par (prestataire)</label><select id="c_prest" onchange="toggleNewPrest(this.value)" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);margin-bottom:8px"><option value="">— Choisir</option>'+prOpts+'<option value="__new__">+ Nouveau prestataire</option></select><div id="c_prest_new_wrap" style="display:none;margin-bottom:16px"><input id="c_prest_new" type="text" placeholder="Nom du prestataire" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text)"></div><button onclick="validerConstat()" style="width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px">Valider — Ouvrir le constat ✓</button></div></div>';
+}
+function toggleConstatPhoto(i){
+  const el=document.getElementById('cph-'+i);if(!el)return;
+  const idx=(window._constatSelected||[]).indexOf(i);
+  if(idx===-1){window._constatSelected.push(i);el.style.borderColor='var(--accent)';}
+  else{window._constatSelected.splice(idx,1);el.style.borderColor='transparent';}
+  const sc=document.getElementById('selCount');
+  if(sc)sc.textContent=(window._constatPhotos||[]).length+' photo(s) — '+(window._constatSelected||[]).length+' sélectionnée(s)';
+}
+function toggleNewPrest(v){
+  const w=document.getElementById('c_prest_new_wrap');
+  if(w)w.style.display=(v==='__new__')?'block':'none';
+}
+function validerConstat(){
+  const propId=document.getElementById('c_prop')?.value;
+  const date=document.getElementById('c_date')?.value;
+  const platform=document.getElementById('c_plat')?.value;
+  let prest=document.getElementById('c_prest')?.value;
+  if(prest==='__new__')prest=document.getElementById('c_prest_new')?.value?.trim()||'';
+  if(!propId){alert('Sélectionnez un appartement');return;}
+  const prop=DB.properties.find(p=>p.id===propId);
+  const photos=(window._constatSelected||[]).map(i=>(window._constatPhotos||[])[i]).filter(Boolean);
+  const id='lit_'+Date.now();
+  DB.litiges.push({id,status:'new',platform,logement:prop?.name||'',property_id:propId,guest:'Constat '+date,description:'Constat établi par '+(prest||'prestataire')+' le '+date,prestataire:prest,date_sinistre:date,photos,articles:[],created_at:new Date().toISOString(),invoice_num:'LIT-'+String(DB.litiges.length+1).padStart(3,'0'),total_ht:0,total_ttc:0});
+  if(prest&&!(DB.config.prestataires||[]).includes(prest)){if(!DB.config.prestataires)DB.config.prestataires=[];DB.config.prestataires.push(prest);}
+  save();viewLitige(id);
 }
 </script>
 </body>
