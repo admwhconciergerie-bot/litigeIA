@@ -2599,7 +2599,7 @@ function viewLitige(id){
   var lit=(DB.litiges||[]).find(function(l){return l.id===id;});
   if(!lit)return;
   var GROUPS={reparations:{label:"🔧 Réparations",cats:["plomberie","serrurerie","platrier"]},remplacement:{label:"🛋 Remplacement",cats:["mobilier"]},services:{label:"🧹 Services",cats:["nettoyage","desinsectisation"]}};
-  var COLORS=["#6c5ce7","#00b894","#e17055","#0984e3","#fd79a8"];
+  var COLORS=["#7c3aed","#059669","#dc2626","#2563eb","#d97706"];
   var initFac=lit.factures&&lit.factures.length?JSON.parse(JSON.stringify(lit.factures)):[{id:"f_"+Date.now(),name:"Facture 1",templates:[]}];
   window._vl={litId:id,factures:initFac,activeFacture:initFac[0].id};
   function tTotal(k){var t=TL[k];return t?t.articles.reduce(function(s,a){return s+(a.p*a.q);},0):0;}
@@ -2611,74 +2611,81 @@ function viewLitige(id){
     var leftHTML="";
     Object.keys(GROUPS).forEach(function(gk){
       var g=GROUPS[gk];
-      var items=Object.keys(TL).filter(function(k){return g.cats.indexOf(TL[k].cat)>-1;}).map(function(k){
-        var t=TL[k];var tot=tTotal(k);var asgn=assigned[k];
-        var dot=asgn?"<span style=\"display:inline-block;width:8px;height:8px;border-radius:50%;background:"+asgn.color+";margin-right:4px\"></span>":"";
-        return "<label style=\"display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;cursor:pointer\" onmouseenter=\"this.style.background='var(--bg)'\" onmouseleave=\"this.style.background=''\">"+
-          "<input type=\"checkbox\" "+(asgn?"checked":"")+" onchange=\"vlToggle('"+k+"',this.checked)\" style=\"width:16px;height:16px;cursor:pointer;accent-color:var(--accent)\">"+
-          "<span style=\"flex:1;font-size:13px\">"+dot+t.label+"</span>"+
-          "<span style=\"font-weight:700;color:var(--accent);font-size:13px;white-space:nowrap\">"+tot.toLocaleString("fr-FR",{minimumFractionDigits:0,maximumFractionDigits:2})+" €</span>"+
+      var tmplKeys=Object.keys(TL).filter(function(k){return g.cats.indexOf(TL[k].cat)>-1;});
+      if(!tmplKeys.length)return;
+      var items=tmplKeys.map(function(k){
+        var t=TL[k];var tot=tTotal(k);var asgn=assigned[k];var checked=!!asgn;
+        var rowBg=checked?"background:#f5f3ff;border-left:3px solid "+(asgn.color)+";":"border-left:3px solid transparent;";
+        var dot=asgn?"<span style=\"width:8px;height:8px;border-radius:50%;background:"+asgn.color+";display:inline-block;flex-shrink:0\"></span>":"<span style=\"width:8px;height:8px;display:inline-block;flex-shrink:0\"></span>";
+        return "<label style=\"display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;"+rowBg+"transition:background .15s\" onmouseenter=\"if(!this.querySelector('input').checked)this.style.background='#f9fafb'\" onmouseleave=\"if(!this.querySelector('input').checked)this.style.background=''\">"+
+          "<input type=\"checkbox\" "+(checked?"checked":"")+" onchange=\"vlToggle('"+k+"',this.checked)\" style=\"width:17px;height:17px;cursor:pointer;accent-color:#7c3aed;flex-shrink:0\">"+
+          dot+
+          "<span style=\"flex:1;font-size:13.5px;color:#1f2937;font-weight:"+(checked?"600":"400")+"\">"+t.label+"</span>"+
+          "<span style=\"font-weight:700;color:"+(checked?asgn.color:"#6b7280")+";font-size:13px;white-space:nowrap\">"+tot.toLocaleString("fr-FR",{minimumFractionDigits:0,maximumFractionDigits:2})+" €</span>"+
         "</label>";
       }).join("");
-      if(!items)return;
-      leftHTML+="<div style=\"margin-bottom:20px\"><div style=\"font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;padding:0 4px\">"+g.label+"</div><div style=\"border-radius:8px;overflow:hidden\">"+items+"</div></div>";
+      leftHTML+="<div style=\"margin-bottom:20px;background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.08);overflow:hidden\">"+
+        "<div style=\"padding:10px 14px 8px;background:#f9fafb;border-bottom:1px solid #f0f0f0\"><span style=\"font-size:11px;font-weight:800;color:#6b7280;text-transform:uppercase;letter-spacing:.8px\">"+g.label+"</span></div>"+
+        items+"</div>";
     });
     var rightHTML="";
     vl.factures.forEach(function(f,fi){
-      var color=COLORS[fi%COLORS.length];
-      var isActive=f.id===vl.activeFacture;
+      var color=COLORS[fi%COLORS.length];var isActive=f.id===vl.activeFacture;
       var fTot=f.templates.reduce(function(s,k){return s+tTotal(k);},0);
       var fItems=f.templates.length?f.templates.map(function(k){
         var t=TL[k];if(!t)return"";
-        return "<div style=\"display:flex;align-items:center;gap:6px;padding:5px 8px;font-size:12px\">"+
-          "<button onclick=\"vlRemove('"+k+"','"+f.id+"')\" style=\"background:none;border:none;cursor:pointer;color:#e74c3c;font-size:15px;line-height:1\">×</button>"+
-          "<span style=\"flex:1\">"+t.label+"</span>"+
-          "<span style=\"font-weight:600;white-space:nowrap\">"+tTotal(k).toLocaleString("fr-FR",{minimumFractionDigits:0,maximumFractionDigits:2})+" €</span>"+
+        return "<div style=\"display:flex;align-items:center;gap:6px;padding:7px 10px;border-bottom:1px solid #f5f5f5\">"+
+          "<button onclick=\"vlRemove('"+k+"','"+f.id+"')\" style=\"background:#fee2e2;border:none;border-radius:4px;cursor:pointer;color:#dc2626;font-size:13px;width:20px;height:20px;line-height:1;flex-shrink:0;display:flex;align-items:center;justify-content:center\">×</button>"+
+          "<span style=\"flex:1;font-size:12.5px;color:#374151\">"+t.label+"</span>"+
+          "<span style=\"font-weight:700;color:"+color+";font-size:12px;white-space:nowrap\">"+tTotal(k).toLocaleString("fr-FR",{minimumFractionDigits:0,maximumFractionDigits:2})+" €</span>"+
         "</div>";
-      }).join(""):"<div style=\"font-size:12px;color:var(--text-muted);padding:10px;text-align:center;font-style:italic\">Aucun article — cochez des templates à gauche</div>";
-      rightHTML+="<div onclick=\"vlSelectFacture('"+f.id+"')\" style=\"border:2px solid "+(isActive?color:"var(--border)")+";border-radius:10px;margin-bottom:12px;cursor:pointer;overflow:hidden;transition:border-color .2s\">"+
-        "<div style=\"background:"+color+"18;padding:10px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid "+color+"30\">"+
-          "<span style=\"width:10px;height:10px;border-radius:50%;background:"+color+";display:inline-block;flex-shrink:0\"></span>"+
-          "<input onclick=\"event.stopPropagation()\" onchange=\"vlRename('"+f.id+"',this.value)\" value=\""+f.name+"\" style=\"flex:1;border:none;background:transparent;font-weight:700;font-size:13px;color:var(--text);outline:none\">"+
-          (vl.factures.length>1?"<button onclick=\"event.stopPropagation();vlDelFacture('"+f.id+"')\" style=\"background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:18px\">×</button>":"")+
+      }).join(""):"<div style=\"padding:16px 12px;text-align:center;color:#9ca3af;font-size:12.5px;font-style:italic\">Aucun article — cochez des templates à gauche</div>";
+      var shadow=isActive?"box-shadow:0 0 0 2px "+color+",0 4px 16px rgba(0,0,0,.1)":"box-shadow:0 1px 4px rgba(0,0,0,.08)";
+      rightHTML+="<div onclick=\"vlSelectFacture('"+f.id+"')\" style=\"background:#fff;border-radius:12px;margin-bottom:12px;cursor:pointer;overflow:hidden;"+shadow+";border-top:4px solid "+color+";transition:box-shadow .2s\">"+
+        "<div style=\"padding:10px 12px;display:flex;align-items:center;gap:8px;background:#fafafa\">"+
+          "<input onclick=\"event.stopPropagation()\" onchange=\"vlRename('"+f.id+"',this.value)\" value=\""+f.name+"\" style=\"flex:1;border:none;background:transparent;font-weight:700;font-size:13px;color:#1f2937;outline:none\">"+
+          (vl.factures.length>1?"<button onclick=\"event.stopPropagation();vlDelFacture('"+f.id+"')\" style=\"background:none;border:none;cursor:pointer;color:#9ca3af;font-size:18px;line-height:1\">×</button>":"")+
         "</div>"+
-        "<div style=\"padding:4px 4px\">"+fItems+"</div>"+
-        "<div style=\"padding:8px 12px;border-top:1px solid var(--border);display:flex;justify-content:space-between\">"+
-          "<span style=\"font-size:12px;color:var(--text-muted)\">"+f.templates.length+" article(s)</span>"+
-          "<span style=\"font-weight:700;color:"+color+"\">"+fmt(fTot)+"</span>"+
+        "<div>"+fItems+"</div>"+
+        "<div style=\"padding:8px 12px;background:#fafafa;display:flex;justify-content:space-between;align-items:center\">"+
+          "<span style=\"font-size:11.5px;color:#9ca3af\">"+f.templates.length+" template(s)</span>"+
+          "<span style=\"font-weight:800;color:"+color+";font-size:14px\">"+fmt(fTot)+"</span>"+
         "</div>"+
       "</div>";
     });
     var grand=vl.factures.reduce(function(s,f){return s+f.templates.reduce(function(ss,k){return ss+tTotal(k);},0);},0);
     document.getElementById("vl-body").innerHTML=
       "<div style=\"display:grid;grid-template-columns:1fr 360px;height:100%;overflow:hidden\">"+
-        "<div style=\"overflow-y:auto;padding:20px 16px 20px 20px;border-right:1px solid var(--border)\">"+leftHTML+"</div>"+
-        "<div style=\"overflow-y:auto;padding:20px 16px\">"+
+        "<div style=\"overflow-y:auto;padding:20px;background:#f4f5f7\">"+leftHTML+"</div>"+
+        "<div style=\"overflow-y:auto;padding:20px;background:#f9fafb;border-left:1px solid #e5e7eb\">"+
           "<div style=\"display:flex;align-items:center;justify-content:space-between;margin-bottom:16px\">"+
-            "<span style=\"font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.6px\">Répartition factures</span>"+
-            "<button onclick=\"vlAddFacture()\" style=\"padding:5px 12px;border:1px dashed var(--accent);border-radius:6px;background:transparent;color:var(--accent);font-size:12px;cursor:pointer;font-weight:600\">+ Facture</button>"+
+            "<span style=\"font-size:11px;font-weight:800;color:#6b7280;text-transform:uppercase;letter-spacing:.8px\">Répartition factures</span>"+
+            "<button onclick=\"vlAddFacture()\" style=\"padding:6px 12px;border:1.5px dashed #7c3aed;border-radius:8px;background:transparent;color:#7c3aed;font-size:12px;cursor:pointer;font-weight:700\">+ Facture</button>"+
           "</div>"+
           rightHTML+
-          "<div style=\"padding:10px 12px;background:var(--bg);border-radius:8px;display:flex;justify-content:space-between;align-items:center\">"+
-            "<span style=\"font-size:13px;font-weight:600\">Total global</span>"+
-            "<span style=\"font-size:18px;font-weight:800;color:var(--accent)\">"+fmt(grand)+"</span>"+
+          "<div style=\"margin-top:4px;padding:12px 14px;background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.08);display:flex;justify-content:space-between;align-items:center\">"+
+            "<span style=\"font-size:13px;font-weight:700;color:#374151\">Total global</span>"+
+            "<span style=\"font-size:20px;font-weight:900;color:#7c3aed\">"+fmt(grand)+"</span>"+
           "</div>"+
         "</div>"+
       "</div>";
   }
   var over=document.getElementById("vl-overlay");if(over)over.remove();
   over=document.createElement("div");over.id="vl-overlay";
-  over.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px";
+  over.style.cssText="position:fixed;inset:0;background:rgba(15,15,25,.65);backdrop-filter:blur(6px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px";
   var guest=lit.guest_name||lit.guest||"—";var logmt=lit.logement||"—";
   var date=lit.created_at?new Date(lit.created_at).toLocaleDateString("fr-FR"):"";
-  over.innerHTML="<div style=\"background:var(--bg-card,#1e1e2e);border-radius:16px;width:100%;max-width:1100px;height:85vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.4)\">"+
-    "<div style=\"padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0\">"+
-      "<div><div style=\"font-size:18px;font-weight:800\">"+guest+" — "+logmt+"</div><div style=\"font-size:12px;color:var(--text-muted);margin-top:2px\">"+date+"</div></div>"+
-      "<button onclick=\"document.getElementById('vl-overlay').remove()\" style=\"width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:transparent;cursor:pointer;color:var(--text);font-size:18px\">×</button>"+
+  over.innerHTML="<div style=\"background:#fff;border-radius:20px;width:100%;max-width:1100px;height:88vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 32px 100px rgba(0,0,0,.35)\">"+
+    "<div style=\"padding:20px 28px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:#fff\">"+
+      "<div>"+
+        "<div style=\"font-size:19px;font-weight:800;color:#111827\">"+guest+" — "+logmt+"</div>"+
+        "<div style=\"font-size:12px;color:#9ca3af;margin-top:3px\">"+date+"</div>"+
+      "</div>"+
+      "<button onclick=\"document.getElementById('vl-overlay').remove()\" style=\"width:34px;height:34px;border-radius:10px;border:1.5px solid #e5e7eb;background:#f9fafb;cursor:pointer;color:#6b7280;font-size:18px;display:flex;align-items:center;justify-content:center\">×</button>"+
     "</div>"+
     "<div id=\"vl-body\" style=\"flex:1;overflow:hidden\"></div>"+
-    "<div style=\"padding:14px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;flex-shrink:0\">"+
-      "<button onclick=\"vlValider()\" style=\"padding:12px 32px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer\">✓ Valider</button>"+
+    "<div style=\"padding:16px 28px;border-top:1px solid #e5e7eb;display:flex;justify-content:flex-end;background:#fff;flex-shrink:0\">"+
+      "<button onclick=\"vlValider()\" style=\"padding:13px 36px;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(124,58,237,.4)\">✓ Valider</button>"+
     "</div>"+
   "</div>";
   document.body.appendChild(over);
@@ -2692,19 +2699,12 @@ function vlAddFacture(){var id="f_"+Date.now();window._vl.factures.push({id:id,n
 function vlDelFacture(fid){var vl=window._vl;vl.factures=vl.factures.filter(function(f){return f.id!==fid;});if(vl.activeFacture===fid)vl.activeFacture=vl.factures[0]?vl.factures[0].id:"";window._vlRender();}
 function vlRename(fid,name){var f=(window._vl.factures||[]).find(function(f){return f.id===fid;});if(f)f.name=name;}
 function vlValider(){
-  var vl=window._vl;
-  var lit=(DB.litiges||[]).find(function(l){return l.id===vl.litId;});
-  if(!lit)return;
+  var vl=window._vl;var lit=(DB.litiges||[]).find(function(l){return l.id===vl.litId;});if(!lit)return;
   var articles=[];
   vl.factures.forEach(function(f){f.templates.forEach(function(k){var t=TL[k];if(t)t.articles.forEach(function(a){articles.push(Object.assign({},a,{facture:f.name,facture_id:f.id}));});});});
-  lit.articles=articles;
-  lit.factures=vl.factures;
-  lit.total_ht=articles.reduce(function(s,a){return s+(a.p*a.q);},0);
-  lit.total_ttc=lit.total_ht;
-  save();
-  document.getElementById("vl-overlay").remove();
-  renderLitiges();
+  lit.articles=articles;lit.factures=vl.factures;
+  lit.total_ht=articles.reduce(function(s,a){return s+(a.p*a.q);},0);lit.total_ttc=lit.total_ht;
+  save();document.getElementById("vl-overlay").remove();renderLitiges();
 }
 </script>
 </body>
-</html>
