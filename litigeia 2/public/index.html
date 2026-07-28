@@ -2560,5 +2560,38 @@ function toggleNewPrest(v){var w=document.getElementById("c_prest_new_wrap");if(
 function validerConstat(){var propId=document.getElementById("c_prop").value;var date=document.getElementById("c_date").value;var platform="";var prest=document.getElementById("c_prest").value;if(prest==="__new__")prest=(document.getElementById("c_prest_new").value||"").trim();if(!propId){alert("Sélectionnez un appartement");return;}var prop=DB.properties.filter(function(p){return p.id===propId;})[0];var photos=(window._constatSelected||[]).map(function(k){return (window._constatPhotos||[])[k];}).filter(Boolean);var id="lit_"+Date.now();DB.litiges.push({id:id,status:"new",platform:platform,logement:prop?prop.name:"",property_id:propId,guest:"Constat "+date,description:"Constat le "+date,prestataire:prest,date_sinistre:date,photos:photos,articles:[],created_at:new Date().toISOString(),invoice_num:"LIT-"+String(DB.litiges.length+1).padStart(3,"0"),total_ht:0,total_ttc:0});if(prest&&!(DB.config.prestataires||[]).includes(prest)){if(!DB.config.prestataires)DB.config.prestataires=[];DB.config.prestataires.push(prest);}DB.pending_photos=(DB.pending_photos||[]).filter(function(pp){return !photos.includes(pp.url);});save();viewLitige(id);}
 (function(){var _nav=nav;window.nav=function(v){if(v==="constat"){renderConstat();return;}_nav(v);};})();
 </script>
+
+<script>
+function renderLitiges(){
+  var etats=["","Déclaré","Intervention","Document envoyé","Accepté","Refusé","Contestation"];
+  var plats=["","Airbnb","Booking","Direct"];
+  var lits=(DB.litiges||[]).filter(function(l){return l.status!=="telegram_draft";}).slice().sort(function(a,b){return new Date(b.created_at||0)-new Date(a.created_at||0);});
+  if(!lits.length){document.getElementById("content").innerHTML="<div class=\"card card-pad\" style=\"text-align:center;color:var(--text-muted);padding:60px\">Aucun litige pour le moment<\/div>";return;}
+  var cols="44px 1fr 130px 165px 90px 115px 80px 52px";
+  var rows=lits.map(function(l){
+    var photo=(l.photos||[])[0]||"";
+    var name=l.guest_name||l.guest||"—";
+    var logmt=l.logement||l.description||"—";
+    var date=l.created_at?new Date(l.created_at).toLocaleDateString("fr-FR"):"—";
+    var total=((l.total_ttc||0).toFixed(2)+"").replace(".",",")+" €";
+    var pOpts=plats.map(function(p){return "<option value=\""+p+"\""+((l.platform||"")==p?" selected":"")+">"+(p||"—")+"<\/option>";}).join("");
+    var eOpts=etats.map(function(e){return "<option value=\""+e+"\""+((l.etat||"")==e?" selected":"")+">"+(e||"—")+"<\/option>";}).join("");
+    var thumb=photo?"<img src=\""+photo+"\" style=\"width:36px;height:36px;border-radius:6px;object-fit:cover\">":'<div style=\"width:36px;height:36px;border-radius:6px;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:16px\">🏠<\/div>';
+    return "<div style=\"display:grid;grid-template-columns:"+cols+";align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);gap:8px\" onmouseenter=\"this.style.background='rgba(0,0,0,.025)'\" onmouseleave=\"this.style.background=''\">"+
+      "<div>"+thumb+"<\/div>"+
+      "<div onclick=\"viewLitige('"+l.id+"')\" style=\"cursor:pointer\"><div style=\"font-weight:600;font-size:13px\">"+name+"<\/div><div style=\"font-size:12px;color:var(--text-muted)\">"+logmt+" · "+date+"<\/div><\/div>"+
+      "<select onchange=\"updateLitigeField('"+l.id+"','platform',this.value)\" onclick=\"event.stopPropagation()\" style=\"padding:4px 6px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:12px;width:100%\">"+pOpts+"<\/select>"+
+      "<select onchange=\"updateLitigeField('"+l.id+"','etat',this.value)\" onclick=\"event.stopPropagation()\" style=\"padding:4px 6px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:12px;width:100%\">"+eOpts+"<\/select>"+
+      "<input type=\"number\" value=\""+( l.montant_regle||"")+"\" onchange=\"updateLitigeField('"+l.id+"','montant_regle',+this.value||0)\" onclick=\"event.stopPropagation()\" placeholder=\"0\" style=\"padding:4px 6px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:12px;width:100%\">"+
+      "<input type=\"text\" value=\""+( l.numero_litige||"")+"\" onchange=\"updateLitigeField('"+l.id+"','numero_litige',this.value.trim())\" onclick=\"event.stopPropagation()\" placeholder=\"N° litige\" style=\"padding:4px 6px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:12px;width:100%\">"+
+      "<div style=\"font-weight:700;color:var(--accent);font-size:13px;text-align:right\">"+total+"<\/div>"+
+      "<div style=\"text-align:center\"><button onclick=\"deleteLitige('"+l.id+"')\" style=\"background:none;border:none;cursor:pointer;color:#e74c3c;font-size:16px\">🗑<\/button><\/div>"+
+    "<\/div>";
+  }).join("");
+  var header="<div style=\"display:grid;grid-template-columns:"+cols+";align-items:center;padding:8px 16px;gap:8px;border-bottom:2px solid var(--border);font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.6px\"><div><\/div><div>Bien / Voyageur<\/div><div>Plateforme<\/div><div>État<\/div><div>Réglé (€)<\/div><div>N° litige<\/div><div style=\"text-align:right\">Total<\/div><div><\/div><\/div>";
+  document.getElementById("content").innerHTML="<div class=\"card\" style=\"overflow:hidden\">"+header+rows+"<\/div>";
+}
+function updateLitigeField(id,field,value){var l=(DB.litiges||[]).find(function(x){return x.id===id;});if(l){l[field]=value;save();}}
+</script>
 </body>
 </html>
