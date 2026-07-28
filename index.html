@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LitigeIA — Gestion litiges Airbnb & Booking</title>
+<title>LitigeIA â Gestion litiges Airbnb & Booking</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
@@ -247,7 +247,7 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
     <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
     <div>
       <div class="logo-text">LitigeIA</div>
-      <div class="logo-sub">Airbnb · Booking.com</div>
+      <div class="logo-sub">Airbnb Â· Booking.com</div>
     </div>
   </div>
   <div class="nav-section">
@@ -271,7 +271,7 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
     </button>
   </div>
   <div class="nav-section" style="margin-top:8px">
-    <div class="nav-label">Paramètres</div>
+    <div class="nav-label">ParamÃ¨tres</div>
     <button class="nav-item" onclick="nav('settings')" id="nav-settings">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
       Configuration
@@ -310,9 +310,9 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 <div class="modal modal-lg">
   <div class="modal-head">
     <div>
-      <div class="modal-title">⚡ Nouveau litige</div>
+      <div class="modal-title">â¡ Nouveau litige</div>
     </div>
-    <button class="btn btn-ghost btn-sm btn-icon" onclick="closeModal('modalNewLitige')">✕</button>
+    <button class="btn btn-ghost btn-sm btn-icon" onclick="closeModal('modalNewLitige')">â</button>
   </div>
   <div class="modal-body">
     <!-- Steps -->
@@ -323,13 +323,13 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
         <div class="fg">
           <label>Plateforme</label>
           <select id="w_platform">
-            <option value="airbnb">🏠 Airbnb</option>
-            <option value="booking">🔵 Booking.com</option>
-            <option value="autre">📦 Autre</option>
+            <option value="airbnb">ð  Airbnb</option>
+            <option value="booking">ðµ Booking.com</option>
+            <option value="autre">ð¦ Autre</option>
           </select>
         </div>
         <div class="fg">
-          <label>Bien concerné</label>
+          <label>Bien concernÃ©</label>
           <select id="w_property"></select>
         </div>
       </div>
@@ -343,17 +343,17 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
           <input type="email" id="w_guest_email" placeholder="john@email.com">
         </div>
         <div class="fg">
-          <label>Référence réservation</label>
+          <label>RÃ©fÃ©rence rÃ©servation</label>
           <input type="text" id="w_booking_ref" placeholder="HMXXXXXXXXX">
         </div>
       </div>
       <div class="row3">
         <div class="fg">
-          <label>Date d'arrivée</label>
+          <label>Date d'arrivÃ©e</label>
           <input type="date" id="w_checkin">
         </div>
         <div class="fg">
-          <label>Date de départ</label>
+          <label>Date de dÃ©part</label>
           <input type="date" id="w_checkout">
         </div>
         <div class="fg">
@@ -362,16 +362,16 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
         </div>
       </div>
       <div class="fg">
-        <label>Description des dégâts (soyez précis — l'IA s'en sert pour l'analyse) *</label>
-        <textarea id="w_description" rows="4" placeholder="Ex: Matelas de la chambre 1 taché de vin rouge, serviettes de bain brûlées (3 pièces), carrelage cassé dans la salle de bain, nettoyage approfondi nécessaire de toute la cuisine, télécommande TV disparue..."></textarea>
+        <label>Description des dÃ©gÃ¢ts (soyez prÃ©cis â l'IA s'en sert pour l'analyse) *</label>
+        <textarea id="w_description" rows="4" placeholder="Ex: Matelas de la chambre 1 tachÃ© de vin rouge, serviettes de bain brÃ»lÃ©es (3 piÃ¨ces), carrelage cassÃ© dans la salle de bain, nettoyage approfondi nÃ©cessaire de toute la cuisine, tÃ©lÃ©commande TV disparue..."></textarea>
       </div>
     </div>
     <!-- Step 2 -->
     <div id="wizStep2" class="hidden">
       <div class="ai-box" id="aiBox">
         <div class="ai-header">
-          <div class="ai-sparkle">✨</div>
-          <div><div class="ai-title">Analyse IA des dégâts</div><div class="ai-title-sub">Claude analyse vos photos et description</div></div>
+          <div class="ai-sparkle">â¨</div>
+          <div><div class="ai-title">Analyse IA des dÃ©gÃ¢ts</div><div class="ai-title-sub">Claude analyse vos photos et description</div></div>
         </div>
         <div class="ai-status" id="aiStatus">Ajoutez vos photos puis lancez l'analyse</div>
         <div class="ai-loading hidden" id="aiLoading">
@@ -380,11 +380,11 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
         </div>
       </div>
       <div class="fg">
-        <label>📷 Photos des dégâts (avant/pendant/après)</label>
+        <label>ð· Photos des dÃ©gÃ¢ts (avant/pendant/aprÃ¨s)</label>
         <div class="photo-drop" id="photoDropZone" onclick="document.getElementById('photoFileIn').click()">
-          <div class="photo-drop-icon">📸</div>
-          <div class="photo-drop-text">Glisser-déposer ou cliquer pour ajouter des photos</div>
-          <div class="photo-drop-sub">JPG, PNG, WEBP — plusieurs fichiers simultanés acceptés</div>
+          <div class="photo-drop-icon">ð¸</div>
+          <div class="photo-drop-text">Glisser-dÃ©poser ou cliquer pour ajouter des photos</div>
+          <div class="photo-drop-sub">JPG, PNG, WEBP â plusieurs fichiers simultanÃ©s acceptÃ©s</div>
           <input type="file" id="photoFileIn" multiple accept="image/*" style="display:none" onchange="addPhotos(event)">
         </div>
         <div class="photo-grid" id="photoGrid"></div>
@@ -397,12 +397,12 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
       </div>
       <div id="articlesSection" class="hidden">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-          <div style="font-size:13px;font-weight:700;color:var(--text)">Articles générés — modifiables</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text)">Articles gÃ©nÃ©rÃ©s â modifiables</div>
           <button class="btn btn-ghost btn-sm" onclick="addEmptyArticle()">+ Ligne</button>
         </div>
         <div class="articles-wrap">
           <div class="articles-head">
-            <span>Désignation</span><span>Qté</span><span>Unité</span><span>PU HT</span><span>Total HT</span><span></span>
+            <span>DÃ©signation</span><span>QtÃ©</span><span>UnitÃ©</span><span>PU HT</span><span>Total HT</span><span></span>
           </div>
           <div id="articlesBody"></div>
         </div>
@@ -413,36 +413,36 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
     <!-- Step 3 -->
     <div id="wizStep3" class="hidden">
       <div class="fg">
-        <label>Notes internes (non imprimées)</label>
-        <textarea id="w_notes" rows="2" placeholder="Ex: Airbnb ouvert le 25/05, réponse attendue avant le 01/06..."></textarea>
+        <label>Notes internes (non imprimÃ©es)</label>
+        <textarea id="w_notes" rows="2" placeholder="Ex: Airbnb ouvert le 25/05, rÃ©ponse attendue avant le 01/06..."></textarea>
       </div>
       <div class="fg">
-        <label>Montant de la caution disponible (€)</label>
+        <label>Montant de la caution disponible (â¬)</label>
         <input type="number" id="w_caution" placeholder="0" min="0">
       </div>
       <div class="fg">
-        <label>Documents à générer</label>
+        <label>Documents Ã  gÃ©nÃ©rer</label>
         <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
           <label style="display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:500;color:var(--text);cursor:pointer">
-            <input type="checkbox" id="gen_invoice" checked> 📄 Facture de dédommagement (PDF)
+            <input type="checkbox" id="gen_invoice" checked> ð Facture de dÃ©dommagement (PDF)
           </label>
           <label style="display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:500;color:var(--text);cursor:pointer">
-            <input type="checkbox" id="gen_report" checked> 📋 Rapport de dommages avec photos (PDF)
+            <input type="checkbox" id="gen_report" checked> ð Rapport de dommages avec photos (PDF)
           </label>
           <label style="display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:500;color:var(--text);cursor:pointer">
-            <input type="checkbox" id="gen_letter"> ✉️ Lettre de litige (texte prêt à copier)
+            <input type="checkbox" id="gen_letter"> âï¸ Lettre de litige (texte prÃªt Ã  copier)
           </label>
         </div>
       </div>
     </div>
   </div>
   <div class="modal-foot">
-    <button class="btn btn-ghost btn-sm" id="btnWizPrev" onclick="wizPrev()" style="display:none">← Précédent</button>
+    <button class="btn btn-ghost btn-sm" id="btnWizPrev" onclick="wizPrev()" style="display:none">â PrÃ©cÃ©dent</button>
     <button class="btn btn-ghost" onclick="closeModal('modalNewLitige')">Annuler</button>
-    <button class="btn btn-primary" id="btnWizNext" onclick="wizNext()">Suivant →</button>
+    <button class="btn btn-primary" id="btnWizNext" onclick="wizNext()">Suivant â</button>
     <button class="btn btn-primary hidden" id="btnWizGenerate" onclick="generateAll()">
       <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-      Générer les documents
+      GÃ©nÃ©rer les documents
     </button>
   </div>
 </div>
@@ -453,15 +453,15 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 <div class="modal modal-lg">
   <div class="modal-head">
     <div class="modal-title" id="viewTitle">Litige</div>
-    <button class="btn btn-ghost btn-sm btn-icon" onclick="closeModal('modalView')">✕</button>
+    <button class="btn btn-ghost btn-sm btn-icon" onclick="closeModal('modalView')">â</button>
   </div>
   <div class="modal-body" id="viewBody"></div>
   <div class="modal-foot">
     <button class="btn btn-ghost" onclick="closeModal('modalView')">Fermer</button>
-    <button class="btn btn-ghost" id="btnSetPaid" onclick="setStatus('resolved')">✅ Résolu</button>
+    <button class="btn btn-ghost" id="btnSetPaid" onclick="setStatus('resolved')">â RÃ©solu</button>
     <button class="btn btn-primary" onclick="regenDocs()">
       <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      Re-télécharger PDFs
+      Re-tÃ©lÃ©charger PDFs
     </button>
   </div>
 </div>
@@ -471,20 +471,20 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 <div class="overlay hidden" id="modalAPIKey">
 <div class="modal" style="width:480px">
   <div class="modal-head">
-    <div class="modal-title">🔑 Clé API Claude</div>
-    <button class="btn btn-ghost btn-sm btn-icon" onclick="closeModal('modalAPIKey')">✕</button>
+    <div class="modal-title">ð ClÃ© API Claude</div>
+    <button class="btn btn-ghost btn-sm btn-icon" onclick="closeModal('modalAPIKey')">â</button>
   </div>
   <div class="modal-body">
     <div style="background:#f8fafc;border-radius:10px;padding:16px;margin-bottom:20px;font-size:13px;color:var(--muted);line-height:1.6">
-      La clé API permet à Claude d'analyser vos photos et de générer des articles ultra-détaillés.
-      Obtenez la vôtre sur <strong>console.anthropic.com</strong> (compte gratuit, ~0,01€/analyse).
+      La clÃ© API permet Ã  Claude d'analyser vos photos et de gÃ©nÃ©rer des articles ultra-dÃ©taillÃ©s.
+      Obtenez la vÃ´tre sur <strong>console.anthropic.com</strong> (compte gratuit, ~0,01â¬/analyse).
     </div>
     <div class="fg">
-      <label>Clé API Anthropic (sk-ant-...)</label>
+      <label>ClÃ© API Anthropic (sk-ant-...)</label>
       <input type="password" id="apiKeyInput" placeholder="sk-ant-api03-..." style="font-family:monospace">
     </div>
     <div class="fg">
-      <label>Votre nom / société (pour les PDFs)</label>
+      <label>Votre nom / sociÃ©tÃ© (pour les PDFs)</label>
       <input type="text" id="ownerNameInput" placeholder="Jean Dupont / SARL Conciergerie">
     </div>
     <div class="fg">
@@ -497,7 +497,7 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
     </div>
     <div class="row2">
       <div class="fg">
-        <label>Téléphone</label>
+        <label>TÃ©lÃ©phone</label>
         <input type="text" id="ownerPhoneInput" placeholder="06 XX XX XX XX">
       </div>
       <div class="fg">
@@ -521,12 +521,12 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 <div class="overlay hidden" id="modalNewProp">
 <div class="modal" style="width:520px">
   <div class="modal-head">
-    <div class="modal-title">🏠 Nouveau bien</div>
-    <button class="btn btn-ghost btn-sm btn-icon" onclick="closeModal('modalNewProp')">✕</button>
+    <div class="modal-title">ð  Nouveau bien</div>
+    <button class="btn btn-ghost btn-sm btn-icon" onclick="closeModal('modalNewProp')">â</button>
   </div>
   <div class="modal-body">
     <div class="fg"><label>Nom du bien *</label><input type="text" id="p_name" placeholder="Studio Montpellier Centre / Villa Cap d'Agde"></div>
-    <div class="fg"><label>Adresse complète *</label><input type="text" id="p_address" placeholder="15 rue des Fleurs, 34000 Montpellier"></div>
+    <div class="fg"><label>Adresse complÃ¨te *</label><input type="text" id="p_address" placeholder="15 rue des Fleurs, 34000 Montpellier"></div>
     <div class="row2">
       <div class="fg"><label>Type de bien</label>
         <select id="p_type">
@@ -545,10 +545,10 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
         </select>
       </div>
     </div>
-    <div class="fg"><label>Caution habituelle (€)</label><input type="number" id="p_caution" placeholder="300"></div>
+    <div class="fg"><label>Caution habituelle (â¬)</label><input type="number" id="p_caution" placeholder="300"></div>
     <div class="fg"><label>Photo du bien (optionnel)</label>
       <div class="photo-drop" style="padding:16px" onclick="document.getElementById('propPhotoIn').click()">
-        <div style="font-size:13px;color:var(--muted)">📷 Cliquer pour ajouter une photo</div>
+        <div style="font-size:13px;color:var(--muted)">ð· Cliquer pour ajouter une photo</div>
         <input type="file" id="propPhotoIn" accept="image/*" style="display:none" onchange="previewPropPhoto(event)">
       </div>
       <img id="propPhotoPreview" src="" style="display:none;max-height:100px;border-radius:8px;margin-top:8px;object-fit:cover">
@@ -556,7 +556,7 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
   </div>
   <div class="modal-foot">
     <button class="btn btn-ghost" onclick="closeModal('modalNewProp')">Annuler</button>
-    <button class="btn btn-primary" onclick="saveProp()">Créer le bien</button>
+    <button class="btn btn-primary" onclick="saveProp()">CrÃ©er le bien</button>
   </div>
 </div>
 </div>
@@ -599,13 +599,13 @@ function load() {
   try { const s = localStorage.getItem('litigeIA'); if (s) Object.assign(DB, JSON.parse(s)); } catch(e){}
 }
 function uid() { return Date.now().toString(36)+Math.random().toString(36).substr(2,5); }
-function fmt(n) { return Number(n||0).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €'; }
+function fmt(n) { return Number(n||0).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' â¬'; }
 
 // ===================== API STATUS =====================
 function updateAPIStatus() {
   const dot = document.getElementById('apiDot');
   const lbl = document.getElementById('apiLabel');
-  dot.className='api-dot ok'; lbl.textContent='Claude IA connecté';
+  dot.className='api-dot ok'; lbl.textContent='Claude IA connectÃ©';
 }
 
 function saveAPIKey() {
@@ -617,7 +617,7 @@ function saveAPIKey() {
   DB.config.email = document.getElementById('ownerEmailInput').value.trim();
   DB.config.iban = document.getElementById('ownerIbanInput').value.trim();
   save(); updateAPIStatus(); closeModal('modalAPIKey');
-  toast('Configuration enregistrée', 'ok');
+  toast('Configuration enregistrÃ©e', 'ok');
 }
 
 // ===================== NAVIGATION =====================
@@ -626,8 +626,8 @@ function nav(v) {
   currentNav = v;
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('nav-'+v)?.classList.add('active');
-  const titles = { dashboard:'Tableau de bord', litiges:'Litiges', properties:'Mes biens', settings:'Configuration', constat:'📸 Constat du jour' };
-  const subs = { dashboard:'Vue d\'ensemble de vos litiges actifs', litiges:'Tous vos litiges par statut', properties:'Gérez vos biens en location', settings:'API, société, préférences', constat:'Photos collectées · Créer un nouveau litige' };
+  const titles = { dashboard:'Tableau de bord', litiges:'Litiges', properties:'Mes biens', settings:'Configuration', constat:'ð¸ Constat du jour' };
+  const subs = { dashboard:'Vue d\'ensemble de vos litiges actifs', litiges:'Tous vos litiges par statut', properties:'GÃ©rez vos biens en location', settings:'API, sociÃ©tÃ©, prÃ©fÃ©rences', constat:'Photos collectÃ©es Â· CrÃ©er un nouveau litige' };
   document.getElementById('topbarTitle').textContent = titles[v]||v;
   document.getElementById('topbarSub').textContent = subs[v]||'';
   updateBadge();
@@ -655,8 +655,8 @@ function renderDashboard() {
   const statuses = [
     { key:'new', label:'Nouveau', color:'#6366f1', dot:'#818cf8' },
     { key:'pending', label:'En cours', color:'#f59e0b', dot:'#fbbf24' },
-    { key:'sent', label:'Envoyé', color:'#8b5cf6', dot:'#a78bfa' },
-    { key:'resolved', label:'Résolu', color:'#10b981', dot:'#34d399' },
+    { key:'sent', label:'EnvoyÃ©', color:'#8b5cf6', dot:'#a78bfa' },
+    { key:'resolved', label:'RÃ©solu', color:'#10b981', dot:'#34d399' },
   ];
 
   document.getElementById('content').innerHTML = `
@@ -667,19 +667,19 @@ function renderDashboard() {
         <div class="stat-sub">${all.length} au total</div>
       </div>
       <div class="stat s-orange">
-        <div class="stat-label">Réclamé TTC</div>
-        <div class="stat-val">${totalTTC>=1000?(totalTTC/1000).toFixed(1)+'k':Math.round(totalTTC)} €</div>
+        <div class="stat-label">RÃ©clamÃ© TTC</div>
+        <div class="stat-val">${totalTTC>=1000?(totalTTC/1000).toFixed(1)+'k':Math.round(totalTTC)} â¬</div>
         <div class="stat-sub">${fmt(totalHT)} HT</div>
       </div>
       <div class="stat s-green">
-        <div class="stat-label">Encaissé</div>
-        <div class="stat-val">${encaisse>=1000?(encaisse/1000).toFixed(1)+'k':Math.round(encaisse)} €</div>
-        <div class="stat-sub">${resolved.length} litige(s) résolu(s)</div>
+        <div class="stat-label">EncaissÃ©</div>
+        <div class="stat-val">${encaisse>=1000?(encaisse/1000).toFixed(1)+'k':Math.round(encaisse)} â¬</div>
+        <div class="stat-sub">${resolved.length} litige(s) rÃ©solu(s)</div>
       </div>
       <div class="stat s-red">
-        <div class="stat-label">Taux succès</div>
+        <div class="stat-label">Taux succÃ¨s</div>
         <div class="stat-val">${all.length?Math.round(resolved.length/all.length*100):0}%</div>
-        <div class="stat-sub">résolution favorable</div>
+        <div class="stat-sub">rÃ©solution favorable</div>
       </div>
     </div>
     <div class="pipeline">
@@ -708,7 +708,7 @@ function litCardHTML(l) {
     ${l.photos&&l.photos[0]?`<img class="litige-card-thumb" src="${l.photos[0]}" alt="">`:''}
     <div><span class="litige-card-platform ${platClass}">${platLabel}</span></div>
     <div class="litige-card-guest">${l.guest_name}</div>
-    <div class="litige-card-prop">📍 ${prop?.name||'Bien inconnu'}</div>
+    <div class="litige-card-prop">ð ${prop?.name||'Bien inconnu'}</div>
     <div class="litige-card-amount">${fmt(l.total_ttc)}</div>
     <div class="litige-card-date">${l.constat_date?new Date(l.constat_date).toLocaleDateString('fr-FR'):''}</div>
   </div>`;
@@ -719,9 +719,9 @@ function renderLitiges() {
   const statusGroups = [
     { key:'new', label:'Nouveaux', badge:'badge-new' },
     { key:'pending', label:'En cours', badge:'badge-pending' },
-    { key:'sent', label:'Envoyés', badge:'badge-sent' },
-    { key:'resolved', label:'Résolus', badge:'badge-resolved' },
-    { key:'refused', label:'Refusés', badge:'badge-refused' },
+    { key:'sent', label:'EnvoyÃ©s', badge:'badge-sent' },
+    { key:'resolved', label:'RÃ©solus', badge:'badge-resolved' },
+    { key:'refused', label:'RefusÃ©s', badge:'badge-refused' },
   ];
   let html = '';
   statusGroups.forEach(sg => {
@@ -738,24 +738,24 @@ function renderLitiges() {
     </div>`;
   });
   if (!html) html = `<div style="text-align:center;padding:80px 0;color:var(--muted)">
-    <div style="font-size:48px;margin-bottom:16px">📋</div>
+    <div style="font-size:48px;margin-bottom:16px">ð</div>
     <div style="font-size:16px;font-weight:600;margin-bottom:6px">Aucun litige</div>
-    <div style="font-size:13px">Créez votre premier litige avec le bouton + Nouveau litige</div>
+    <div style="font-size:13px">CrÃ©ez votre premier litige avec le bouton + Nouveau litige</div>
   </div>`;
   document.getElementById('content').innerHTML = html;
 }
 
 function litRowHTML(l) {
   const prop = DB.properties.find(p=>p.id===l.property_id);
-  const statLabels = { new:'Nouveau', pending:'En cours', sent:'Envoyé', resolved:'Résolu', refused:'Refusé' };
+  const statLabels = { new:'Nouveau', pending:'En cours', sent:'EnvoyÃ©', resolved:'RÃ©solu', refused:'RefusÃ©' };
   const statBadges = { new:'badge-new', pending:'badge-pending', sent:'badge-sent', resolved:'badge-resolved', refused:'badge-refused' };
   return `<div style="display:grid;grid-template-columns:48px 1fr 160px 120px 100px 90px;align-items:center;gap:16px;padding:14px 18px;background:var(--card);border-radius:10px;border:1px solid var(--border);cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'" onclick="viewLitige('${l.id}')">
     <div style="width:42px;height:42px;border-radius:8px;overflow:hidden;background:var(--bg);flex-shrink:0">
-      ${l.photos&&l.photos[0]?`<img src="${l.photos[0]}" style="width:100%;height:100%;object-fit:cover">`:'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px">📸</div>'}
+      ${l.photos&&l.photos[0]?`<img src="${l.photos[0]}" style="width:100%;height:100%;object-fit:cover">`:'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px">ð¸</div>'}
     </div>
     <div>
-      <div style="font-weight:600;font-size:14px">📍 ${(DB.properties.find(p=>p.id===l.property_id)?.name||l.logement||'Bien inconnu').toUpperCase()}</div>
-      <div style="font-size:12px;color:var(--muted)">💣 ${(()=>{let d=(l.description||'').replace(/\n/g,' ');if(l.logement){const w=l.logement.split(' ')[0];d=d.replace(new RegExp(w+'\\s*','gi'),'').replace(/\s{2,}/g,' ').trim();}return d.substring(0,70);})()} </div>
+      <div style="font-weight:600;font-size:14px">ð ${(DB.properties.find(p=>p.id===l.property_id)?.name||l.logement||'Bien inconnu').toUpperCase()}</div>
+      <div style="font-size:12px;color:var(--muted)">ð£ ${(()=>{let d=(l.description||'').replace(/\n/g,' ');if(l.logement){const w=l.logement.split(' ')[0];d=d.replace(new RegExp(w+'\\s*','gi'),'').replace(/\s{2,}/g,' ').trim();}return d.substring(0,70);})()} </div>
     </div>
     <div style="font-size:12px;color:var(--muted)">${l.constat_date?new Date(l.constat_date).toLocaleDateString('fr-FR'):''}</div>
     <div><span class="badge ${statBadges[l.status||'new']}">${statLabels[l.status||'new']}</span></div>
@@ -779,13 +779,13 @@ function renderProperties() {
     </div>
     <div class="props-grid">${DB.properties.map(p => `
       <div class="prop-card">
-        <div class="prop-img">${p.photo?`<img src="${p.photo}">`:'🏠'}</div>
+        <div class="prop-img">${p.photo?`<img src="${p.photo}">`:'ð '}</div>
         <div class="prop-body">
           <div class="prop-name">${p.name}</div>
-          <div class="prop-address">📍 ${p.address||'Adresse non renseignée'}</div>
+          <div class="prop-address">ð ${p.address||'Adresse non renseignÃ©e'}</div>
           <div class="prop-stats">
             <span><strong>${DB.litiges.filter(l=>l.property_id===p.id).length}</strong> litiges</span>
-            <span><strong>${p.caution||0} €</strong> caution</span>
+            <span><strong>${p.caution||0} â¬</strong> caution</span>
             <span>${p.platform}</span>
           </div>
           <div style="display:flex;gap:8px;margin-top:12px">
@@ -795,7 +795,7 @@ function renderProperties() {
       </div>`).join('')}
       <div style="background:var(--card);border-radius:var(--radius-lg);border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;min-height:200px;cursor:pointer;transition:border-color .2s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'" onclick="openModal('modalNewProp')">
         <div style="text-align:center;color:var(--muted)">
-          <div style="font-size:28px;margin-bottom:8px">➕</div>
+          <div style="font-size:28px;margin-bottom:8px">â</div>
           <div style="font-size:13px;font-weight:600">Ajouter un bien</div>
         </div>
       </div>
@@ -808,22 +808,22 @@ function renderSettings() {
   document.getElementById('content').innerHTML = `
     <div style="max-width:560px">
       <div style="margin-bottom:28px">
-        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:16px">IA — Claude API</div>
+        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:16px">IA â Claude API</div>
         <div style="background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:var(--radius-lg);padding:16px 20px;border:1px solid var(--border);color:white">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-            <span style="font-size:18px">✅</span>
-            <span style="font-weight:700;font-size:14px">Clé API gérée côté serveur (Render)</span>
+            <span style="font-size:18px">â</span>
+            <span style="font-weight:700;font-size:14px">ClÃ© API gÃ©rÃ©e cÃ´tÃ© serveur (Render)</span>
           </div>
-          <div style="font-size:12.5px;color:rgba(255,255,255,.65);line-height:1.6">La clé API Anthropic est stockée en variable d'environnement sur Render.<br>Elle n'est jamais exposée dans le navigateur.</div>
+          <div style="font-size:12.5px;color:rgba(255,255,255,.65);line-height:1.6">La clÃ© API Anthropic est stockÃ©e en variable d'environnement sur Render.<br>Elle n'est jamais exposÃ©e dans le navigateur.</div>
         </div>
       </div>
       <div>
-        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:16px">Votre identité (apparaît sur les PDFs)</div>
+        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:16px">Votre identitÃ© (apparaÃ®t sur les PDFs)</div>
         <div style="background:var(--card);border-radius:var(--radius-lg);padding:20px;border:1px solid var(--border)">
-          <div class="fg"><label>Nom / Société</label><input type="text" id="s_owner" value="${c.ownerName||''}"></div>
+          <div class="fg"><label>Nom / SociÃ©tÃ©</label><input type="text" id="s_owner" value="${c.ownerName||''}"></div>
           <div class="row2">
             <div class="fg"><label>SIRET</label><input type="text" id="s_siret" value="${c.siret||''}"></div>
-            <div class="fg"><label>Téléphone</label><input type="text" id="s_phone" value="${c.phone||''}"></div>
+            <div class="fg"><label>TÃ©lÃ©phone</label><input type="text" id="s_phone" value="${c.phone||''}"></div>
           </div>
           <div class="fg"><label>Adresse</label><input type="text" id="s_address" value="${c.address||''}"></div>
           <div class="row2">
@@ -846,7 +846,7 @@ function saveSettings() {
   DB.config.address = document.getElementById('s_address').value.trim();
   DB.config.email = document.getElementById('s_email').value.trim();
   DB.config.iban = document.getElementById('s_iban').value.trim();
-  save(); updateAPIStatus(); toast('Paramètres enregistrés', 'ok');
+  save(); updateAPIStatus(); toast('ParamÃ¨tres enregistrÃ©s', 'ok');
 }
 
 // ===================== PROPERTY MGMT =====================
@@ -868,7 +868,7 @@ function saveProp() {
   const imgEl = document.getElementById('propPhotoPreview');
   DB.properties.push({ id:uid(), name, address:document.getElementById('p_address').value.trim(), type:document.getElementById('p_type').value, platform:document.getElementById('p_platform').value, caution:parseFloat(document.getElementById('p_caution').value)||300, photo:imgEl.style.display!=='none'?imgEl.src:null });
   save(); renderPropertySelect(); closeModal('modalNewProp');
-  toast('Bien créé !', 'ok'); nav('properties');
+  toast('Bien crÃ©Ã© !', 'ok'); nav('properties');
 }
 function deleteProp(id) {
   if (!confirm('Supprimer ce bien ?')) return;
@@ -891,13 +891,13 @@ function openNewLitige() {
 }
 
 function renderWizSteps() {
-  const labels = ['Infos voyage', 'Dégâts & IA', 'Génération'];
+  const labels = ['Infos voyage', 'DÃ©gÃ¢ts & IA', 'GÃ©nÃ©ration'];
   document.getElementById('stepsBar').innerHTML = labels.map((l,i) => {
     const n = i+1;
     const cls = n<wiz.step?'done':n===wiz.step?'active':'idle';
     return `${i>0?`<div class="step-line ${n<=wiz.step?'done':''}"></div>`:''}
     <div class="step-item ${cls}">
-      <div class="step-num">${n<wiz.step?'✓':n}</div>
+      <div class="step-num">${n<wiz.step?'â':n}</div>
       <span class="step-lbl">${l}</span>
     </div>`;
   }).join('');
@@ -930,7 +930,7 @@ function renderPhotoGrid() {
   document.getElementById('photoGrid').innerHTML = wiz.photos.map((p,i) => `
     <div class="photo-item">
       <img src="${p}" alt="Photo ${i+1}">
-      <button class="rm" onclick="wiz.photos.splice(${i},1);renderPhotoGrid()">×</button>
+      <button class="rm" onclick="wiz.photos.splice(${i},1);renderPhotoGrid()">Ã</button>
     </div>`).join('');
 }
 
@@ -947,18 +947,18 @@ async function runAIAnalysis() {
 
   const prop = DB.properties.find(p=>p.id===document.getElementById('w_property').value);
 
-  const systemPrompt = `Tu es un expert en gestion de litiges locatifs pour Airbnb et Booking.com en France. Tu évalues les dommages causés par des voyageurs et génères des devis de réparation/remplacement détaillés avec des prix réalistes du marché français 2024-2025.
+  const systemPrompt = `Tu es un expert en gestion de litiges locatifs pour Airbnb et Booking.com en France. Tu Ã©values les dommages causÃ©s par des voyageurs et gÃ©nÃ¨res des devis de rÃ©paration/remplacement dÃ©taillÃ©s avec des prix rÃ©alistes du marchÃ© franÃ§ais 2024-2025.
 
-Analyse les photos et la description fournie. Génère un JSON strict avec:
-- articles: liste détaillée de TOUS les dommages constatés. Chaque article doit être PRÉCIS et JUSTIFIÉ (ex: "Remplacement matelas 140x190 (taches multiples irréversibles)" pas juste "matelas"). Prix unitaires réalistes marché.
-  Chaque article: { designation, categorie (nettoyage|reparation|remplacement|perte), quantite, unite (pièce|m²|h|forfait|nuit), prix_ht, justification }
-- resume_dommages: résumé professionnel en 2-3 phrases pour le dossier litige
+Analyse les photos et la description fournie. GÃ©nÃ¨re un JSON strict avec:
+- articles: liste dÃ©taillÃ©e de TOUS les dommages constatÃ©s. Chaque article doit Ãªtre PRÃCIS et JUSTIFIÃ (ex: "Remplacement matelas 140x190 (taches multiples irrÃ©versibles)" pas juste "matelas"). Prix unitaires rÃ©alistes marchÃ©.
+  Chaque article: { designation, categorie (nettoyage|reparation|remplacement|perte), quantite, unite (piÃ¨ce|mÂ²|h|forfait|nuit), prix_ht, justification }
+- resume_dommages: rÃ©sumÃ© professionnel en 2-3 phrases pour le dossier litige
 - niveau_gravite: leger|modere|grave|critique
-- lettre_litige: message professionnel en français pour soumettre à Airbnb/Booking, ~200 mots
+- lettre_litige: message professionnel en franÃ§ais pour soumettre Ã  Airbnb/Booking, ~200 mots
 
-IMPORTANT: Sois exhaustif. Un dossier de litige Airbnb doit détailler chaque dommage séparément pour être pris en charge. Prix réalistes: main d'oeuvre ~50-70€/h, remplacement drap 20-40€, serviette 10-20€, matelas 200-500€ selon taille, etc.
+IMPORTANT: Sois exhaustif. Un dossier de litige Airbnb doit dÃ©tailler chaque dommage sÃ©parÃ©ment pour Ãªtre pris en charge. Prix rÃ©alistes: main d'oeuvre ~50-70â¬/h, remplacement drap 20-40â¬, serviette 10-20â¬, matelas 200-500â¬ selon taille, etc.
 
-Réponds UNIQUEMENT avec le JSON, sans markdown.`;
+RÃ©ponds UNIQUEMENT avec le JSON, sans markdown.`;
 
   const userContent = [];
   // Add photos (max 5 to avoid token overflow)
@@ -967,7 +967,7 @@ Réponds UNIQUEMENT avec le JSON, sans markdown.`;
     const b64 = p.replace(/^data:image\/\w+;base64,/,'');
     userContent.push({ type:'image', source:{ type:'base64', media_type:mt, data:b64 } });
   });
-  userContent.push({ type:'text', text:`Bien: ${prop?.name||'appartement'} (${prop?.type||'appartement'})\nPlateforme: ${document.getElementById('w_platform').value}\nVoyageur: ${document.getElementById('w_guest').value}\nDates: du ${document.getElementById('w_checkin').value} au ${document.getElementById('w_checkout').value}\n\nDescription des dégâts constatés:\n${desc}` });
+  userContent.push({ type:'text', text:`Bien: ${prop?.name||'appartement'} (${prop?.type||'appartement'})\nPlateforme: ${document.getElementById('w_platform').value}\nVoyageur: ${document.getElementById('w_guest').value}\nDates: du ${document.getElementById('w_checkin').value} au ${document.getElementById('w_checkout').value}\n\nDescription des dÃ©gÃ¢ts constatÃ©s:\n${desc}` });
 
   try {
     const res = await fetch('/api/analyze', {
@@ -988,14 +988,14 @@ Réponds UNIQUEMENT avec le JSON, sans markdown.`;
     wiz.gravite = parsed.niveau_gravite || 'modere';
     wiz.lettre = parsed.lettre_litige || '';
 
-    document.getElementById('aiStatus').textContent = `✅ ${wiz.articles.length} article(s) identifié(s) — Gravité: ${wiz.gravite}`;
+    document.getElementById('aiStatus').textContent = `â ${wiz.articles.length} article(s) identifiÃ©(s) â GravitÃ©: ${wiz.gravite}`;
     document.getElementById('aiLoading').classList.add('hidden');
     renderArticles();
     document.getElementById('articlesSection').classList.remove('hidden');
-    document.getElementById('aiResume').innerHTML = `<strong>Résumé IA:</strong> ${wiz.resume}`;
-    toast(`Analyse terminée — ${wiz.articles.length} articles`, 'ok');
+    document.getElementById('aiResume').innerHTML = `<strong>RÃ©sumÃ© IA:</strong> ${wiz.resume}`;
+    toast(`Analyse terminÃ©e â ${wiz.articles.length} articles`, 'ok');
   } catch(e) {
-    document.getElementById('aiStatus').textContent = '❌ Erreur: ' + (e.message||e);
+    document.getElementById('aiStatus').textContent = 'â Erreur: ' + (e.message||e);
     document.getElementById('aiLoading').classList.add('hidden');
     toast('Erreur IA: ' + (e.message||'').substr(0,60), 'err');
   }
@@ -1016,9 +1016,9 @@ function buildArticleRow(a,i) {
   const catColors = { nettoyage:'cat-nettoyage', reparation:'cat-reparation', remplacement:'cat-remplacement', perte:'cat-perte' };
   tr.innerHTML = `
     <div style="padding:4px 4px 4px 8px">
-      <input type="text" value="${a.designation||''}" placeholder="Désignation" oninput="updateArticle(${i},'designation',this.value)">
+      <input type="text" value="${a.designation||''}" placeholder="DÃ©signation" oninput="updateArticle(${i},'designation',this.value)">
       <div style="padding:0 4px 6px;display:flex;align-items:center;gap:6px">
-        <span class="article-cat ${catColors[a.categorie]||'cat-reparation'}">${a.categorie||'réparation'}</span>
+        <span class="article-cat ${catColors[a.categorie]||'cat-reparation'}">${a.categorie||'rÃ©paration'}</span>
         <span style="font-size:11px;color:var(--subtle);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.justification||''}</span>
       </div>
     </div>
@@ -1026,7 +1026,7 @@ function buildArticleRow(a,i) {
     <div><input type="text" value="${a.unite||'forfait'}" oninput="updateArticle(${i},'unite',this.value)"></div>
     <div><input type="number" value="${a.prix_ht||0}" min="0" step="0.01" oninput="updateArticle(${i},'prix_ht',parseFloat(this.value)||0);calcTotals()"></div>
     <div class="art-total" id="artTot${i}">${fmt((a.quantite||1)*(a.prix_ht||0))}</div>
-    <button class="art-del" onclick="wiz.articles.splice(${i},1);renderArticles()">×</button>`;
+    <button class="art-del" onclick="wiz.articles.splice(${i},1);renderArticles()">Ã</button>`;
   return tr;
 }
 
@@ -1100,7 +1100,7 @@ function generateAll() {
   if (document.getElementById('gen_letter').checked && litige.lettre) showLetter(litige);
 
   closeModal('modalNewLitige');
-  toast(`Litige créé — ${litige.articles.length} articles — ${fmt(ttc)}`, 'ok');
+  toast(`Litige crÃ©Ã© â ${litige.articles.length} articles â ${fmt(ttc)}`, 'ok');
   updateBadge(); nav('dashboard');
 }
 
@@ -1127,7 +1127,7 @@ function buildInvoicePDF(l, num) {
   // Owner
   doc.setTextColor(255,255,255);
   doc.setFontSize(16); doc.setFont('helvetica','bold');
-  doc.text(c.ownerName||'Nom non configuré', M, 17);
+  doc.text(c.ownerName||'Nom non configurÃ©', M, 17);
   doc.setFontSize(8); doc.setFont('helvetica','normal');
   const ownerLine = [c.address, c.phone, c.email].filter(Boolean).join('  |  ');
   if (ownerLine) doc.text(ownerLine, M, 24);
@@ -1135,7 +1135,7 @@ function buildInvoicePDF(l, num) {
 
   // Platform badge top-right
   doc.setFontSize(9); doc.setFont('helvetica','bold');
-  doc.text(isAirbnb ? '🏠 AIRBNB' : '🔵 BOOKING.COM', W-M, 14, {align:'right'});
+  doc.text(isAirbnb ? 'ð  AIRBNB' : 'ðµ BOOKING.COM', W-M, 14, {align:'right'});
   doc.setFontSize(22); doc.setFont('helvetica','bold');
   doc.text('FACTURE', W-M, 28, {align:'right'});
   doc.setFontSize(11); doc.setFont('helvetica','normal');
@@ -1153,14 +1153,14 @@ function buildInvoicePDF(l, num) {
   doc.text(l.guest_name, M+4, 70);
   doc.setFont('helvetica','normal'); doc.setFontSize(9);
   if (l.guest_email) doc.text(l.guest_email, M+4, 77);
-  if (l.booking_ref) doc.text('Réf: '+l.booking_ref, M+4, 83);
-  const dateRange = [l.checkin&&'Entrée: '+new Date(l.checkin).toLocaleDateString('fr-FR'), l.checkout&&'Sortie: '+new Date(l.checkout).toLocaleDateString('fr-FR')].filter(Boolean).join('  ');
+  if (l.booking_ref) doc.text('RÃ©f: '+l.booking_ref, M+4, 83);
+  const dateRange = [l.checkin&&'EntrÃ©e: '+new Date(l.checkin).toLocaleDateString('fr-FR'), l.checkout&&'Sortie: '+new Date(l.checkout).toLocaleDateString('fr-FR')].filter(Boolean).join('  ');
   if (dateRange) doc.text(dateRange, M+4, 89);
 
   // Property box
   doc.setFillColor(248,250,252); doc.roundedRect(W-M-88,54,88,42,3,3,'F');
   doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(100,100,100);
-  doc.text('BIEN CONCERNÉ', W-M-84, 61);
+  doc.text('BIEN CONCERNÃ', W-M-84, 61);
   doc.setTextColor(20,20,20); doc.setFont('helvetica','bold'); doc.setFontSize(11);
   doc.text(prop?.name||'', W-M-84, 70);
   doc.setFont('helvetica','normal'); doc.setFontSize(9);
@@ -1168,13 +1168,13 @@ function buildInvoicePDF(l, num) {
   doc.text(addr, W-M-84, 77);
   doc.text('Constat: '+new Date(l.constat_date||l.created_at).toLocaleDateString('fr-FR'), W-M-84, 89);
 
-  // Gravité badge
+  // GravitÃ© badge
   const gravColors = { leger:[16,185,129], modere:[245,158,11], grave:[239,68,68], critique:[127,29,29] };
   const gc = gravColors[l.gravite||'modere'];
   doc.setFillColor(...gc);
   doc.roundedRect(W-M-88, 100, 88, 12, 2, 2, 'F');
   doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(9);
-  doc.text('Gravité des dommages: '+((l.gravite||'modéré').toUpperCase()), W-M-44, 108, {align:'center'});
+  doc.text('GravitÃ© des dommages: '+((l.gravite||'modÃ©rÃ©').toUpperCase()), W-M-44, 108, {align:'center'});
 
   // Resume
   doc.setTextColor(60,60,60); doc.setFont('helvetica','italic'); doc.setFontSize(8.5);
@@ -1188,13 +1188,13 @@ function buildInvoicePDF(l, num) {
     a.designation + (a.justification?'\n'+a.justification:''),
     a.categorie,
     String(a.quantite)+' '+a.unite,
-    a.prix_ht.toFixed(2)+' €',
-    ((a.quantite||0)*(a.prix_ht||0)).toFixed(2)+' €'
+    a.prix_ht.toFixed(2)+' â¬',
+    ((a.quantite||0)*(a.prix_ht||0)).toFixed(2)+' â¬'
   ]);
 
   doc.autoTable({
     startY: 116, margin:{left:M,right:M},
-    head:[['DÉSIGNATION / JUSTIFICATION','CATÉGORIE','QTÉ','PU HT','TOTAL HT']],
+    head:[['DÃSIGNATION / JUSTIFICATION','CATÃGORIE','QTÃ','PU HT','TOTAL HT']],
     body: tableData,
     headStyles:{fillColor:[...brandColor],textColor:255,fontSize:8.5,fontStyle:'bold'},
     bodyStyles:{fontSize:8,textColor:[30,30,30],valign:'top'},
@@ -1211,18 +1211,18 @@ function buildInvoicePDF(l, num) {
   doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.setTextColor(...brandColor);
   doc.text('TOTAL TTC:', W-M-75, fy+27);
   doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(30,30,30);
-  doc.text(l.total_ht.toFixed(2)+' €', W-M-2, fy+9, {align:'right'});
-  doc.text(l.total_tva.toFixed(2)+' €', W-M-2, fy+17, {align:'right'});
+  doc.text(l.total_ht.toFixed(2)+' â¬', W-M-2, fy+9, {align:'right'});
+  doc.text(l.total_tva.toFixed(2)+' â¬', W-M-2, fy+17, {align:'right'});
   doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(...brandColor);
-  doc.text(l.total_ttc.toFixed(2)+' €', W-M-2, fy+27, {align:'right'});
+  doc.text(l.total_ttc.toFixed(2)+' â¬', W-M-2, fy+27, {align:'right'});
 
   // Caution
   if (l.caution>0) {
     doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(60,60,60);
     const reste = Math.max(0, l.total_ttc - l.caution);
-    doc.text(`Caution disponible: -${l.caution.toFixed(2)} €`, M, fy+15);
+    doc.text(`Caution disponible: -${l.caution.toFixed(2)} â¬`, M, fy+15);
     doc.setFont('helvetica','bold'); doc.setTextColor(...brandColor);
-    doc.text(`Solde restant dû: ${reste.toFixed(2)} €`, M, fy+24);
+    doc.text(`Solde restant dÃ»: ${reste.toFixed(2)} â¬`, M, fy+24);
   }
 
   // IBAN
@@ -1232,7 +1232,7 @@ function buildInvoicePDF(l, num) {
   doc.setFillColor(...brandColor);
   doc.rect(0,285,W,12,'F');
   doc.setTextColor(255,255,255); doc.setFontSize(7.5); doc.setFont('helvetica','normal');
-  const footTxt = (c.ownerName||'') + (c.address?' — '+c.address:'') + (c.siret?' — SIRET '+c.siret:'');
+  const footTxt = (c.ownerName||'') + (c.address?' â '+c.address:'') + (c.siret?' â SIRET '+c.siret:'');
   doc.text(footTxt, W/2, 293, {align:'center'});
 
   doc.save(`Facture_${num||l.invoice_num||l.id}.pdf`);
@@ -1254,10 +1254,10 @@ function buildReportPDF(l, num) {
   doc.setTextColor(255,255,255); doc.setFontSize(18); doc.setFont('helvetica','bold');
   doc.text("RAPPORT DE DOMMAGES", W/2, 16, {align:'center'});
   doc.setFontSize(10); doc.setFont('helvetica','normal');
-  doc.text((prop?.name||'Bien') + '  ·  ' + l.guest_name + '  ·  ' + new Date(l.constat_date||l.created_at).toLocaleDateString('fr-FR'), W/2, 25, {align:'center'});
-  doc.text((c.ownerName||'') + (c.siret?' — SIRET '+c.siret:''), W/2, 32, {align:'center'});
+  doc.text((prop?.name||'Bien') + '  Â·  ' + l.guest_name + '  Â·  ' + new Date(l.constat_date||l.created_at).toLocaleDateString('fr-FR'), W/2, 25, {align:'center'});
+  doc.text((c.ownerName||'') + (c.siret?' â SIRET '+c.siret:''), W/2, 32, {align:'center'});
   doc.setFontSize(9); doc.setFont('helvetica','bold');
-  doc.text('GRAVITÉ: '+(l.gravite||'modéré').toUpperCase(), W/2, 40, {align:'center'});
+  doc.text('GRAVITÃ: '+(l.gravite||'modÃ©rÃ©').toUpperCase(), W/2, 40, {align:'center'});
 
   let y = 52;
 
@@ -1267,11 +1267,11 @@ function buildReportPDF(l, num) {
   doc.text('INFORMATIONS CONSTAT', M, y); doc.line(M,y+2,W-M,y+2); y+=8;
 
   const infoItems = [
-    ['Établi par:', c.ownerName||'—'], ['Bien:', prop?.name||'—'],
-    ['Adresse:', prop?.address||'—'], ['Plateforme:', l.platform],
-    ['Voyageur:', l.guest_name], ['Email:', l.guest_email||'—'],
-    ['Réf. réservation:', l.booking_ref||'—'],
-    ['Dates séjour:', (l.checkin?new Date(l.checkin).toLocaleDateString('fr-FR'):'—')+' → '+(l.checkout?new Date(l.checkout).toLocaleDateString('fr-FR'):'—')],
+    ['Ãtabli par:', c.ownerName||'â'], ['Bien:', prop?.name||'â'],
+    ['Adresse:', prop?.address||'â'], ['Plateforme:', l.platform],
+    ['Voyageur:', l.guest_name], ['Email:', l.guest_email||'â'],
+    ['RÃ©f. rÃ©servation:', l.booking_ref||'â'],
+    ['Dates sÃ©jour:', (l.checkin?new Date(l.checkin).toLocaleDateString('fr-FR'):'â')+' â '+(l.checkout?new Date(l.checkout).toLocaleDateString('fr-FR'):'â')],
     ['Date constat:', new Date(l.constat_date||l.created_at).toLocaleDateString('fr-FR')],
   ];
   doc.setTextColor(30,30,30); doc.setFont('helvetica','normal'); doc.setFontSize(8.5);
@@ -1295,7 +1295,7 @@ function buildReportPDF(l, num) {
   if (l.resume) {
     doc.setFillColor(240,240,255); doc.roundedRect(M,y,W-M*2,14,2,2,'F');
     doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(99,102,241);
-    doc.text('✨ Analyse IA:', M+4, y+5);
+    doc.text('â¨ Analyse IA:', M+4, y+5);
     doc.setFont('helvetica','normal'); doc.setTextColor(30,30,30);
     const aLines = doc.splitTextToSize(l.resume, W-M*2-28);
     doc.text(aLines, M+32, y+5);
@@ -1305,8 +1305,8 @@ function buildReportPDF(l, num) {
   // Articles table
   doc.autoTable({
     startY: y, margin:{left:M,right:M},
-    head:[['DÉSIGNATION','CATÉGORIE','QTÉ','PU HT','TOTAL HT']],
-    body: l.articles.map(a=>[a.designation+(a.justification?'\n('+a.justification+')':''), a.categorie, a.quantite+' '+a.unite, a.prix_ht.toFixed(2)+' €', ((a.quantite||0)*(a.prix_ht||0)).toFixed(2)+' €']),
+    head:[['DÃSIGNATION','CATÃGORIE','QTÃ','PU HT','TOTAL HT']],
+    body: l.articles.map(a=>[a.designation+(a.justification?'\n('+a.justification+')':''), a.categorie, a.quantite+' '+a.unite, a.prix_ht.toFixed(2)+' â¬', ((a.quantite||0)*(a.prix_ht||0)).toFixed(2)+' â¬']),
     headStyles:{fillColor:[...gc],textColor:255,fontSize:8,fontStyle:'bold'},
     bodyStyles:{fontSize:7.5,valign:'top'},
     alternateRowStyles:{fillColor:[250,250,250]},
@@ -1317,10 +1317,10 @@ function buildReportPDF(l, num) {
   // Total
   doc.setFillColor(250,250,250); doc.rect(W-M-70,y,70,22,'F');
   doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(80,80,80);
-  doc.text('Total HT:', W-M-66,y+6); doc.text(l.total_ht.toFixed(2)+' €',W-M-2,y+6,{align:'right'});
-  doc.text('TVA (20%):', W-M-66,y+12); doc.text(l.total_tva.toFixed(2)+' €',W-M-2,y+12,{align:'right'});
+  doc.text('Total HT:', W-M-66,y+6); doc.text(l.total_ht.toFixed(2)+' â¬',W-M-2,y+6,{align:'right'});
+  doc.text('TVA (20%):', W-M-66,y+12); doc.text(l.total_tva.toFixed(2)+' â¬',W-M-2,y+12,{align:'right'});
   doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(...gc);
-  doc.text('TOTAL TTC:', W-M-66,y+20); doc.text(l.total_ttc.toFixed(2)+' €',W-M-2,y+20,{align:'right'});
+  doc.text('TOTAL TTC:', W-M-66,y+20); doc.text(l.total_ttc.toFixed(2)+' â¬',W-M-2,y+20,{align:'right'});
   y += 26;
 
   // Photos
@@ -1352,9 +1352,9 @@ function buildReportPDF(l, num) {
   doc.setDrawColor(180,180,180);
   doc.rect(M,y,86,28); doc.rect(W-M-86,y,86,28);
   doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(100,100,100);
-  doc.text('Constaté par (propriétaire/gestionnaire)', M+4, y+5);
+  doc.text('ConstatÃ© par (propriÃ©taire/gestionnaire)', M+4, y+5);
   doc.text('Signature + date', M+4, y+10);
-  doc.text('Voyageur (si présent)', W-M-82, y+5);
+  doc.text('Voyageur (si prÃ©sent)', W-M-82, y+5);
   doc.text('Signature + date', W-M-82, y+10);
   if (c.ownerName) doc.text(c.ownerName, M+4, y+20);
 
@@ -1362,7 +1362,7 @@ function buildReportPDF(l, num) {
   doc.setFillColor(...gc);
   doc.rect(0,285,W,12,'F');
   doc.setTextColor(255,255,255); doc.setFontSize(7.5);
-  doc.text((c.ownerName||'')+(c.address?' — '+c.address:'')+(c.siret?' — SIRET '+c.siret:''), W/2, 293, {align:'center'});
+  doc.text((c.ownerName||'')+(c.address?' â '+c.address:'')+(c.siret?' â SIRET '+c.siret:''), W/2, 293, {align:'center'});
 
   doc.save(`Rapport_${num||l.invoice_num||l.id}.pdf`);
 }
@@ -1373,13 +1373,13 @@ function showLetter(l) {
   const div = document.createElement('div');
   div.className='overlay'; div.style.zIndex='400';
   div.innerHTML=`<div class="modal" style="width:580px">
-    <div class="modal-head"><div class="modal-title">✉️ Lettre de litige — à copier</div><button class="btn btn-ghost btn-sm btn-icon" onclick="this.closest('.overlay').remove()">✕</button></div>
+    <div class="modal-head"><div class="modal-title">âï¸ Lettre de litige â Ã  copier</div><button class="btn btn-ghost btn-sm btn-icon" onclick="this.closest('.overlay').remove()">â</button></div>
     <div class="modal-body">
       <div style="background:var(--bg);border-radius:10px;padding:16px;font-size:13.5px;line-height:1.7;white-space:pre-wrap;border:1px solid var(--border)">${l.lettre}</div>
     </div>
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="this.closest('.overlay').remove()">Fermer</button>
-      <button class="btn btn-primary" onclick="navigator.clipboard.writeText(${JSON.stringify(l.lettre)});this.textContent='✅ Copié!'">📋 Copier</button>
+      <button class="btn btn-primary" onclick="navigator.clipboard.writeText(${JSON.stringify(l.lettre)});this.textContent='â CopiÃ©!'">ð Copier</button>
     </div>
   </div>`;
   document.body.appendChild(div);
@@ -1391,9 +1391,9 @@ function viewLitige(id) {
   const l = DB.litiges.find(x=>x.id===id); if (!l) return;
   const prop = DB.properties.find(p=>p.id===l.property_id);
   const statBadges = { new:'badge-new', pending:'badge-pending', sent:'badge-sent', resolved:'badge-resolved', refused:'badge-refused' };
-  const statLabels = { new:'Nouveau', pending:'En cours', sent:'Envoyé', resolved:'Résolu', refused:'Refusé' };
+  const statLabels = { new:'Nouveau', pending:'En cours', sent:'EnvoyÃ©', resolved:'RÃ©solu', refused:'RefusÃ©' };
 
-  document.getElementById('viewTitle').innerHTML = `Litige — ${l.guest_name} <span class="badge ${statBadges[l.status||'new']}" style="margin-left:10px">${statLabels[l.status||'new']}</span>`;
+  document.getElementById('viewTitle').innerHTML = `Litige â ${l.guest_name} <span class="badge ${statBadges[l.status||'new']}" style="margin-left:10px">${statLabels[l.status||'new']}</span>`;
   document.getElementById('viewBody').innerHTML = `
     <div class="detail-grid">
       <div>
@@ -1402,10 +1402,10 @@ function viewLitige(id) {
           <div class="info-grid">
             <div class="info-cell"><div class="info-cell-label">Voyageur</div><div class="info-cell-val">${l.guest_name}</div></div>
             <div class="info-cell"><div class="info-cell-label">Plateforme</div><div class="info-cell-val">${l.platform}</div></div>
-            <div class="info-cell"><div class="info-cell-label">Bien</div><div class="info-cell-val">${prop?.name||`<select onchange="updateLitigeProp('${l.id}',this.value)" style="background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:13px;max-width:200px"><option value="">— Choisir un bien</option>${DB.properties.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}</select>`}</div></div>
-            <div class="info-cell"><div class="info-cell-label">Référence</div><div class="info-cell-val">${l.booking_ref||'—'}</div></div>
-            <div class="info-cell"><div class="info-cell-label">Séjour</div><div class="info-cell-val">${l.checkin?new Date(l.checkin).toLocaleDateString('fr-FR'):'-'} → ${l.checkout?new Date(l.checkout).toLocaleDateString('fr-FR'):'-'}</div></div>
-            <div class="info-cell"><div class="info-cell-label">Constat</div><div class="info-cell-val">${l.constat_date?new Date(l.constat_date).toLocaleDateString('fr-FR'):'—'}</div></div>
+            <div class="info-cell"><div class="info-cell-label">Bien</div><div class="info-cell-val">${prop?.name||`<select onchange="updateLitigeProp('${l.id}',this.value)" style="background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:13px;max-width:200px"><option value="">â Choisir un bien</option>${DB.properties.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}</select>`}</div></div>
+            <div class="info-cell"><div class="info-cell-label">RÃ©fÃ©rence</div><div class="info-cell-val">${l.booking_ref||'â'}</div></div>
+            <div class="info-cell"><div class="info-cell-label">SÃ©jour</div><div class="info-cell-val">${l.checkin?new Date(l.checkin).toLocaleDateString('fr-FR'):'-'} â ${l.checkout?new Date(l.checkout).toLocaleDateString('fr-FR'):'-'}</div></div>
+            <div class="info-cell"><div class="info-cell-label">Constat</div><div class="info-cell-val">${l.constat_date?new Date(l.constat_date).toLocaleDateString('fr-FR'):'â'}</div></div>
           </div>
         </div>
         <div class="detail-section">
@@ -1415,19 +1415,19 @@ function viewLitige(id) {
           <input type="checkbox" style="width:18px;height:18px;cursor:pointer;accent-color:var(--accent)">
           <div>
             <div style="font-size:14px;font-weight:600;color:var(--text)">${a.designation}</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:2px">${a.quantite||1} × ${fmt(a.prix_ht||0)} €</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:2px">${a.quantite||1} Ã ${fmt(a.prix_ht||0)} â¬</div>
           </div>
         </label>
         <div style="text-align:right">
-          <strong style="color:var(--accent);font-size:15px">${fmt((a.quantite||0)*(a.prix_ht||0))} €</strong>
+          <strong style="color:var(--accent);font-size:15px">${fmt((a.quantite||0)*(a.prix_ht||0))} â¬</strong>
         </div>
       </div>`).join('')}</div>
           <div style="margin-top:20px;padding:16px;background:linear-gradient(135deg,rgba(99,102,241,.1) 0%,rgba(139,92,246,.05) 100%);border-radius:12px;border:1px solid rgba(99,102,241,.2);text-align:right">
           <div style="font-size:13px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em;font-weight:700">Total TTC</div>
-          <div style="font-size:24px;font-weight:700;color:var(--accent);letter-spacing:-1px">${fmt(l.total_ttc)} €</div>
+          <div style="font-size:24px;font-weight:700;color:var(--accent);letter-spacing:-1px">${fmt(l.total_ttc)} â¬</div>
         </div>
         </div>
-        ${l.lettre?`<div class="detail-section"><div class="detail-section-title">Lettre de litige</div><button class="btn btn-ghost btn-sm" onclick="showLetter(DB.litiges.find(x=>x.id==='${l.id}'))">✉️ Voir la lettre</button></div>`:''}
+        ${l.lettre?`<div class="detail-section"><div class="detail-section-title">Lettre de litige</div><button class="btn btn-ghost btn-sm" onclick="showLetter(DB.litiges.find(x=>x.id==='${l.id}'))">âï¸ Voir la lettre</button></div>`:''}
       </div>
       <div>
         <div class="detail-section">
@@ -1448,7 +1448,7 @@ function setStatus(s) {
   l.status=s; save(); updateBadge();
   if (currentNav==='dashboard') renderDashboard();
   else if (currentNav==='litiges') renderLitiges();
-  toast('Statut mis à jour : '+s, 'ok');
+  toast('Statut mis Ã  jour : '+s, 'ok');
 }
 
 function updateLitigeProp(id, propId) {
@@ -1457,7 +1457,7 @@ function updateLitigeProp(id, propId) {
   l.property_id=propId; l.logement=prop.name;
   save();
   viewLitige(id);
-  toast('Bien assigné : '+prop.name,'ok');
+  toast('Bien assignÃ© : '+prop.name,'ok');
 }
 
 function regenDocs() {
@@ -1465,7 +1465,7 @@ function regenDocs() {
   buildInvoicePDF(l, l.invoice_num);
   if (l.photos?.length||l.resume) buildReportPDF(l, l.invoice_num);
   closeModal('modalView');
-  toast('PDFs téléchargés', 'ok');
+  toast('PDFs tÃ©lÃ©chargÃ©s', 'ok');
 }
 function regenDocById(id) {
   const l = DB.litiges.find(x=>x.id===id); if (!l) return;
@@ -1516,7 +1516,7 @@ function renderConstat() {
   window._constatSelected = [];
 
   const prestataires = [...new Set(DB.litiges.map(l => l.prestataire).filter(Boolean))];
-  if (!prestataires.length) prestataires.push('Équipe ménage','Gestionnaire','Propriétaire');
+  if (!prestataires.length) prestataires.push('Ãquipe mÃ©nage','Gestionnaire','PropriÃ©taire');
 
   const propOptions = DB.properties.slice().sort((a,b)=>a.name.localeCompare(b.name))
     .map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
@@ -1524,8 +1524,8 @@ function renderConstat() {
   document.getElementById('content').innerHTML = `
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;height:calc(100vh - 116px)">
       <div class="card card-pad" style="overflow-y:auto;display:flex;flex-direction:column">
-        <div style="font-size:16px;font-weight:700;margin-bottom:4px">📸 Photos du jour</div>
-        <div style="font-size:12px;color:var(--muted);margin-bottom:16px">${today} · ${allPhotos.length} photo(s) — cliquez pour sélectionner</div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:4px">ð¸ Photos du jour</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:16px">${today} Â· ${allPhotos.length} photo(s) â cliquez pour sÃ©lectionner</div>
         ${allPhotos.length ? `<div class="photo-grid" id="constatPhotosGrid">
           ${allPhotos.map((p,i) => `
             <div class="photo-item" id="cph-${i}" onclick="toggleConstatPhoto(${i})" style="cursor:pointer;border:3px solid transparent;border-radius:9px;transition:border-color .15s">
@@ -1533,14 +1533,14 @@ function renderConstat() {
             </div>
           `).join('')}
         </div>
-        <div style="margin-top:12px;font-size:12px;color:var(--accent)" id="selCount">0 photo(s) sélectionnée(s) — toutes incluses si aucune</div>` 
-        : `<div style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;text-align:center"><div><div style="font-size:36px;margin-bottom:12px">📭</div><div>Aucune photo collectée aujourd'hui<br>Le bot Telegram les récupère automatiquement</div></div></div>`}
+        <div style="margin-top:12px;font-size:12px;color:var(--accent)" id="selCount">0 photo(s) sÃ©lectionnÃ©e(s) â toutes incluses si aucune</div>` 
+        : `<div style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;text-align:center"><div><div style="font-size:36px;margin-bottom:12px">ð­</div><div>Aucune photo collectÃ©e aujourd'hui<br>Le bot Telegram les rÃ©cupÃ¨re automatiquement</div></div></div>`}
       </div>
       <div class="card card-pad" style="overflow-y:auto">
         <div style="font-size:16px;font-weight:700;margin-bottom:20px">Nouveau constat</div>
         <div class="fg">
           <label>Appartement *</label>
-          <select id="c_prop"><option value="">— Choisir un bien</option>${propOptions}</select>
+          <select id="c_prop"><option value="">â Choisir un bien</option>${propOptions}</select>
         </div>
         <div class="fg">
           <label>Date du sinistre *</label>
@@ -1549,14 +1549,14 @@ function renderConstat() {
         <div class="fg">
           <label>Plateforme *</label>
           <select id="c_plat">
-            <option value="airbnb">🏠 Airbnb</option>
-            <option value="booking">🔵 Booking.com</option>
+            <option value="airbnb">ð  Airbnb</option>
+            <option value="booking">ðµ Booking.com</option>
           </select>
         </div>
         <div class="fg">
-          <label>Déclaré par (prestataire)</label>
+          <label>DÃ©clarÃ© par (prestataire)</label>
           <select id="c_prest" onchange="toggleNewPrest(this.value)">
-            <option value="">— Choisir</option>
+            <option value="">â Choisir</option>
             ${prestataires.map(p=>`<option value="${p}">${p}</option>`).join('')}
             <option value="__new__">+ Nouveau prestataire...</option>
           </select>
@@ -1566,7 +1566,7 @@ function renderConstat() {
           <input type="text" id="c_prest_new" placeholder="Nom du prestataire">
         </div>
         <button class="btn btn-primary" style="width:100%;margin-top:16px;justify-content:center;padding:14px" onclick="validerConstat()">
-          Valider — Ouvrir le constat ✓
+          Valider â Ouvrir le constat â
         </button>
       </div>
     </div>
@@ -1586,8 +1586,8 @@ function toggleConstatPhoto(i) {
   }
   const cnt = document.getElementById('selCount');
   if (cnt) cnt.textContent = window._constatSelected.length
-    ? window._constatSelected.length + ' photo(s) sélectionnée(s)'
-    : '0 photo(s) sélectionnée(s) — toutes incluses si aucune';
+    ? window._constatSelected.length + ' photo(s) sÃ©lectionnÃ©e(s)'
+    : '0 photo(s) sÃ©lectionnÃ©e(s) â toutes incluses si aucune';
 }
 
 function toggleNewPrest(v) {
@@ -1614,7 +1614,7 @@ function validerConstat() {
     logement: prop?.name||'',
     property_id: propId,
     guest: 'Constat ' + date,
-    description: 'Constat établi par ' + (prestataire||'prestataire') + ' le ' + date,
+    description: 'Constat Ã©tabli par ' + (prestataire||'prestataire') + ' le ' + date,
     prestataire, date_sinistre: date,
     photos, articles:[],
     created_at: new Date().toISOString(),
@@ -1627,7 +1627,7 @@ function validerConstat() {
     if (!DB.config.prestataires.includes(prestataire)) DB.config.prestataires.push(prestataire);
   }
   save();
-  toast('Constat créé — ' + photos.length + ' photo(s)','ok');
+  toast('Constat crÃ©Ã© â ' + photos.length + ' photo(s)','ok');
   viewLitige(id);
 }
 
