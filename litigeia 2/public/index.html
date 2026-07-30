@@ -2952,5 +2952,40 @@ if(body)body.innerHTML='<div style="display:flex;height:100%;overflow:hidden">'+
 window.vlToggle=function(key,ck){var af=window._vl.factures[window._vl.activeFacture];if(!af)return;if(ck){if(af.templates.indexOf(key)===-1)af.templates.push(key);}else{af.templates=af.templates.filter(function(k){return k!==key;});}vlRender();};
 window.vlSetFact=function(idx){window._vl.activeFacture=idx;vlRender();};
 window.vlAddFact=function(){var vl=window._vl;var n=vl.factures.length+1;vl.factures.push({id:"f"+Date.now(),name:"Facture "+n,templates:[]});vl.activeFacture=vl.factures.length-1;vlRender();};
+
+// === CONSTAT: auto-refresh + logmt labels ===
+(function(){
+  var _origRC=window.renderConstat;
+  if(typeof _origRC==='function'){
+    window.renderConstat=function(){
+      _origRC.apply(this,arguments);
+      setTimeout(function(){
+        var today=new Date().toISOString().slice(0,10);
+        var ul={};
+        (DB.pending_photos||[]).forEach(function(p){if(p.logmt&&(p.date||'')===today)ul[p.url]=p.logmt;});
+        (window._constatPhotos||[]).forEach(function(url,k){
+          var nm=ul[url];if(!nm)return;
+          var c=document.getElementById('cph-'+k);if(!c)return;
+          if(c.querySelector('.ll'))return;
+          c.style.position='relative';
+          var d=document.createElement('div');
+          d.className='ll';
+          d.style.cssText='position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.65);color:#fff;font-size:10px;font-weight:700;padding:3px 6px;text-align:center;pointer-events:none;z-index:2';
+          d.textContent=nm;c.appendChild(d);
+        });
+      },50);
+    };
+  }
+  function _poll(){
+    fetch('/api/state').then(function(r){return r.json();}).then(function(d){
+      if(d&&d.pending_photos){
+        DB.pending_photos=d.pending_photos;
+        var nb=document.getElementById('nav-constat');
+        if(nb&&nb.classList.contains('active')&&window.renderConstat)window.renderConstat();
+      }
+    }).catch(function(){});
+  }
+  setTimeout(function(){_poll();setInterval(_poll,30000);},5000);
+})();
 </script>
 </body>
