@@ -2804,4 +2804,129 @@ function vlShowDocs(lit){
     "</div>";
 }
 </script>
+
+<script>
+Object.assign(TL,{
+rep_sommier:{label:"Réparation sommier",cat:"mobilier",articles:[{d:"Déplacement artisan menuiserie",p:45,q:1},{d:"Remplacement lattes endommagées",p:15,q:3},{d:"Main d'oeuvre réassemblage",p:50,q:1}]},
+rep_pied_lit:{label:"Réparation pied de lit",cat:"mobilier",articles:[{d:"Déplacement artisan",p:40,q:1},{d:"Fourniture pied de lit de remplacement",p:32,q:1},{d:"Pose et alignement",p:35,q:0.5}]},
+rep_chaise:{label:"Réparation chaise",cat:"mobilier",articles:[{d:"Déplacement artisan",p:40,q:1},{d:"Réparation structure recolle et visserie",p:55,q:1},{d:"Fourniture visserie et colle structurelle",p:12,q:1}]},
+rep_table:{label:"Réparation table",cat:"mobilier",articles:[{d:"Déplacement artisan",p:45,q:1},{d:"Réparation pied cassé et charnière",p:65,q:1},{d:"Fourniture pièces et visserie",p:18,q:1}]},
+rep_armoire:{label:"Réparation armoire",cat:"mobilier",articles:[{d:"Déplacement artisan",p:45,q:1},{d:"Réparation charnières et rails",p:60,q:1},{d:"Fourniture charnières et coulisses",p:22,q:1}]},
+rep_tiroir:{label:"Réparation tiroir",cat:"mobilier",articles:[{d:"Déplacement artisan",p:40,q:1},{d:"Réparation coulisses et fond de tiroir",p:55,q:1},{d:"Fourniture coulisses de remplacement",p:20,q:1}]},
+rep_prise:{label:"Réparation prise / interrupteur",cat:"electricite",articles:[{d:"Déplacement électricien",p:55,q:1},{d:"Dépose et remplacement prise ou interrupteur",p:50,q:1},{d:"Fourniture prise ou interrupteur",p:18,q:1},{d:"Test mise en sécurité",p:50,q:0.25}]},
+rep_lustre:{label:"Réparation lustre",cat:"electricite",articles:[{d:"Déplacement électricien",p:55,q:1},{d:"Dépose et réparation câblage douille",p:50,q:1},{d:"Fourniture pièces douille câble fixation",p:28,q:1},{d:"Repose et test",p:50,q:0.5}]},
+rep_volet:{label:"Réparation volet / store",cat:"menuiserie",articles:[{d:"Déplacement artisan stores",p:55,q:1},{d:"Diagnostic",p:30,q:1},{d:"Réparation mécanique sangle lame moteur",p:80,q:1},{d:"Fourniture pièces de rechange",p:45,q:1}]},
+rep_plinthe:{label:"Réparation plinthe",cat:"menuiserie",articles:[{d:"Déplacement artisan",p:40,q:1},{d:"Dépose plinthe endommagée et pose neuve",p:45,q:1},{d:"Fourniture plinthe assortie par ml",p:12,q:2},{d:"Retouche peinture et jointement",p:35,q:1}]},
+rep_portema:{label:"Réparation porte-manteau",cat:"mobilier",articles:[{d:"Déplacement artisan",p:35,q:1},{d:"Dépose, rebouchage et repose",p:40,q:1},{d:"Fourniture porte-manteau mural",p:45,q:1}]},
+rep_tableau:{label:"Refixer tableau",cat:"platrier",articles:[{d:"Déplacement artisan",p:35,q:1},{d:"Rebouchage trou au plâtre",p:40,q:1},{d:"Fourniture fixation murale renforcée",p:8,q:1},{d:"Retouche peinture",p:30,q:1}]},
+rep_porte_douche:{label:"Réparation porte de douche",cat:"plomberie",articles:[{d:"Déplacement technicien",p:55,q:1},{d:"Réparation rail joint ou gond",p:75,q:1},{d:"Fourniture joints et pièces",p:35,q:1}]},
+rep_canape:{label:"Réparation canapé structure",cat:"mobilier",articles:[{d:"Déplacement tapissier",p:55,q:1},{d:"Réparation structure ressort pied armature",p:85,q:1},{d:"Fourniture pièces ressorts bois visserie",p:35,q:1}]},
+rep_robinet:{label:"Réparation robinet",cat:"plomberie",articles:[{d:"Déplacement plombier",p:55,q:1},{d:"Remplacement cartouche et joints",p:50,q:1},{d:"Fourniture cartouche ou joints",p:22,q:1},{d:"Test étanchéité",p:50,q:0.25}]},
+rep_porte_cuisine:{label:"Réparation porte cuisine",cat:"mobilier",articles:[{d:"Déplacement artisan",p:45,q:1},{d:"Réparation charnières et ajustement",p:50,q:1},{d:"Fourniture charnières et visserie",p:15,q:1}]},
+rem_sommier:{label:"Remplacement sommier",cat:"mobilier",articles:[{d:"Dépose et évacuation sommier",p:40,q:1},{d:"Fourniture sommier à lattes",p:150,q:1},{d:"Livraison et mise en place",p:45,q:1}]},
+rem_matelas:{label:"Remplacement matelas",cat:"mobilier",articles:[{d:"Dépose et évacuation matelas",p:45,q:1},{d:"Fourniture matelas 140x190 qualité hôtelière",p:280,q:1},{d:"Livraison et mise en place",p:45,q:1}]},
+rem_couette:{label:"Remplacement couette",cat:"linge",articles:[{d:"Mise au rebut couette endommagée",p:15,q:1},{d:"Fourniture couette 140/160x200",p:65,q:1}]},
+rem_oreiller:{label:"Remplacement oreiller",cat:"linge",articles:[{d:"Mise au rebut oreillers",p:10,q:1},{d:"Fourniture oreillers par paire",p:28,q:2}]},
+rem_luminaire:{label:"Remplacement luminaire suspension",cat:"electricite",articles:[{d:"Déplacement électricien",p:55,q:1},{d:"Dépose et évacuation ancien luminaire",p:50,q:0.5},{d:"Fourniture luminaire suspension",p:95,q:1},{d:"Pose et câblage",p:50,q:1}]},
+rem_lampe_chevet:{label:"Remplacement lampe de chevet",cat:"electricite",articles:[{d:"Fourniture lampe de chevet",p:55,q:1},{d:"Mise en place et test",p:15,q:1}]},
+rem_lampe_pied:{label:"Remplacement lampe sur pied",cat:"electricite",articles:[{d:"Fourniture lampe sur pied",p:85,q:1},{d:"Livraison et mise en place",p:25,q:1}]},
+rem_table_basse:{label:"Remplacement table basse",cat:"mobilier",articles:[{d:"Dépose et évacuation",p:35,q:1},{d:"Fourniture table basse",p:120,q:1},{d:"Livraison et montage",p:45,q:1}]},
+rem_tapis:{label:"Remplacement tapis",cat:"mobilier",articles:[{d:"Évacuation tapis endommagé",p:30,q:1},{d:"Fourniture tapis selon dimensions",p:95,q:1},{d:"Livraison et mise en place",p:30,q:1}]},
+rem_tv:{label:"Remplacement télévision",cat:"electromenager",articles:[{d:"Dépose et évacuation",p:40,q:1},{d:"Fourniture TV 55 pouces Smart TV",p:550,q:1},{d:"Livraison fixation murale et paramétrage",p:65,q:1}]},
+rem_miroir:{label:"Remplacement miroir",cat:"mobilier",articles:[{d:"Dépose et évacuation miroir",p:30,q:1},{d:"Fourniture miroir mural",p:95,q:1},{d:"Pose et fixation murale",p:50,q:0.5}]},
+rem_micro_ondes:{label:"Remplacement micro-ondes",cat:"electromenager",articles:[{d:"Dépose et évacuation",p:25,q:1},{d:"Fourniture micro-ondes",p:120,q:1},{d:"Mise en place et test",p:20,q:1}]},
+rem_cafetiere:{label:"Remplacement cafetière",cat:"electromenager",articles:[{d:"Fourniture cafetière expresso",p:80,q:1},{d:"Mise au rebut ancienne cafetière",p:10,q:1}]},
+rem_machine_laver:{label:"Remplacement machine à laver",cat:"electromenager",articles:[{d:"Dépose déconnexion et évacuation",p:65,q:1},{d:"Fourniture machine à laver 7kg",p:490,q:1},{d:"Livraison raccordement et mise en service",p:80,q:1}]},
+rem_frigo:{label:"Remplacement réfrigérateur",cat:"electromenager",articles:[{d:"Dépose et évacuation réfrigérateur",p:65,q:1},{d:"Fourniture réfrigérateur",p:480,q:1},{d:"Livraison et mise en place",p:65,q:1}]},
+rem_rideaux:{label:"Remplacement rideaux",cat:"linge",articles:[{d:"Dépose des rideaux",p:35,q:1},{d:"Fourniture paire de rideaux",p:95,q:1},{d:"Repose anneaux et tringles inclus",p:35,q:0.5}]},
+rem_meuble_tv:{label:"Remplacement meuble TV",cat:"mobilier",articles:[{d:"Dépose et évacuation",p:40,q:1},{d:"Fourniture meuble TV",p:195,q:1},{d:"Livraison et montage",p:55,q:1}]},
+rem_vitre:{label:"Remplacement vitre",cat:"vitrier",articles:[{d:"Déplacement vitrier",p:65,q:1},{d:"Fourniture et pose vitre selon format",p:180,q:1},{d:"Joint et finition",p:20,q:1}]},
+rem_porte:{label:"Remplacement porte",cat:"menuiserie",articles:[{d:"Dépose et évacuation porte",p:55,q:1},{d:"Fourniture porte bois peinte",p:220,q:1},{d:"Pose ajustement et quincaillerie",p:75,q:1}]},
+rem_cadre:{label:"Remplacement cadre",cat:"mobilier",articles:[{d:"Fourniture cadre avec vitre",p:35,q:1},{d:"Pose murale",p:15,q:1}]},
+rem_boite_cle:{label:"Remplacement boîte à clé",cat:"serrurerie",articles:[{d:"Fourniture boîte à clé murale sécurisée",p:55,q:1},{d:"Pose et programmation code",p:30,q:1}]},
+rem_aspirateur:{label:"Remplacement aspirateur",cat:"electromenager",articles:[{d:"Fourniture aspirateur balai sans fil",p:120,q:1},{d:"Mise au rebut",p:15,q:1}]},
+rem_poubelle:{label:"Remplacement poubelle",cat:"equipement",articles:[{d:"Fourniture poubelle pédale 30L",p:45,q:1},{d:"Mise au rebut",p:10,q:1}]},
+rem_vaisselle:{label:"Remplacement vaisselle / ustensiles",cat:"equipement",articles:[{d:"Fourniture service vaisselle complet 4 personnes",p:95,q:1},{d:"Fourniture set ustensiles de cuisine",p:55,q:1},{d:"Mise au rebut",p:15,q:1}]},
+rem_plaque:{label:"Remplacement plaque de cuisson",cat:"electromenager",articles:[{d:"Dépose et évacuation",p:45,q:1},{d:"Fourniture plaque vitrocéramique",p:180,q:1},{d:"Pose et raccordement électrique",p:65,q:1}]},
+rem_telecommande:{label:"Remplacement télécommande",cat:"electromenager",articles:[{d:"Fourniture télécommande universelle",p:25,q:1},{d:"Programmation",p:15,q:1}]},
+rem_box_tv:{label:"Remplacement box TV",cat:"electromenager",articles:[{d:"Fourniture box TV streaming",p:85,q:1},{d:"Paramétrage et installation",p:30,q:1}]},
+rem_rideau_douche:{label:"Remplacement rideau de douche",cat:"linge",articles:[{d:"Fourniture rideau de douche + anneaux",p:35,q:1},{d:"Pose",p:15,q:1}]},
+rem_linge_lit:{label:"Remplacement linge de lit",cat:"linge",articles:[{d:"Fourniture parure de lit housse + taies",p:55,q:1},{d:"Mise au rebut",p:10,q:1}]},
+rem_linge_toilette:{label:"Remplacement linge de toilette",cat:"linge",articles:[{d:"Fourniture set serviettes 2 grandes + 2 petites",p:60,q:1},{d:"Mise au rebut",p:10,q:1}]},
+rem_seche_cheveux:{label:"Remplacement sèche-cheveux",cat:"electromenager",articles:[{d:"Fourniture sèche-cheveux mural 2000W",p:55,q:1}]},
+rem_ventilateur:{label:"Remplacement ventilateur",cat:"electromenager",articles:[{d:"Fourniture ventilateur sur pied",p:75,q:1},{d:"Mise en place",p:15,q:1}]},
+rem_plaid_coussins:{label:"Remplacement plaid et coussins",cat:"linge",articles:[{d:"Fourniture plaid",p:35,q:1},{d:"Fourniture coussins décoratifs",p:25,q:2}]},
+rem_detecteur:{label:"Remplacement détecteur de fumée",cat:"securite",articles:[{d:"Fourniture détecteur de fumée NF EN 14604",p:30,q:1},{d:"Pose test et remise en service",p:25,q:1}]},
+svc_animal:{label:"Nettoyage — présence animal",cat:"nettoyage",articles:[{d:"Déplacement et diagnostic",p:50,q:1},{d:"Nettoyage approfondi poils traces odeurs",p:80,q:2},{d:"Traitement désodorisant spécialisé",p:65,q:1},{d:"Produits désinfectants professionnels",p:35,q:1}]},
+svc_poubelle:{label:"Poubelle non vidée",cat:"nettoyage",articles:[{d:"Déplacement prestataire",p:35,q:1},{d:"Évacuation poubelles et tri sélectif",p:55,q:1}]},
+svc_vaisselle:{label:"Vaisselle non faite",cat:"nettoyage",articles:[{d:"Déplacement prestataire",p:30,q:1},{d:"Nettoyage et rangement vaisselle",p:55,q:1}]},
+svc_tapis:{label:"Nettoyage tapis",cat:"nettoyage",articles:[{d:"Déplacement technicien nettoyage",p:40,q:1},{d:"Nettoyage par injection-extraction vapeur",p:85,q:1},{d:"Séchage professionnel",p:25,q:1},{d:"Produits nettoyants",p:20,q:1}]},
+svc_lessivage:{label:"Lessivage murs",cat:"nettoyage",articles:[{d:"Déplacement artisan",p:45,q:1},{d:"Lessivage murs et plafonds par pièce",p:65,q:2},{d:"Fourniture produits lessivage",p:25,q:1}]},
+svc_tete_lit:{label:"Nettoyage tête de lit",cat:"nettoyage",articles:[{d:"Déplacement technicien",p:35,q:1},{d:"Nettoyage vapeur tête de lit",p:55,q:1},{d:"Produits désinfectants",p:15,q:1}]},
+svc_douche:{label:"Nettoyage douche",cat:"nettoyage",articles:[{d:"Déplacement prestataire",p:35,q:1},{d:"Nettoyage douche parois bac joints",p:55,q:1},{d:"Produit anticalcaire professionnel",p:15,q:1}]},
+svc_invite:{label:"Invité non déclaré",cat:"penalite",articles:[{d:"Pénalité invité non déclaré règlement intérieur",p:50,q:1}]},
+svc_depart_tardif:{label:"Départ tardif",cat:"penalite",articles:[{d:"Perturbation planning nettoyage",p:80,q:1},{d:"Heures supplémentaires équipe ménage",p:55,q:1}]},
+svc_protoxyde:{label:"Débarrassage protoxyde azote",cat:"nettoyage",articles:[{d:"Collecte et tri capsules de protoxyde azote",p:80,q:1}]}
+});
+window.TL_GROUPS={
+reparation:{label:"🔧 Réparations",keys:["rep_sommier","ser_poignee_porte","rep_pied_lit","rep_chaise","rep_table","rep_armoire","rep_tiroir","rep_prise","rep_lustre","rep_porte_cuisine","rep_volet","rep_plinthe","rep_portema","rep_tableau","rep_porte_douche","rep_canape","rep_robinet","plo_debouchage","plo_pommeau","ser_poignee_fen","pei_trou","pei_peinture","pei_tringle","pei_radiateur"]},
+remplacement:{label:"🛋 Remplacement",keys:["rem_sommier","rem_matelas","rem_couette","rem_oreiller","rem_luminaire","rem_lampe_chevet","rem_lampe_pied","mob_canape","mob_table","rem_table_basse","mob_chaises","rem_tapis","rem_tv","mob_armoire","rem_miroir","rem_micro_ondes","rem_cafetiere","rem_machine_laver","rem_frigo","rem_rideaux","rem_meuble_tv","rem_vitre","rem_porte","rem_cadre","rem_boite_cle","ser_cles","ser_serrure","plo_robinet","plo_cuvette","rem_aspirateur","rem_poubelle","rem_vaisselle","rem_plaque","rem_telecommande","rem_box_tv","rem_rideau_douche","rem_linge_lit","rem_linge_toilette","rem_seche_cheveux","rem_ventilateur","rem_plaid_coussins","rem_detecteur","mob_lit","mob_porte_cuisine","mob_commode","plo_colonne"]},
+service:{label:"🧹 Services",keys:["ser_claquee","net_general","net_bio","svc_animal","svc_poubelle","svc_vaisselle","des_cafards","des_punaises","net_linge","svc_tapis","net_matelas","net_canape","svc_lessivage","svc_tete_lit","svc_douche","svc_invite","svc_depart_tardif","svc_protoxyde","des_souris","net_tabac"]}
+};
+window.vlRender=function(){
+var vl=window._vl;if(!vl)return;
+vl._open=vl._open||{reparation:true,remplacement:false,service:false};
+var af=vl.factures[vl.activeFacture]||vl.factures[0];
+var checked=af?af.templates:[];
+var WH="#309BAB";
+var left='<div style="width:290px;min-width:260px;border-right:1px solid #e5e7eb;overflow-y:auto;background:#fff">';
+["reparation","remplacement","service"].forEach(function(gk){
+var g=TL_GROUPS[gk];var isOpen=vl._open[gk];
+var cnt=g.keys.filter(function(k){return checked.indexOf(k)>-1;}).length;
+left+='<div style="border-bottom:1px solid #f0f0f0"><div onclick="window._vl._open[''+gk+'']=!window._vl._open[''+gk+''];vlRender()" style="cursor:pointer;padding:13px 16px;font-size:13px;font-weight:700;color:#111827;display:flex;align-items:center;justify-content:space-between;background:'+(isOpen?"#f0f9fa":"#fff")+'">';
+left+=g.label+(cnt>0?' <span style="background:'+WH+';color:#fff;border-radius:10px;font-size:10px;padding:1px 7px;margin-left:6px">'+cnt+'</span>':'');
+left+='<span style="font-size:10px;color:#9ca3af">'+(isOpen?"▲":"▼")+'</span></div>';
+if(isOpen){left+='<div style="padding:4px 0">';
+g.keys.forEach(function(k){
+var t=TL[k];if(!t)return;
+var tot=(t.articles||[]).reduce(function(s,a){return s+(a.p*a.q);},0);
+var ck=checked.indexOf(k)>-1;
+left+='<label style="display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;border-left:3px solid '+(ck?WH:"transparent")+';background:'+(ck?"#e6f6f8":"transparent")+'">';
+left+='<input type="checkbox" '+(ck?"checked ":"")+'onchange="vlToggle(''+k+'',this.checked)" style="accent-color:'+WH+';width:14px;height:14px;flex-shrink:0">';
+left+='<div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:'+(ck?"700":"500")+';color:#111827;line-height:1.3">'+t.label+'</div>';
+left+='<div style="font-size:11px;color:#9ca3af">'+tot.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" €</div></div></label>";
+});left+='</div>';}
+left+='</div>';});
+left+='</div>';
+var right='<div style="flex:1;display:flex;flex-direction:column;overflow:hidden;background:#f4f5f7">';
+right+='<div style="display:flex;align-items:center;gap:6px;padding:10px 14px;background:#fff;border-bottom:1px solid #e5e7eb;overflow-x:auto;flex-wrap:wrap">';
+vl.factures.forEach(function(f,fi){
+var isAct=fi===vl.activeFacture;
+var ftot=(f.templates||[]).reduce(function(s,k){var t=TL[k];return s+(t?(t.articles||[]).reduce(function(ss,a){return ss+(a.p*a.q);},0):0);},0);
+right+='<div onclick="vlSetFact('+fi+')" style="cursor:pointer;padding:7px 12px;border-radius:8px;font-size:12px;font-weight:600;white-space:nowrap;margin-bottom:4px;background:'+(isAct?WH:"#f3f4f6")+';color:'+(isAct?"#fff":"#374151")+'">';
+right+=f.name+(ftot>0?" — "+ftot.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" €":" — vide")+"</div>";});
+right+='<div onclick="vlAddFact()" style="cursor:pointer;padding:7px 11px;border-radius:8px;font-size:12px;font-weight:600;background:#f3f4f6;color:#6b7280;white-space:nowrap;margin-bottom:4px">+ Facture</div></div>';
+right+='<div style="padding:8px 14px;background:#fff;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:8px"><span style="font-size:12px;color:#6b7280">Nom :</span>';
+right+='<input value="'+(af?af.name:"")+'" onchange="window._vl.factures[window._vl.activeFacture].name=this.value" style="flex:1;border:1px solid #e5e7eb;border-radius:6px;padding:5px 9px;font-size:13px;color:#111827"></div>';
+right+='<div style="flex:1;overflow-y:auto;padding:12px 14px">';
+if(checked.length===0){right+='<div style="text-align:center;padding:40px 20px;color:#9ca3af;font-size:13px">Cochez des prestations à gauche</div>';}
+else{var gt=0;
+checked.forEach(function(k){var t=TL[k];if(!t)return;
+var tot=(t.articles||[]).reduce(function(s,a){return s+(a.p*a.q);},0);gt+=tot;
+right+='<div style="background:#fff;border-radius:8px;border:1px solid #e5e7eb;padding:9px 13px;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between">';
+right+='<span style="font-size:12px;font-weight:600;color:#111827">'+t.label+'</span>';
+right+='<div style="display:flex;align-items:center;gap:10px"><span style="font-size:13px;font-weight:700;color:'+WH+'">'+tot.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" €</span>";
+right+='<span onclick="vlToggle(''+k+'',false)" style="cursor:pointer;color:#d1d5db;font-size:17px;line-height:1">&times;</span></div></div>';});
+right+='<div style="margin-top:10px;padding:12px 14px;background:#fff;border-radius:10px;border:2px solid '+WH+';display:flex;justify-content:space-between;align-items:center">';
+right+='<span style="font-size:13px;font-weight:700;color:#111827">Total facture</span><span style="font-size:15px;font-weight:800;color:'+WH+'">'+gt.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" €</span></div>";
+if(vl.factures.length>1){var tg=vl.factures.reduce(function(s,f){return s+(f.templates||[]).reduce(function(ss,k){var t=TL[k];return ss+(t?(t.articles||[]).reduce(function(sss,a){return sss+(a.p*a.q);},0):0);},0);},0);
+right+='<div style="margin-top:6px;padding:10px 14px;background:#111827;border-radius:10px;display:flex;justify-content:space-between;align-items:center">';
+right+='<span style="font-size:13px;font-weight:700;color:#fff">Total global</span><span style="font-size:14px;font-weight:800;color:#fff">'+tg.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" €</span></div>";}}
+right+='</div><div style="padding:12px 14px;background:#fff;border-top:1px solid #e5e7eb">';
+right+='<button onclick="vlValider()" style="width:100%;padding:13px;background:'+WH+';color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">Valider et générer les documents →</button></div></div>';
+document.getElementById("vl-body").innerHTML='<div style="display:flex;height:100%;overflow:hidden">'+left+right+'</div>';};
+window.vlToggle=function(key,ck){var af=window._vl.factures[window._vl.activeFacture];if(!af)return;if(ck){if(af.templates.indexOf(key)===-1)af.templates.push(key);}else{af.templates=af.templates.filter(function(k){return k!==key;});}vlRender();};
+window.vlSetFact=function(idx){window._vl.activeFacture=idx;vlRender();};
+window.vlAddFact=function(){var vl=window._vl;var n=vl.factures.length+1;vl.factures.push({id:"f"+Date.now(),name:"Facture "+n,templates:[]});vl.activeFacture=vl.factures.length-1;vlRender();};
+</script>
 </body>
