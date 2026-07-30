@@ -2896,7 +2896,7 @@ var t=window.TL[k];if(!t)return;
 var tot=(t.articles||[]).reduce(function(s,a){return s+(a.p*a.q);},0);
 var ck=checked.indexOf(k)>-1;
 left+='<label style="display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;background:'+(ck?'#f0f9fa':'')+'"> ';
-left+='<input type="checkbox" '+(ck?'checked ':'')+' onchange="window.vlToggle(\''+k+'\','+vl.factures.indexOf(af)+'" style="cursor:pointer;accent-color:'+WH+'"> ';
+left+='<input type="checkbox" '+(ck?'checked ':'')+' onchange="window.vlToggle(\''+k+'\','+vl.factures.indexOf(af)+')" style="cursor:pointer;accent-color:'+WH+'"> ';
 left+='<div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:'+(ck?700:400)+'">'+t.label+'</div>';
 left+='<div style="font-size:11px;color:#9ca3af">'+tot.toLocaleString('fr-FR',{minimumFractionDigits:0})+'\u20ac</div></div></label>';
 });
