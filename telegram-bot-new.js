@@ -156,7 +156,7 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
         if (score > bestScore) { bestScore = score; best = b; }
       }
 
-      if (best) { console.log('PassPass MATCH:', best.tenantName, '|', best.start, '→', best.end); return best; }
+      if (best) { console.log('PassPass MATCH:', best.tenantName, '|', best.start, 'â', best.end); return best; }
       return null;
     } catch(e) { return null; }
   }
@@ -257,7 +257,7 @@ if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_KEY) {
     // Creation litige auto desactivee - photos dans pending_photos uniquement
     if (!state.pending_photos) state.pending_photos = [];
     const _sender = firstMsg && firstMsg.from ? (firstMsg.from.first_name || firstMsg.from.username || '') : '';
-    photos.forEach(function(url){ state.pending_photos.push({ url: url, date: today, sender: _sender }); });
+    photos.forEach(function(url){ state.pending_photos.push({ url: url, date: today, sender: _sender, logmt: logement || null }); });
     const { error: writeErr } = await supabase.from('app_state').upsert({ id: 'main', data: state, updated_at: new Date().toISOString() });
     if (writeErr) { console.error('Erreur ecriture'); return null; }
     console.log('Litige cree:', newLitige.id, '| logement:', logement, '| guest:', guest_name, '| photos:', photos.length);
