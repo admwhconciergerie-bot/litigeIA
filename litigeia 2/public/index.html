@@ -2949,8 +2949,8 @@ right+='</div>';
 var body=document.getElementById('vl-body');
 if(body)body.innerHTML='<div style="display:flex;height:100%;overflow:hidden">'+left+right+'</div>';
 };
-// Patch renderModal so vlRender is called when modal opens
-(function(){var _rm=renderModal;renderModal=function(){_rm.apply(this,arguments);if(window._vl)window.vlRender();};window.renderModal=renderModal;})();
+// Intercepte _vlRender pour appeler vlRender() apres ouverture modal
+(function(){var _v;Object.defineProperty(window,'_vlRender',{get:function(){return _v;},set:function(fn){_v=fn;setTimeout(function(){if(window._vl)window.vlRender();},0);},configurable:true});})();
 window.vlToggle=function(key,ck){var af=window._vl.factures[window._vl.activeFacture];if(!af)return;if(ck){if(af.templates.indexOf(key)===-1)af.templates.push(key);}else{af.templates=af.templates.filter(function(k){return k!==key;});}vlRender();};
 window.vlSetFact=function(idx){window._vl.activeFacture=idx;vlRender();};
 window.vlAddFact=function(){var vl=window._vl;var n=vl.factures.length+1;vl.factures.push({id:"f"+Date.now(),name:"Facture "+n,templates:[]});vl.activeFacture=vl.factures.length-1;vlRender();};
