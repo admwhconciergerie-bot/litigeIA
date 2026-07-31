@@ -2947,7 +2947,7 @@ right+='<button onclick="window.vlValider()" style="width:100%;padding:13px;back
 right+='</div>';
 right+='</div>';
 var body=document.getElementById('vl-body');
-if(body)body.innerHTML='<div style="display:flex;height:100%;overflow:hidden">'+left+right+'</div>';
+if(body&&body.firstElementChild&&body.firstElementChild.firstElementChild)body.firstElementChild.firstElementChild.outerHTML=left;
 };
 // Intercepte _vlRender pour appeler vlRender() apres ouverture modal
 (function(){var _v;Object.defineProperty(window,'_vlRender',{get:function(){return _v;},set:function(fn){_v=fn;setTimeout(function(){if(window._vl)window.vlRender();},0);},configurable:true});})();
