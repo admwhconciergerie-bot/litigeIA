@@ -2879,7 +2879,7 @@ vl._open=vl._open||{reparation:true,remplacement:false,service:false};
 var af=vl.factures[vl.activeFacture]||vl.factures[0];
 var checked=af?af.templates:[];
 var WH='#309BAB';
-var left='<div style="width:290px;min-width:260px;border-right:1px solid #e5e7eb;overflow-y:auto;height:100%;flex-shrink:0">';
+var left='<div style="overflow-y:auto;height:100%;border-right:1px solid #e5e7eb">';
 ['reparation','remplacement','service'].forEach(function(gk){
 var g=window.TL_GROUPS[gk];if(!g)return;
 var isOpen=vl._open[gk];
